@@ -1,0 +1,19 @@
+{
+  "name": "node-and-sql",
+  "version": "1.0.0",
+  "description": "test sql connection",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "izhan faridi",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mssql": "^8.1.2",
+    "nodemon": "^2.0.16",
+    "tedious": "^14.5.0"
+  }
+}
