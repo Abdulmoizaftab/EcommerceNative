@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import SearchDropdown from './SearchDropdown';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 
@@ -115,7 +115,8 @@ const SearchBar= () => {
       alignItems: "center",
       backgroundColor:'#5A56E9',
       flexDirection:'row',
-      justifyContent:'space-around'
+      justifyContent:'space-around',
+      height:65
     },
     searchView:{
         flexDirection:'row',
@@ -124,11 +125,11 @@ const SearchBar= () => {
         borderColor:"#EAE9FC",
         borderRadius:50,
         paddingHorizontal:5,
-        width:'50%'
+        width:'60%',
+        height:50
     },
     search: {
-      backgroundColor: "#5A56E9",
-      width: 150,
+      backgroundColor: "#5A56E9", 
       color: "#EAE9FC",
       fontSize: 15,
       fontWeight: "400",

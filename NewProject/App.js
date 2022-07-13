@@ -1,41 +1,72 @@
+import React from 'react';
+import {Text} from 'react-native'
+import Home from './screens/Home';
+import Favourites from './screens/Favourites';
+import Notification from './screens/Notification';
+import Orders from './screens/Orders';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import React, {useState,useEffect} from 'react';
-import axios from 'axios';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Image
-} from 'react-native';
-import SearchDropdown from './components/SearchDropdown';
-import Icon from 'react-native-vector-icons/Ionicons';
-import SearchBar from './components/SearchBar';
-
-
-
-
-
-
-const App= () => {
-  
-
+const Tab = createBottomTabNavigator();
+const App = () => {
   return (
-    <View>
-      <SearchBar></SearchBar>
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator
+      initialRouteName='Home'
+      screenOptions={({route})=>({
+        tabBarIcon:({focused,color,size})=>{
+          let iconName;
+          let rn=route.name;
+          if(rn==='Home'){
+            iconName=focused?'home':'home-outline';
+          }
+          else if(rn==='Favourites'){
+            iconName=focused?'heart':'heart-outline';
+          }
+          else if(rn==='Notification'){
+            iconName=focused?'bell':'bell-outline';
+          }
+          else if(rn==='Orders'){
+            iconName=focused?'view-list':'view-list-outline';
+          }
+          return (
+            <MaterialCommunityIcons name={iconName} size={size} color='#5A56E9'/>
+          )
+        },
+        headerShown:false,
+        tabBarHideOnKeyboard:true,
+        
+      })}
+      
+      >
+        <Tab.Screen name="Home" component={Home} options={{
+          tabBarLabel: () => (
+            <Text style={{color: "#5A56E9",fontSize:12,flexDirection:"column"}}>Home</Text>
+          ),
+          tabBarStyle:{
+            
+          }
+        }} />
+        <Tab.Screen name="Favourites" component={Favourites} options={{
+          tabBarLabel: () => (
+            <Text style={{color: "#5A56E9",fontSize:12}}>Favourites</Text>
+          )
+        }} />
+        <Tab.Screen name="Notification" component={Notification} options={{
+          tabBarLabel: () => (
+            <Text style={{color: "#5A56E9",fontSize:12}}>Notification</Text>
+          )
+        }}/>
+        <Tab.Screen name="Orders" component={Orders} options={{
+          tabBarLabel: () => (
+            <Text style={{color: "#5A56E9",fontSize:12}}>Orders</Text>
+          )
+        }}/>
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 };
 
-
-
-
 export default App;
-
-
-
-
