@@ -31,18 +31,6 @@
 //   }).catch(function(err) {
 //     console.error('Error creating connection pool', err)
 //   });
-
-
-
-
-
-
-// app.listen(process.env.PORT || 5000,()=>{
-//             console.log("Backend server running!");
-//         })
-
-
-
 const express = require('express')
 const sql = require('mssql')
 var config = {
@@ -64,6 +52,7 @@ const appPool = new sql.ConnectionPool(config)
 //require route handlers and use the same connection pool everywhere
 const sqlRoutes = require('./routes/sqlRoutes')
 const app = express()
+app.use(express.json())
 app.use('/sql', sqlRoutes)
 
 
