@@ -30,13 +30,7 @@ const Categories = () => {
             </View>
 
             <View style={{ flexDirection: "column", justifyContent: "flex-end" }}>
-              <Image style={{
-                elevation: 5,
-                shadowColor: "purple",
-                width: 80,
-                height: 50,
-                marginBottom: -12
-              }}
+              <Image style={styles.imageStyle}
                 source={image} />
             </View>
           </TouchableOpacity>
@@ -70,6 +64,12 @@ const styles=StyleSheet.create({
         backgroundColor:"white",
         padding:5
       },    
+
+      imageStyle:{
+        width: 80,
+        height: 50,
+        marginBottom: -12,
+      }
 })
 
 export default Categories;

@@ -15,8 +15,8 @@ const AllItems_slider = () => {
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
         </TouchableOpacity>
       </View>
-      <View style={{width: '100%', flexDirection: 'row', flexWrap:"wrap"}}>
-          <TouchableOpacity>
+      <View style={{width: '100%', flexDirection: 'row', flexWrap:"wrap" ,marginTop:-8,justifyContent:"space-evenly"}}>
+          <TouchableOpacity style={Style.topa}>
             <View style={Style.ProdCard}>
               <View style={Style.imgContainer}>
                 <Image
@@ -40,7 +40,7 @@ const AllItems_slider = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity style={Style.topa}>
             <View style={Style.ProdCard}>
               <View style={Style.imgContainer}>
                 <Image
@@ -64,7 +64,7 @@ const AllItems_slider = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity style={Style.topa}>
             <View style={Style.ProdCard}>
               <View style={Style.imgContainer}>
                 <Image
@@ -88,7 +88,7 @@ const AllItems_slider = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity style={Style.topa}>
             <View style={Style.ProdCard}>
               <View style={Style.imgContainer}>
                 <Image
@@ -163,14 +163,12 @@ const Style= StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: 'white',
-        borderRadius: 8,
         borderRadius: 10,
         elevation: 3.5,
         shadowColor: '#52006A',
         width: 160,
         height: 190,
-        marginLeft: 10,
-        marginVertical: 5,
+        
       },
       imgContainer: {
         borderBottomWidth: 1,
@@ -211,6 +209,12 @@ const Style= StyleSheet.create({
         fontWeight: '800',
         marginTop: 1.5,
       },
+      topa:{
+        width: 160,
+        height: 190,
+        borderRadius:10,
+        marginTop:10
+      }
 });
 
 export default AllItems_slider;
