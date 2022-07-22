@@ -16,7 +16,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 
 
-const SearchBar= () => {
+const SearchBar = ({ navigate }) => {
     //const [isSearching , setIsSearching] = useState(false)
     const [searchText , setSearchText] = useState("");
     const [filterData,setFilterData]=useState([]);
@@ -93,7 +93,7 @@ const SearchBar= () => {
     return (
         <>
             <View style={styles.container}>
-                <MaterialCommunityIcons name='account-outline' style={styles.accountIcon} />
+                <MaterialCommunityIcons name='account-outline' style={styles.accountIcon} onPress={() => navigate.navigate('Login')}  />
                 <View style={styles.searchView}>
                     <Ionicons name='search-outline' style={styles.searchIcon} />
                     <TextInput
@@ -102,7 +102,7 @@ const SearchBar= () => {
                         placeholderTextColor="#EAE9FC"
                         onChangeText={(e) => onChange(e)} />
                 </View>
-                <Ionicons name="cart-outline" style={styles.cartIcon} />
+                <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
             <SearchDropdown dataSource={filterData} /> 
         </>

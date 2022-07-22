@@ -1,0 +1,163 @@
+import {View, Text, StyleSheet,TextInput, TouchableOpacity} from 'react-native';
+import React from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+
+const Sign_up = ({navigation}) => {
+  return (
+    <View style={Style.main}>
+      <View style={Style.dot1}></View>
+      <View style={Style.dot2}></View>
+      <View style={Style.e_container}>
+        <View style={Style.e_container2}>
+          <Text style={Style.e_container2_text1}>E commerce</Text>
+          <Text style={Style.e_container2_text2}>App</Text>
+        </View>
+      </View>
+      <View style={Style.dot3}></View>
+      <View style={Style.log_container}>
+        <View style={Style.log_container2}>
+          <Text style={Style.log_container2_text}>Sign up</Text>
+          <View style={Style.fl_name_view}>
+          <View>
+            <Text style={Style.fl_name_view_text}><FontAwesome name='user-circle-o'/>  First Name</Text>
+            <TextInput selectionColor="black" style={Style.fl_name_view_input}/>
+          </View>
+          <View>
+            <Text style={Style.fl_name_view_text}><FontAwesome name='user-circle-o'/>  Last name</Text>
+            <TextInput selectionColor="black" style={Style.fl_name_view_input}/>
+          </View>
+          </View>
+          <View style={Style.email_view}>
+            <Text style={Style.email_view_text}><MaterialCommunityIcons name='email-outline'/>  Email</Text>
+            <TextInput selectionColor="black" style={Style.email_view_textinput}/>
+          </View>
+          <View style={Style.email_view}>
+            <Text style={Style.email_view_text}><AntDesign name='user'/>  Username</Text>
+            <TextInput selectionColor="black" style={Style.email_view_textinput}/>
+          </View>
+          <View>
+            <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Password</Text>
+            <TextInput selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true}/>
+          </View>
+          <View>
+            <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Confirm password</Text>
+            <TextInput selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true}/>
+          </View>
+          <TouchableOpacity style={Style.forgot_btn}>
+            <Text style={Style.forgot_btn_text}>Forgot password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={Style.login_btn}>
+            <Text style={Style.login_btn_text}>Sign up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={Style.log_in_btn}>
+            <Text style={Style.log_in_btn_text}>Log in instead</Text>
+          </TouchableOpacity>
+          <View style={Style.auth_view}>
+            <AntDesign style={Style.auth_icon} name='google'/>
+            <FontAwesome5Pro style={Style.auth_icon} name='facebook'/>
+          </View>
+        </View>        
+      </View>
+    </View>
+  );
+};
+const Style = StyleSheet.create({
+  main:{
+    width: '100%',
+    height: '100%', 
+    backgroundColor: '#5A56E9'
+  },
+  dot1:{
+    backgroundColor:'#f5ae62',
+    opacity:0.7,
+    width:80,
+    height:80,
+    borderRadius:40,
+    position:"absolute",
+    top:"-5%",
+    right:"8%"
+  },
+  dot2:{
+    borderWidth:4,
+    borderColor: 'rgba(158, 150, 150, .3)',
+    width:18,
+    height:18,
+    borderRadius:1000,
+    position:"absolute",
+    top:"2%",
+    left:"25%"
+  },
+  e_container:{
+    width: '100%', 
+    height: '25%',
+    justifyContent:"center"
+  },
+  e_container2:{
+    width:"70%",
+    alignSelf:"center"
+  },
+  e_container2_text1:{
+    color:"white",fontWeight:"bold",fontSize:35,letterSpacing:1
+  },
+  e_container2_text2:{
+    color:"white",fontWeight:"bold",fontSize:35,lineHeight:35,letterSpacing:2
+  },
+  dot3:{
+    borderWidth:4,borderColor: 'rgba(158, 150, 150, .3)',width:25,height:25,borderRadius:1000,position:"absolute",top:"18%",right:"15%"
+  },
+  log_container:{
+    width: '100%', height: '75%',backgroundColor:"white",borderTopRightRadius:15,borderTopLeftRadius:15,justifyContent:"center"
+  },
+  log_container2:{
+    width:"80%",height:"100%",alignSelf:"center"
+  },fl_name_view:{
+    flexDirection:"row",justifyContent:"space-between" 
+  },
+  fl_name_view_text:{
+    color:"gray",fontSize:13
+  },fl_name_view_input:{
+    height: 25,width:130,padding: 5,borderBottomWidth:1,color:"black"
+  },
+  log_container2_text:{
+    color:"black",fontWeight:"bold",fontSize:25,marginVertical:"3%"
+  },
+  email_view:{
+    
+  },
+  email_view_text:{
+    color:"gray",fontSize:13,marginVertical:"1%"
+  },
+  email_view_textinput:{
+    height: 25,padding: 5,borderBottomWidth:1,color:"black"
+  },
+  forgot_btn:{
+    width:"40%",
+    marginVertical:"2%"
+  },
+  forgot_btn_text:{
+    color:"#5A56E9",fontWeight:"bold"
+  },
+  login_btn:{
+    width:"80%",height:50,backgroundColor:"#5A56E9",borderRadius:10,justifyContent:"center",alignItems:"center",alignSelf:"center"
+  },
+  login_btn_text:{
+    color:"white",fontWeight:"bold"
+  },
+  log_in_btn:{
+    width:"55%",justifyContent:"center",alignItems:"center",alignSelf:"center",marginVertical:"2%"
+  },
+  log_in_btn_text:{
+    color:"#5A56E9",fontWeight:"bold"
+  },
+  auth_view:{
+    flexDirection:"row",alignItems:"center",justifyContent:"space-between",width:"25%",alignSelf:"center"
+  },
+  auth_icon:{
+    fontSize:30,color:"#5A56E9"
+  }
+});
+
+export default Sign_up;

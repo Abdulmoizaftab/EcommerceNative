@@ -9,11 +9,12 @@ import AllItems_slider from '../components/slider/allItems_slider';
 import Categories from '../components/Categories';
 
 
-const Home = () => {
+
+const Home = ({navigation}) => {
   return (
       <ScrollView>
     <View>
-        <SearchBar/>
+        <SearchBar navigate={navigation}/>
         <Carousel data = {dummyData}/>
         <Categories/>
         <Popuplar_slider/>

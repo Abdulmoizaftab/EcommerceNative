@@ -238,7 +238,8 @@ const Styles = StyleSheet.create({
   },
   middle2_2_icon: {
     fontSize: 15,
-    marginRight:10
+    marginRight:10,
+    color:"gray"
   },
   cardDesc: {
     paddingHorizontal: 10,
@@ -270,6 +271,7 @@ const Styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
     flexWrap: 'wrap',
+    color:"black"
   },
   cardPrice: {
     fontSize: 17,

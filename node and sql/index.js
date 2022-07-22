@@ -32,6 +32,7 @@
 //     console.error('Error creating connection pool', err)
 //   });
 const express = require('express')
+const dotenv = require('dotenv');
 const sql = require('mssql')
 var config = {
     user: "sa", //default is sa
@@ -51,6 +52,7 @@ var config = {
 const appPool = new sql.ConnectionPool(config)
 //require route handlers and use the same connection pool everywhere
 const sqlRoutes = require('./routes/sqlRoutes')
+dotenv.config();
 const app = express()
 app.use(express.json())
 app.use('/sql', sqlRoutes)
