@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import Sign_up from './screens/sign up';
 import TabNav from './HomebottomNav';
 import AddToCart from './screens/AddToCart';
+import Product_detail from './screens/Product_detail';
 import SplashScreen from 'react-native-splash-screen'
 
 const Stack=createNativeStackNavigator();
@@ -23,6 +24,7 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Sign_up" component={Sign_up} />
         <Stack.Screen name="AddToCart" component={AddToCart} />
+        <Stack.Screen name="Product_detail" component={Product_detail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

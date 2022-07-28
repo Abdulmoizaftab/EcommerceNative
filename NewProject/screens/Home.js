@@ -17,8 +17,8 @@ const Home = ({navigation}) => {
         <SearchBar navigate={navigation}/>
         <Carousel data = {dummyData}/>
         <Categories/>
-        <Popuplar_slider/>
-        <AllItems_slider/>
+        <Popuplar_slider navigate={navigation}/>
+        <AllItems_slider navigate={navigation}/>
     </View>
     </ScrollView>
   )

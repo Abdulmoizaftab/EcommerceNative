@@ -49,10 +49,10 @@ const Sign_up = ({navigation}) => {
           <TouchableOpacity style={Style.forgot_btn}>
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Style.login_btn}>
-            <Text style={Style.login_btn_text}>Sign up</Text>
+          <TouchableOpacity style={Style.signup_btn}>
+            <Text style={Style.signup_btn_text}>Sign up</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Style.log_in_btn}>
+          <TouchableOpacity style={Style.log_in_btn} onPress={()=>navigation.navigate('Login')}>
             <Text style={Style.log_in_btn_text}>Log in instead</Text>
           </TouchableOpacity>
           <View style={Style.auth_view}>
@@ -117,43 +117,43 @@ const Style = StyleSheet.create({
     flexDirection:"row",justifyContent:"space-between" 
   },
   fl_name_view_text:{
-    color:"gray",fontSize:13
+    color:"gray",fontSize:13,marginTop:"3%"
   },fl_name_view_input:{
     height: 25,width:130,padding: 5,borderBottomWidth:1,color:"black"
   },
   log_container2_text:{
-    color:"black",fontWeight:"bold",fontSize:25,marginVertical:"3%"
+    color:"black",fontWeight:"bold",fontSize:25,marginTop:"4%"
   },
   email_view:{
     
   },
   email_view_text:{
-    color:"gray",fontSize:13,marginVertical:"1%"
+    color:"gray",fontSize:13,marginTop:"3%"
   },
   email_view_textinput:{
     height: 25,padding: 5,borderBottomWidth:1,color:"black"
   },
   forgot_btn:{
     width:"40%",
-    marginVertical:"2%"
+    marginTop:"3%"
   },
   forgot_btn_text:{
     color:"#5A56E9",fontWeight:"bold"
   },
-  login_btn:{
-    width:"80%",height:50,backgroundColor:"#5A56E9",borderRadius:10,justifyContent:"center",alignItems:"center",alignSelf:"center"
+  signup_btn:{
+    width:"80%",height:50,backgroundColor:"#5A56E9",borderRadius:10,justifyContent:"center",alignItems:"center",alignSelf:"center",marginTop:"3%"
   },
-  login_btn_text:{
+  signup_btn_text:{
     color:"white",fontWeight:"bold"
   },
   log_in_btn:{
-    width:"55%",justifyContent:"center",alignItems:"center",alignSelf:"center",marginVertical:"2%"
+    width:"55%",justifyContent:"center",alignItems:"center",alignSelf:"center",marginTop:"3%"
   },
   log_in_btn_text:{
     color:"#5A56E9",fontWeight:"bold"
   },
   auth_view:{
-    flexDirection:"row",alignItems:"center",justifyContent:"space-between",width:"25%",alignSelf:"center"
+    flexDirection:"row",alignItems:"center",justifyContent:"space-between",width:"25%",alignSelf:"center",marginTop:"3%"
   },
   auth_icon:{
     fontSize:30,color:"#5A56E9"

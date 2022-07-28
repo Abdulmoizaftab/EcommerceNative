@@ -3,7 +3,7 @@ import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const AllItems_slider = () => {
+const AllItems_slider = ({navigate}) => {
   return (
     <View style={Style.main}>
       <View style={Style.middle2}>
@@ -18,14 +18,14 @@ const AllItems_slider = () => {
       <View style={Style.all_item_main}>
         <View style={Style.all_item_main2}>
           <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
+            <TouchableOpacity style={Style.all_item_main4} onPress={()=>navigate.navigate('Product_detail')}>
               <Image style={Style.all_item_main4_img}
                 resizeMode="cover"
                 source={{
                   uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
                 }}
               />
-            </View>
+            </TouchableOpacity>
             <View>
               <Text style={Style.cardTitle}>
                 AirPods Pro Light Blue Exquisite Design
