@@ -16,35 +16,7 @@ const AllItems_slider = ({navigate}) => {
         </TouchableOpacity>
       </View>
       <View style={Style.all_item_main}>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <TouchableOpacity style={Style.all_item_main4} onPress={()=>navigate.navigate('Product_detail')}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </TouchableOpacity>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={Style.all_item_main2}>
+        <TouchableOpacity style={Style.all_item_main2} onPress={()=>navigate.navigate('Product_detail')}>
           <View style={Style.all_item_main3}>
             <View style={Style.all_item_main4}>
               <Image style={Style.all_item_main4_img}
@@ -58,12 +30,11 @@ const AllItems_slider = ({navigate}) => {
               <Text style={Style.cardTitle}>
                 AirPods Pro Light Blue Exquisite Design
               </Text>
+              <View style={Style.cardBotm}>
               <Text
                 style={Style.cardPrice}>
                 RS. 500
               </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
                 <Text style={Style.rating}>
                   4.5{' '}
                   <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
@@ -71,63 +42,7 @@ const AllItems_slider = ({navigate}) => {
               </View>
             </View>
           </View>
-        </View>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </View>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </View>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -225,13 +140,9 @@ const Style = StyleSheet.create({
   cardBotm: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 2,
-  },
-  favIcon: {
-    color: '#FB2F53',
-    fontSize: 13,
-    fontWeight: '800',
-    marginTop: 1.5,
+    marginVertical:"5%",
+    paddingLeft:"2%",
+    alignItems:"center"
   }
 });
 
