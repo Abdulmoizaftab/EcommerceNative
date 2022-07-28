@@ -1,78 +1,32 @@
-import React from 'react';
-import {Text} from 'react-native'
-import Home from './screens/Home';
-import Favourites from './screens/Favourites';
-import Notification from './screens/Notification';
-import Orders from './screens/Orders';
+import React,{useEffect} from 'react';
+import Login from './screens/login';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './screens/Login';
-import { useNavigation } from '@react-navigation/native';
-import HomeStackScreen from './screens/HomeStackScreen';
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import Sign_up from './screens/sign up';
+import TabNav from './HomebottomNav';
+import AddToCart from './screens/AddToCart';
+import Product_detail from './screens/Product_detail';
+import SplashScreen from 'react-native-splash-screen'
 
-
-
-const Tab = createBottomTabNavigator();
-const App = ({navigation}) => {
+const Stack=createNativeStackNavigator();
+const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, [])
+  
   return (
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName='Home'
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              let rn = route.name;
-              if (rn === 'Home') {
-                iconName = focused ? 'home' : 'home-outline';
-              }
-              else if (rn === 'Favourites') {
-                iconName = focused ? 'heart' : 'heart-outline';
-              }
-              else if (rn === 'Notification') {
-                iconName = focused ? 'bell' : 'bell-outline';
-              }
-              else if (rn === 'Orders') {
-                iconName = focused ? 'view-list' : 'view-list-outline';
-              }
-              return (
-                <MaterialCommunityIcons name={iconName} size={size} color='#5A56E9' />
-              )
-            },
-            headerShown: false,
-            tabBarHideOnKeyboard: true,
-
-          })}
-
-        >
-          <Tab.Screen name="Home" component={HomeStackScreen} options={{
-            tabBarLabel: () => (
-              <Text style={{ color: "#5A56E9", fontSize: 12, flexDirection: "column" }}>Home</Text>
-            ),
-            tabBarStyle: {
-
-            }
-          }} />
-          <Tab.Screen name="Favourites" component={Favourites} options={{
-            tabBarLabel: () => (
-              <Text style={{ color: "#5A56E9", fontSize: 12 }}>Favourites</Text>
-            )
-          }} />
-          <Tab.Screen name="Notification" component={Notification} options={{
-            tabBarLabel: () => (
-              <Text style={{ color: "#5A56E9", fontSize: 12 }}>Notification</Text>
-            )
-          }} />
-          <Tab.Screen name="Orders" component={Orders} options={{
-            tabBarLabel: () => (
-              <Text style={{ color: "#5A56E9", fontSize: 12 }}>Orders</Text>
-            )
-          }} />
-        </Tab.Navigator>
-      </NavigationContainer>
-      
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="TabNav" component={TabNav} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Sign_up" component={Sign_up} />
+        <Stack.Screen name="AddToCart" component={AddToCart} />
+        <Stack.Screen name="Product_detail" component={Product_detail} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

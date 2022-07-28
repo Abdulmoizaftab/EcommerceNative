@@ -1,7 +1,8 @@
-const sql = require("mssql")
-const router = require("express").Router()
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+const sql = require("mssql");
+const router = require("express").Router();
+const bcrypt = require('bcryptjs');
+// const validator = require('validator');
+const jwt=require('jsonwebtoken');
 
 
 
@@ -78,21 +79,25 @@ router.post("/login",  (req,res) =>{
     else{
       if(Object.keys(recordset.recordset).length !== 0){
         const matchedPassword=await bcrypt.compare(password,recordset.recordset[0].password)
-        
         if(matchedPassword){
           const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
           res.status(201).json({user:recordset.recordset,token:token});
         }
         else{
-          res.status(400).json('Wrong credential')
+          res.status(400).json('Wrong credential');
         }
       }
       else{
-        res.status(400).json("No user found")
+        res.status(400).json("No user found");
       }
     }
   })
 })
+  
+
+
+
+
 
 
 

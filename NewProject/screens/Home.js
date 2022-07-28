@@ -7,24 +7,20 @@ import { dummyData } from '../data/Carousel_data'
 import Popuplar_slider from '../components/slider/popuplar_slider';
 import AllItems_slider from '../components/slider/allItems_slider';
 import Categories from '../components/Categories';
-import { createStackNavigator } from '@react-navigation/stack';
-import Login from './Login';
 
 
 
 const Home = ({navigation}) => {
   return (
-    <>
       <ScrollView>
-        <View>
-          <SearchBar navigation={navigation}/>
-          <Carousel data={dummyData} />
-          <Categories />
-          <Popuplar_slider />
-          <AllItems_slider />
-        </View>
-      </ScrollView>
-    </>
+    <View>
+        <SearchBar navigate={navigation}/>
+        <Carousel data = {dummyData}/>
+        <Categories/>
+        <Popuplar_slider navigate={navigation}/>
+        <AllItems_slider navigate={navigation}/>
+    </View>
+    </ScrollView>
   )
 };
 

@@ -11,7 +11,7 @@ import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Popuplar_slider = () => {
+const Popuplar_slider = ({navigation}) => {
   return (
     <View style={Styles.main}>
       <View style={Styles.middle2}>
@@ -238,7 +238,8 @@ const Styles = StyleSheet.create({
   },
   middle2_2_icon: {
     fontSize: 15,
-    marginRight:10
+    marginRight:10,
+    color:"gray"
   },
   cardDesc: {
     paddingHorizontal: 10,
@@ -270,6 +271,7 @@ const Styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
     flexWrap: 'wrap',
+    color:"black"
   },
   cardPrice: {
     fontSize: 17,
