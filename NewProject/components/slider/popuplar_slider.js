@@ -23,6 +23,7 @@ const Popuplar_slider = () => {
           <Feather name="arrow-right" style={Styles.middle2_2_icon} />
         </TouchableOpacity>
       </View>
+      
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={{width: '100%', flexDirection: 'row',}}>
           <TouchableOpacity>

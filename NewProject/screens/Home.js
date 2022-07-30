@@ -7,19 +7,22 @@ import { dummyData } from '../data/Carousel_data'
 import Popuplar_slider from '../components/slider/popuplar_slider';
 import AllItems_slider from '../components/slider/allItems_slider';
 import Categories from '../components/Categories';
+import { NativeBaseProvider } from "native-base";
 
 
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   return (
-      <ScrollView>
-    <View>
-        <SearchBar navigate={navigation}/>
-        <Carousel data = {dummyData}/>
-        <Categories/>
-        <Popuplar_slider/>
-        <AllItems_slider/>
-    </View>
+    <ScrollView>
+      <View>
+        <SearchBar navigate={navigation} />
+        <Carousel data={dummyData} />
+        <Categories />
+        <Popuplar_slider />
+        <NativeBaseProvider>
+          <AllItems_slider navigate={navigation} />
+        </NativeBaseProvider>
+      </View>
     </ScrollView>
   )
 };

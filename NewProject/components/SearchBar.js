@@ -19,6 +19,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const SearchBar = ({ navigate }) => {
     //const [isSearching , setIsSearching] = useState(false)
     const [searchText , setSearchText] = useState("");
+    console.log("🚀 ~ file: SearchBar.js ~ line 22 ~ SearchBar ~ searchText", searchText, filterData)
     const [filterData,setFilterData]=useState([]);
     
     useEffect(() => {

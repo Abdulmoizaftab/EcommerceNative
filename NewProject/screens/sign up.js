@@ -52,7 +52,7 @@ const Sign_up = ({navigation}) => {
           <TouchableOpacity style={Style.login_btn}>
             <Text style={Style.login_btn_text}>Sign up</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Style.log_in_btn}>
+          <TouchableOpacity style={Style.log_in_btn} onPress={()=>navigation.navigate('Login')}>
             <Text style={Style.log_in_btn_text}>Log in instead</Text>
           </TouchableOpacity>
           <View style={Style.auth_view}>

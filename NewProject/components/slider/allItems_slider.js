@@ -1,9 +1,21 @@
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SkeletonJs from '../Skeleton'
 
-const AllItems_slider = () => {
+const AllItems_slider = ({ navigate }) => {
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(async () => {
+    await fetch('http://192.168.1.22:5000/sql/all')
+      .then((response) => response.json())
+      .then((json) => setProducts(json))
+      .catch((error) => console.error(error))
+    //.finally(() => setLoading(false));
+  }, []);
+
   return (
     <View style={Style.main}>
       <View style={Style.middle2}>
@@ -16,118 +28,37 @@ const AllItems_slider = () => {
         </TouchableOpacity>
       </View>
       <View style={Style.all_item_main}>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </View>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </View>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </View>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={Style.all_item_main2}>
-          <View style={Style.all_item_main3}>
-            <View style={Style.all_item_main4}>
-              <Image style={Style.all_item_main4_img}
-                resizeMode="cover"
-                source={{
-                  uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                }}
-              />
-            </View>
-            <View>
-              <Text style={Style.cardTitle}>
-                AirPods Pro Light Blue Exquisite Design
-              </Text>
-              <Text
-                style={Style.cardPrice}>
-                RS. 500
-              </Text>
-              <View style={Style.cardBotm}>
-                <Icon style={Style.favIcon} name="md-heart-outline" />
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
+      {products.length>0?
+      <FlatList data={products} renderItem={(element)=>{
+        return  <View style={Style.all_item_main2}>
+                   <View style={Style.all_item_main3}>
+                     <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
+                       <Image style={Style.all_item_main4_img}
+                         resizeMode="cover"
+                         source={{ uri: element.item.imgs }}
+                      />
+                    </TouchableOpacity>
+                    <View>
+                      <Text style={Style.cardTitle}>
+                        {element.item.name.split(/\s+/).slice(0, 4).join(" ")+"..."}
+                      </Text>
+                      <View style={Style.cardBotm}>
+                      <Text
+                        style={Style.cardPrice}>
+                        RS. {element.item.price}
+                      </Text>
+                        <Text style={Style.rating}>
+                          4.5{' '}
+                          <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+          
+        
+      }} keyExtractor={item => item.product_id} numColumns={2}/>
+      :<SkeletonJs/>}
       </View>
     </View>
   );
@@ -173,7 +104,7 @@ const Style = StyleSheet.create({
   middle2_2_icon: {
     fontSize: 15,
     marginRight: 10,
-    color:"gray"
+    color: "gray"
   },
   all_item_main: {
     width: '100%',
@@ -183,29 +114,30 @@ const Style = StyleSheet.create({
     padding: 5,
     marginTop: -5
   },
-  all_item_main2:{
-    width: '50%', 
+  all_item_main2: {
+    width: '50%',
     padding: 5
   },
-  all_item_main3:{
+  all_item_main3: {
     padding: 5,
     backgroundColor: 'white',
     borderRadius: 10,
     elevation: 3.5,
     shadowColor: '#52006A',
   },
-  all_item_main4:{
-    borderBottomWidth: 1,
+  all_item_main4: {
+    // borderBottomWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomColor:"#ACACAC"
+    borderBottomColor: "#ACACAC",
+    paddingBottom: 8,
   },
-  all_item_main4_img:{
+  all_item_main4_img: {
     width: '80%',
     height: 120
   },
-  cardTitle:{
-    margin:2,
+  cardTitle: {
+    margin: 2,
     color: 'black',
     fontSize: 13
   },
@@ -225,13 +157,9 @@ const Style = StyleSheet.create({
   cardBotm: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 2,
-  },
-  favIcon: {
-    color: '#FB2F53',
-    fontSize: 13,
-    fontWeight: '800',
-    marginTop: 1.5,
+    marginVertical: "5%",
+    paddingLeft: "2%",
+    alignItems: "center"
   }
 });
 
