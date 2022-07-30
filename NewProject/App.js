@@ -7,7 +7,7 @@ import TabNav from './HomebottomNav';
 import AddToCart from './screens/AddToCart';
 import Product_detail from './screens/Product_detail';
 import SplashScreen from 'react-native-splash-screen'
-import Product_detail from './screens/Product_detail';
+import Home from './screens/Home';
 
 const Stack=createNativeStackNavigator();
 const App = () => {

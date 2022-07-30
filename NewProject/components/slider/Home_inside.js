@@ -1,24 +1,59 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SkeletonJs from '../Skeleton'
+import SearchBar from '../SearchBar';
+import Carousel from '../carousel/carousel';
+import { dummyData } from '../../data/Carousel_data'
+import Popuplar_slider from './popuplar_slider';
+import Categories from '../Categories';
 
-const AllItems_slider = ({ navigate }) => {
+const Home_inside = ({ navigate }) => {
 
   const [products, setProducts] = useState([]);
+  const [limit,setlimit]=useState(10);
+  const [isLoading,setIsloading]=useState(true)
 
   useEffect(async () => {
-    await fetch('http://192.168.1.22:5000/sql/all')
+    //setIsloading(true)
+    await fetch(`http://192.168.1.11:5000/sql/all/${limit}`)
       .then((response) => response.json())
-      .then((json) => setProducts(json))
+      .then((json) => {setProducts(json)})
       .catch((error) => console.error(error))
     //.finally(() => setLoading(false));
-  }, []);
+  }, [limit]);
+
+  const flatlistEnd=()=>{
+    // const getData=async()=>{
+      //setlimit(20)
+      // await fetch(`http://192.168.1.11:5000/sql/all/${limit}`)
+      // .then((response) => response.json())
+      // .then((json) => setProducts(json))
+      // .catch((error) => console.error(error)) 
+
+    //   setIsloading(false)
+    // }
+    // getData()
+    return(
+      isLoading?
+      <View>
+        <ActivityIndicator size="large" color="#5A56E9" animating={isLoading}/>
+      </View>:null
+    );
+  }
+
 
   return (
-    <View style={Style.main}>
-      <View style={Style.middle2}>
+    <View style={Style.all_item_main}>
+      <FlatList
+      ListHeaderComponent={
+        <View style={{flex:1,width:"100%"}}>
+          <SearchBar navigate={navigate} />
+        <Carousel data={dummyData} />
+        <Categories />
+        <Popuplar_slider />
+        <View style={Style.middle2}>
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
         </View>
@@ -26,10 +61,10 @@ const AllItems_slider = ({ navigate }) => {
           <Text style={Style.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
         </TouchableOpacity>
-      </View>
-      <View style={Style.all_item_main}>
-      {products.length>0?
-      <FlatList data={products} renderItem={(element)=>{
+        </View>
+        </View>
+      }
+        data={products} renderItem={(element)=>{
         return  <View style={Style.all_item_main2}>
                    <View style={Style.all_item_main3}>
                      <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
@@ -57,18 +92,16 @@ const AllItems_slider = ({ navigate }) => {
                 </View>
           
         
-      }} keyExtractor={item => item.product_id} numColumns={2}/>
-      :<SkeletonJs/>}
-      </View>
-    </View>
+      }} keyExtractor={item => item.product_id} numColumns={2}  
+      
+      onEndReached={()=>{
+        console.log("hello");
+      }} onEndReachedThreshold={0.5}/>
+  </View>
   );
 };
 
 const Style = StyleSheet.create({
-  main: {
-    width: '100%',
-    backgroundColor: '#e8e7e6',
-  },
   middle2: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -107,16 +140,13 @@ const Style = StyleSheet.create({
     color: "gray"
   },
   all_item_main: {
-    width: '100%',
-    height: '85%',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 5,
-    marginTop: -5
+    flex:1,
+    width:"100%",
+    backgroundColor:"#e8e7e6",
   },
   all_item_main2: {
     width: '50%',
-    padding: 5
+    padding: 10
   },
   all_item_main3: {
     padding: 5,
@@ -163,4 +193,4 @@ const Style = StyleSheet.create({
   }
 });
 
-export default AllItems_slider;
+export default Home_inside;

@@ -17,8 +17,8 @@ router.get("/suggest/:prod", (req,res) =>{
       })
 })
 
-router.get("/all", (req,res) =>{
-  req.app.locals.db.query(`select top(50) * from product`, function(err, recordset) {
+router.get("/all/:limit", (req,res) =>{
+  req.app.locals.db.query(`select top(${req.params.limit}) * from product`, function(err, recordset) {
       if (err) {
         console.error(err)
         res.status(500).send('SERVER ERROR')
