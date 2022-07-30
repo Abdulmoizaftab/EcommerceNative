@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import Sign_up from './screens/sign up';
 import TabNav from './HomebottomNav';
 import AddToCart from './screens/AddToCart';
+import Product_detail from './screens/Product_detail';
 import SplashScreen from 'react-native-splash-screen'
 import Product_detail from './screens/Product_detail';
 
