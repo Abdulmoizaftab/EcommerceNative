@@ -12,29 +12,22 @@ import Categories from '../Categories';
 const Home_inside = ({ navigate }) => {
 
   const [products, setProducts] = useState([]);
-  const [limit,setlimit]=useState(10);
+  const [limit,setlimit]=useState(6);
   const [isLoading,setIsloading]=useState(true)
 
-  useEffect(async () => {
-    //setIsloading(true)
+  const getdata=async()=>{
+    setIsloading(true)
     await fetch(`http://192.168.1.11:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => {setProducts(json)})
       .catch((error) => console.error(error))
-    //.finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    getdata()
   }, [limit]);
 
   const flatlistEnd=()=>{
-    // const getData=async()=>{
-      //setlimit(20)
-      // await fetch(`http://192.168.1.11:5000/sql/all/${limit}`)
-      // .then((response) => response.json())
-      // .then((json) => setProducts(json))
-      // .catch((error) => console.error(error)) 
-
-    //   setIsloading(false)
-    // }
-    // getData()
     return(
       isLoading?
       <View>
@@ -43,14 +36,44 @@ const Home_inside = ({ navigate }) => {
     );
   }
 
+  const renderItem=(element)=>{
+    
+      return  (<View style={Style.all_item_main2}>
+                 <View style={Style.all_item_main3}>
+                   <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
+                     <Image style={Style.all_item_main4_img}
+                       resizeMode="cover"
+                       source={{ uri: element.item.imgs }}
+                    />
+                  </TouchableOpacity>
+                  <View>
+                    <Text style={Style.cardTitle}>
+                      {element.item.name.split(/\s+/).slice(0, 4).join(" ")+"..."}
+                    </Text>
+                    <View style={Style.cardBotm}>
+                    <Text
+                      style={Style.cardPrice}>
+                      RS. {element.item.price}
+                    </Text>
+                      <Text style={Style.rating}>
+                        4.5{' '}
+                        <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>)
+    
+  }
 
   return (
     <View style={Style.all_item_main}>
+      <SearchBar navigate={navigate} />
       <FlatList
       ListHeaderComponent={
         <View style={{flex:1,width:"100%"}}>
-          <SearchBar navigate={navigate} />
-        <Carousel data={dummyData} />
+          {/* <SearchBar navigate={navigate} /> */}
+        {/* <Carousel data={dummyData} /> */}
         <Categories />
         <Popuplar_slider />
         <View style={Style.middle2}>
@@ -64,38 +87,12 @@ const Home_inside = ({ navigate }) => {
         </View>
         </View>
       }
-        data={products} renderItem={(element)=>{
-        return  <View style={Style.all_item_main2}>
-                   <View style={Style.all_item_main3}>
-                     <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
-                       <Image style={Style.all_item_main4_img}
-                         resizeMode="cover"
-                         source={{ uri: element.item.imgs }}
-                      />
-                    </TouchableOpacity>
-                    <View>
-                      <Text style={Style.cardTitle}>
-                        {element.item.name.split(/\s+/).slice(0, 4).join(" ")+"..."}
-                      </Text>
-                      <View style={Style.cardBotm}>
-                      <Text
-                        style={Style.cardPrice}>
-                        RS. {element.item.price}
-                      </Text>
-                        <Text style={Style.rating}>
-                          4.5{' '}
-                          <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-          
-        
-      }} keyExtractor={item => item.product_id} numColumns={2}  
-      
+        data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}  
+      ListFooterComponent={flatlistEnd}
       onEndReached={()=>{
         console.log("hello");
+        setlimit(limit+4);
+        setIsloading(false)
       }} onEndReachedThreshold={0.5}/>
   </View>
   );
@@ -146,7 +143,8 @@ const Style = StyleSheet.create({
   },
   all_item_main2: {
     width: '50%',
-    padding: 10
+    padding:4,
+    justifyContent:"center"
   },
   all_item_main3: {
     padding: 5,
@@ -156,7 +154,7 @@ const Style = StyleSheet.create({
     shadowColor: '#52006A',
   },
   all_item_main4: {
-    // borderBottomWidth: 1,
+    borderBottomWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: "#ACACAC",
