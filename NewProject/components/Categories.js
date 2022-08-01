@@ -31,8 +31,6 @@ const Categories = () => {
 
             <View style={{ flexDirection: "column", justifyContent: "flex-end" }}>
               <Image style={{
-                elevation: 5,
-                shadowColor: "purple",
                 width: 80,
                 height: 50,
                 marginBottom: -12
