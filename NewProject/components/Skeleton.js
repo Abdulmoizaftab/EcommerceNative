@@ -78,16 +78,15 @@ const SkeletonJs = () => {
 
 const Style = StyleSheet.create({
     all_item_main: {
-        width: '100%',
-        height: '85%',
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        padding: 5,
-        marginTop: -5
+        flex: 1,
+        width: "100%",
+        backgroundColor: "#e8e7e6",
     },
     all_item_main2: {
         width: '50%',
-        padding: 5
+        padding: 4,
+        justifyContent: "center"
     },
     all_item_main3: {
         padding: 5,
@@ -102,7 +101,7 @@ const Style = StyleSheet.create({
         alignItems: 'center',
         borderBottomColor: "#ACACAC",
         paddingBottom: 8,
-    },
+    }
 });
 
 export default SkeletonJs;
