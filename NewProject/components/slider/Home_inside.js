@@ -13,7 +13,9 @@ const Home_inside = ({ navigate }) => {
 
   const [products, setProducts] = useState([]);
   const [limit,setlimit]=useState(6);
-  const [isLoading,setIsloading]=useState(true)
+  const [isLoading,setIsloading]=useState(true);
+  const [IsRefreshing,setIsRefreshing]=useState(false);
+
 
   const getdata=async()=>{
     setIsloading(true)
@@ -31,7 +33,7 @@ const Home_inside = ({ navigate }) => {
     return(
       isLoading?
       <View>
-        <ActivityIndicator size="large" color="#5A56E9" animating={isLoading}/>
+        <SkeletonJs/>
       </View>:null
     );
   }
@@ -63,17 +65,26 @@ const Home_inside = ({ navigate }) => {
                   </View>
                 </View>
               </View>)
-    
+  }
+  const onEndReached=()=>{
+    setlimit(limit+4);
+    setIsloading(false)
+  }
+
+  const onRefresh=()=>{
+      setIsRefreshing(true);
+      setProducts([]);
+      setlimit(6);
+      setIsRefreshing(false)
   }
 
   return (
     <View style={Style.all_item_main}>
-      <SearchBar navigate={navigate} />
       <FlatList
       ListHeaderComponent={
         <View style={{flex:1,width:"100%"}}>
-          {/* <SearchBar navigate={navigate} /> */}
-        {/* <Carousel data={dummyData} /> */}
+          <SearchBar navigate={navigate} />
+        <Carousel data={dummyData} />
         <Categories />
         <Popuplar_slider />
         <View style={Style.middle2}>
@@ -89,11 +100,7 @@ const Home_inside = ({ navigate }) => {
       }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}  
       ListFooterComponent={flatlistEnd}
-      onEndReached={()=>{
-        console.log("hello");
-        setlimit(limit+4);
-        setIsloading(false)
-      }} onEndReachedThreshold={0.5}/>
+      onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh}/>
   </View>
   );
 };
