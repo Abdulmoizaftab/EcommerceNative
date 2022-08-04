@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-import { View, Text,Button, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React from 'react'
-=======
 import { Dimensions,View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { SliderBox } from "react-native-image-slider-box";
@@ -15,7 +11,6 @@ import FlatButton from '../components/Button';
 
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
->>>>>>> branch-izhan
 const Product_detail = () => {
   const [imgArr, setImgArr] = useState(["https://kimerahome.b-cdn.net/wp-content/uploads/2022/01/CADBURY-SILK-HEART-BLUSH-150-GM.jpg", "https://cdn.shopify.com/s/files/1/0474/6828/2012/products/FOPBarsPO6_2pcEach.jpg?v=1642502710", "https://cdn0.woolworths.media/content/wowproductimages/large/194423.jpg"])
   const [prdSize, setPrdSize] = useState(['Small', 'Medium', 'Large'])
@@ -41,10 +36,6 @@ const Product_detail = () => {
     }
 
   return (
-<<<<<<< HEAD
-    <View>
-      <Text>Hello 123</Text>
-=======
     <ScrollView scrollEnabled={true}>
     <View style={Style.container} >
       <View style={Style.sliderView} >
@@ -130,7 +121,6 @@ const Product_detail = () => {
         <BottomSheet reference={refRBSheet}/>
       </RBSheet>
        
->>>>>>> branch-izhan
     </View>
     </ScrollView>
   );

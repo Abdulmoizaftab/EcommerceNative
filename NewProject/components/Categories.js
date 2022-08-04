@@ -30,15 +30,7 @@ const Categories = () => {
             </View>
 
             <View style={{ flexDirection: "column", justifyContent: "flex-end" }}>
-<<<<<<< HEAD
-              <Image style={{
-                width: 80,
-                height: 50,
-                marginBottom: -12
-              }}
-=======
               <Image style={styles.imageStyle}
->>>>>>> branch-izhan
                 source={image} />
             </View>
           </TouchableOpacity>
