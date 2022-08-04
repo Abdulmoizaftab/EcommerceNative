@@ -24,7 +24,18 @@ const App = () => {
         <Stack.Screen name="TabNav" component={TabNav} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Sign_up" component={Sign_up} />
-        <Stack.Screen name="AddToCart" component={AddToCart} />
+
+        <Stack.Screen
+         options={{headerShown:true,
+          title:"My Cart",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}}
+         name="AddToCart" component={AddToCart} />
+
         <Stack.Screen name="Product_detail" component={Product_detail} />
       </Stack.Navigator>
     </NavigationContainer>
