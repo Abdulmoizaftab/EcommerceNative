@@ -11,7 +11,7 @@ import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Popuplar_slider = ({navigation}) => {
+const Popuplar_slider = ({navigate}) => {
   return (
     <View style={Styles.main}>
       <View style={Styles.middle2}>
@@ -26,7 +26,7 @@ const Popuplar_slider = ({navigation}) => {
       
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={{width: '100%', flexDirection: 'row',}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigate.navigate('Product_detail')}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image

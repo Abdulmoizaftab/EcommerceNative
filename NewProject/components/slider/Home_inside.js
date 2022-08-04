@@ -19,7 +19,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata=async()=>{
     setIsloading(true)
-    await fetch(`http://192.168.1.11:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => {setProducts(json)})
       .catch((error) => console.error(error))
@@ -86,7 +86,7 @@ const Home_inside = ({ navigate }) => {
           <SearchBar navigate={navigate} />
         <Carousel data={dummyData} />
         <Categories />
-        <Popuplar_slider />
+        <Popuplar_slider navigate={navigate}/>
         <View style={Style.middle2}>
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
