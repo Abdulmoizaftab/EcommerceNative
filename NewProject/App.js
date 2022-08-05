@@ -7,6 +7,7 @@ import TabNav from './HomebottomNav';
 import AddToCart from './screens/AddToCart';
 import Product_detail from './screens/Product_detail';
 import SplashScreen from 'react-native-splash-screen'
+import CategoryScreen from './screens/CategoryScreen';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <Stack.Screen name="Sign_up" component={Sign_up} />
         <Stack.Screen name="AddToCart" component={AddToCart} />
         <Stack.Screen name="Product_detail" component={Product_detail} />
+        <Stack.Screen name="Categories" component={CategoryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
