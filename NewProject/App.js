@@ -8,6 +8,9 @@ import AddToCart from './screens/AddToCart';
 import Product_detail from './screens/Product_detail';
 import SplashScreen from 'react-native-splash-screen'
 import Home from './screens/Home';
+import { store, persistor } from './redux/store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -42,4 +45,12 @@ const App = () => {
   );
 };
 
-export default App;
+export default ()=>{
+  return(
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <App></App>
+      </PersistGate>
+    </Provider>
+  )
+};

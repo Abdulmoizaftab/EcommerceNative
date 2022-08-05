@@ -29,7 +29,7 @@ router.get("/all/:limit", (req,res) =>{
 })
 
 router.post("/register",  (req,res) =>{
-  const {username,email,password,first_name,last_name,address,telephone} = req.body
+  const {username,email,password,first_name,last_name} = req.body
   req.app.locals.db.query(`select * from users where email='${email}'`, async function(err, recordset) {
     if (err) {
       console.error(err)
@@ -41,7 +41,7 @@ router.post("/register",  (req,res) =>{
       }
       else{
         const encrypt_pswd = await bcrypt.hash(password,10);
-        req.app.locals.db.query(`insert into users (username , password,first_name,last_name,address,telephone,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${address}','${telephone}','${email}')`, function(err, recordset) {
+        req.app.locals.db.query(`insert into users (username , password,first_name,last_name,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}')`, function(err, recordset) {
           if (err) {
             console.error(err)
             res.status(500).send('SERVER ERROR')

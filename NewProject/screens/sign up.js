@@ -1,11 +1,36 @@
 import {View, Text, StyleSheet,TextInput, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import {useDispatch,useSelector} from 'react-redux' 
+import { register } from '../redux/apiCalls';
 
 const Sign_up = ({navigation}) => {
+
+  const [first_name , setFirstName] = useState("")
+  const [last_name , setLastName] = useState("")
+  const [username , setUsername] = useState("")
+  const [email , setEmail] = useState("")
+  const [password , setPswd] = useState("")
+  const [confirmPswd , setConfirmPswd] = useState("")
+  const [dataBody , setDataBody] = useState({})
+  const dispatch = useDispatch()
+
+  const handlePress = ()=>{
+    let payload={
+      username,
+      email,
+      password,
+      first_name,
+      last_name
+    }
+    setDataBody({...payload})
+    register(dispatch,payload)
+    console.log("pressed");
+  }
+
   return (
     <View style={Style.main}>
       <View style={Style.dot1}></View>
@@ -23,33 +48,33 @@ const Sign_up = ({navigation}) => {
           <View style={Style.fl_name_view}>
           <View>
             <Text style={Style.fl_name_view_text}><FontAwesome name='user-circle-o'/>  First Name</Text>
-            <TextInput selectionColor="black" style={Style.fl_name_view_input}/>
+            <TextInput selectionColor="black" style={Style.fl_name_view_input} onChangeText={setFirstName}/>
           </View>
           <View>
             <Text style={Style.fl_name_view_text}><FontAwesome name='user-circle-o'/>  Last name</Text>
-            <TextInput selectionColor="black" style={Style.fl_name_view_input}/>
+            <TextInput selectionColor="black" style={Style.fl_name_view_input} onChangeText={setLastName}/>
           </View>
           </View>
           <View style={Style.email_view}>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='email-outline'/>  Email</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput}/>
+            <TextInput selectionColor="black" style={Style.email_view_textinput} onChangeText={setEmail}/>
           </View>
           <View style={Style.email_view}>
             <Text style={Style.email_view_text}><AntDesign name='user'/>  Username</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput}/>
+            <TextInput selectionColor="black" style={Style.email_view_textinput} onChangeText={setUsername}/>
           </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Password</Text>
-            <TextInput selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true}/>
+            <TextInput selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPswd}/>
           </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Confirm password</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true}/>
+            <TextInput selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setConfirmPswd}/>
           </View>
           <TouchableOpacity style={Style.forgot_btn}>
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Style.signup_btn}>
+          <TouchableOpacity style={Style.signup_btn} onPress={handlePress}>
             <Text style={Style.signup_btn_text}>Sign up</Text>
           </TouchableOpacity>
           <TouchableOpacity style={Style.log_in_btn} onPress={()=>navigation.navigate('Login')}>
