@@ -11,6 +11,7 @@ import Home from './screens/Home';
 import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import CategoryScreen from './screens/CategoryScreen';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
          name="AddToCart" component={AddToCart} />
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
+        <Stack.Screen name="Categories" component={CategoryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
