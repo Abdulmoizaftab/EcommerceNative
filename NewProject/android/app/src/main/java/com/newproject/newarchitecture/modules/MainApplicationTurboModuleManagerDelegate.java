@@ -1,4 +1,4 @@
-package com.newproject.newarchitecture.modules;
+package com.ecommercenative.newproject.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
