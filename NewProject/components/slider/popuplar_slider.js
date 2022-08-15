@@ -26,7 +26,7 @@ const Popuplar_slider = ({navigate}) => {
       
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={{width: '100%', flexDirection: 'row',}}>
-          <TouchableOpacity onPress={()=>navigate.navigate('Product_detail')}>
+          <TouchableOpacity >
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image

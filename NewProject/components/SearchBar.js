@@ -10,17 +10,17 @@ import {
 import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
 
-
-const SearchBar = ({ navigate }) => {
+const SearchBar = () => {
     //const [isSearching , setIsSearching] = useState(false)
     const [searchText , setSearchText] = useState("");
-    console.log("🚀 ~ file: SearchBar.js ~ line 22 ~ SearchBar ~ searchText", searchText, filterData)
     const [filterData,setFilterData]=useState([]);
+    const navigate = useNavigation()
     
     useEffect(() => {
       // const fetchAndSet = async()=>{
@@ -44,7 +44,7 @@ const SearchBar = ({ navigate }) => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.9:5000/sql/suggest/${searchText}`);
+            const result= await axios.get(`http://192.168.1.15:5000/sql/suggest/${searchText}`);
           if (result.data) {
             result.data.map(item => {
               return arr.push(item.name);

@@ -19,7 +19,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata=async()=>{
     setIsloading(true)
-    await fetch(`http://192.168.1.9:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.15:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => {setProducts(json)})
       .catch((error) => console.error(error))
@@ -41,13 +41,13 @@ const Home_inside = ({ navigate }) => {
   const renderItem=(element)=>{
     
       return  (<View style={Style.all_item_main2}>
-                 <View style={Style.all_item_main3}>
-                   <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
+                 <TouchableOpacity style={Style.all_item_main3} onPress={() => navigate.navigate('Product_detail',element.item)} >
+                   <View style={Style.all_item_main4} >
                      <Image style={Style.all_item_main4_img}
                        resizeMode="cover"
                        source={{ uri: element.item.imgs }}
                     />
-                  </TouchableOpacity>
+                  </View>
                   <View>
                     <Text style={Style.cardTitle}>
                       {element.item.name.split(/\s+/).slice(0, 4).join(" ")+"..."}
@@ -63,7 +63,7 @@ const Home_inside = ({ navigate }) => {
                       </Text>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>)
   }
   const onEndReached=()=>{

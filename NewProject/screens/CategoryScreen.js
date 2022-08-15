@@ -12,7 +12,7 @@ const CategoryScreen = () => {
     <View style={{width:"100%"}}>
       <SearchBar/>
     <ScrollView>
-        <View style={{ alignItems:'center', justifyContent:'center',width:"100%",borderWidth:1,paddingBottom:"15%"}}>
+        <View style={{ alignItems:'center', justifyContent:'center',width:"100%",backgroundColor:"white",paddingBottom:"15%"}}>
             
        {arr.map(item=>(
         <View style={{marginVertical:"2%",width: "90%"}}>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     categoryCard:{
         width: "100%",
         height: 113,
-        borderWidth: 2,
+        elevation:5,
         borderColor: "#8580AF",
         borderRadius: 15,
         flexDirection:'row',
