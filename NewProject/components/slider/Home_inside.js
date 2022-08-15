@@ -42,35 +42,6 @@ const Home_inside = ({ navigate }) => {
     );
   }
 
-<<<<<<< HEAD
-  const renderItem=(element)=>{
-    
-      return  (<View style={Style.all_item_main2}>
-                 <TouchableOpacity style={Style.all_item_main3} onPress={() => navigate.navigate('Product_detail',element.item)} >
-                   <View style={Style.all_item_main4} >
-                     <Image style={Style.all_item_main4_img}
-                       resizeMode="cover"
-                       source={{ uri: element.item.imgs }}
-                    />
-                  </View>
-                  <View>
-                    <Text style={Style.cardTitle}>
-                      {element.item.name.split(/\s+/).slice(0, 4).join(" ")+"..."}
-                    </Text>
-                    <View style={Style.cardBotm}>
-                    <Text
-                      style={Style.cardPrice}>
-                      RS. {element.item.price}
-                    </Text>
-                      <Text style={Style.rating}>
-                        4.5{' '}
-                        <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>)
-=======
   const addToCart = async (productData) => {
     try {
       let asyncData = await AsyncStorage.getItem('@cartItems');
@@ -88,7 +59,6 @@ const Home_inside = ({ navigate }) => {
     } catch (error) {
       alert('Something went wrong');
     }
->>>>>>> branch-umair
   }
 
   const removeSpecificProduct = async (productData) => {
@@ -98,7 +68,7 @@ const Home_inside = ({ navigate }) => {
       if (asyncData) {
         let cartItem = asyncData;
         const removedData = cartItem.filter(object => object.product_id != productData.product_id)
-        console.log("🚀 ~ file: Home_inside.js ~ line 71 ~ removeSpecificProduct ~ removedData", removedData)
+        console.log("🚀  file: Home_inside.js  line 71  removeSpecificProduct  removedData", removedData)
         await AsyncStorage.removeItem('@cartItems')
         await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
       }
@@ -111,7 +81,7 @@ const Home_inside = ({ navigate }) => {
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@cartItems')
-      console.log("🚀 ~ file: Home_inside.js ~ line 167 ~ getData ~ jsonValue", jsonValue)
+      console.log("🚀  file: Home_inside.js  line 167  getData  jsonValue", jsonValue)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       alert('Something went wrong');
@@ -226,7 +196,7 @@ const Home_inside = ({ navigate }) => {
         <View style={{flex:1,width:"100%"}}>
           <SearchBar navigate={navigate} />
         <Carousel data={dummyData} />
-        <Categories navigate={navigate}/>
+        <Categories />
         <Popuplar_slider navigate={navigate}/>
         <View style={Style.middle2}>
         <View style={Style.middle2_1}>

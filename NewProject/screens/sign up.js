@@ -2,7 +2,6 @@ import {View, Text, StyleSheet,TextInput, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
 import {useDispatch,useSelector} from 'react-redux' 
 import { register } from '../redux/apiCalls';
-import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro';
