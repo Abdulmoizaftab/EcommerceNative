@@ -37,41 +37,8 @@ const SkeletonJs = () => {
                 </View>
             </View>
 
-            <View style={Style.all_item_main2}>
-                <View style={Style.all_item_main3}>
-                    <View style={Style.all_item_main4}>
-                        <Skeleton h="40" />
-                    </View>
-                    <View>
-                        <Skeleton.Text lines={3} px="1" />
-                    </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 5 }}>
-                        <Skeleton size="5" rounded="full" />
-                        <Skeleton h="5" w="10" startColor="amber.300" rounded="20" />
-                    </View>
-                </View>
-            </View>
-
-            <View style={Style.all_item_main2}>
-                <View style={Style.all_item_main3}>
-                    <View style={Style.all_item_main4}>
-                        <Skeleton h="40" />
-                    </View>
-                    <View>
-                        <Skeleton.Text lines={3} px="1" />
-                    </View>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 5 }}>
-                        <Skeleton size="5" rounded="full" />
-                        <Skeleton h="5" w="10" startColor="amber.300" rounded="20" />
-                    </View>
-                </View>
-            </View>
-
-            
-
-           
         </View>
-    // </ScrollView>
+        // </ScrollView>
 
     )
 }

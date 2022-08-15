@@ -12,6 +12,8 @@ import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
+import AddressBook from './screens/AddressBook';
+import CheckOutScreen from './screens/CheckOutScreen';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -42,6 +44,17 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
+        <Stack.Screen name="CheckoutScreen" component={CheckOutScreen} />
+        <Stack.Screen
+          options={{headerShown:true,
+            title:"Address Book",
+           headerStyle:{backgroundColor:"#5A56E9"},
+           headerTintColor: '#fff',
+           headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+           headerTitleAlign:"center"}}
+        name="AddressBook" component={AddressBook} />
       </Stack.Navigator>
     </NavigationContainer>
   );

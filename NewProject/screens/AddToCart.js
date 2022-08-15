@@ -1,18 +1,21 @@
-import { View, Text, StyleSheet,ScrollView,Image, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { Actionsheet,NativeBaseProvider,useDisclose } from 'native-base';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React,{useRef} from 'react';
+import { Actionsheet, NativeBaseProvider, useDisclose } from 'native-base';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import { useNavigation } from '@react-navigation/native';
+import RBSheet from "react-native-raw-bottom-sheet";
+import CheckoutBottomSheet from '../components/CheckoutBottomSheet';
 
 const AddToCart = () => {
 
-  const {
-    isOpen,
-    onOpen,
-    onClose
-  } = useDisclose();
+  
+
+  const refRBSheet = useRef();
+
+  const navigate = useNavigation()
 
   return (
-    <NativeBaseProvider>
+    // <NativeBaseProvider>
     <View style={Style.main}>
       <View style={Style.topHeader}>
         <View style={Style.topHeader_inside}>
@@ -20,12 +23,12 @@ const AddToCart = () => {
           <Text style={Style.topHeader_inside_text2}>TOTAL: RS 200.00</Text>
         </View>
       </View>
-      
+
       <ScrollView>
         <View style={Style.item}>
           <View style={Style.item_inside}>
             <View style={Style.img_view}>
-              <Image source={{uri:'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg'}} style={Style.img}/>
+              <Image source={{ uri: 'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg' }} style={Style.img} />
             </View>
             <View style={Style.details}>
               <Text style={Style.detail_text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</Text>
@@ -51,7 +54,7 @@ const AddToCart = () => {
           </View>
           <View style={Style.item_inside}>
             <View style={Style.img_view}>
-              <Image source={{uri:'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg'}} style={Style.img}/>
+              <Image source={{ uri: 'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg' }} style={Style.img} />
             </View>
             <View style={Style.details}>
               <Text style={Style.detail_text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</Text>
@@ -77,7 +80,7 @@ const AddToCart = () => {
           </View>
           <View style={Style.item_inside}>
             <View style={Style.img_view}>
-              <Image source={{uri:'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg'}} style={Style.img}/>
+              <Image source={{ uri: 'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg' }} style={Style.img} />
             </View>
             <View style={Style.details}>
               <Text style={Style.detail_text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</Text>
@@ -103,7 +106,7 @@ const AddToCart = () => {
           </View>
           <View style={Style.item_inside}>
             <View style={Style.img_view}>
-              <Image source={{uri:'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg'}} style={Style.img}/>
+              <Image source={{ uri: 'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg' }} style={Style.img} />
             </View>
             <View style={Style.details}>
               <Text style={Style.detail_text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</Text>
@@ -129,7 +132,7 @@ const AddToCart = () => {
           </View>
           <View style={Style.item_inside}>
             <View style={Style.img_view}>
-              <Image source={{uri:'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg'}} style={Style.img}/>
+              <Image source={{ uri: 'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg' }} style={Style.img} />
             </View>
             <View style={Style.details}>
               <Text style={Style.detail_text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</Text>
@@ -155,7 +158,7 @@ const AddToCart = () => {
           </View>
           <View style={Style.item_inside}>
             <View style={Style.img_view}>
-              <Image source={{uri:'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg'}} style={Style.img}/>
+              <Image source={{ uri: 'https://5.imimg.com/data5/SELLER/Default/2021/1/HK/LE/LL/1073409/oppo-mobile-a9-2020-500x500.jpg' }} style={Style.img} />
             </View>
             <View style={Style.details}>
               <Text style={Style.detail_text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit....</Text>
@@ -179,18 +182,46 @@ const AddToCart = () => {
               </View>
             </View>
           </View>
-    
-        </View>
-        </ScrollView>
-      
-        
-        <TouchableOpacity activeOpacity={1} onPress={onOpen} style={{width:"100%",backgroundColor:"white",padding:10,justifyContent:"center",alignItems:"center",position:"absolute",bottom:0,borderTopLeftRadius:15,borderTopRightRadius:15}}>
-              <Text>
-                <SimpleLineIcons name='arrow-up' style={{fontWeight:"bold",color:"black",fontSize:25}}/>
-              </Text>
-        </TouchableOpacity> 
 
-          <Actionsheet isOpen={isOpen} onClose={onClose}>
+        </View>
+      </ScrollView>
+
+
+      <TouchableOpacity activeOpacity={1} onPress={() => refRBSheet.current.open()} style={{ width: "100%", backgroundColor: "white", padding: 10, justifyContent: "center", alignItems: "center", position: "absolute", bottom: 0, borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
+        <Text>
+          <SimpleLineIcons name='arrow-up' style={{ fontWeight: "bold", color: "black", fontSize: 25 }} />
+        </Text>
+      </TouchableOpacity>
+      <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        height={300}
+        openDuration={450}
+        closeDuration={450}
+        closeOnPressMask={true}
+        closeOnPressBack={false}
+        dragFromTopOnly={true}
+        animationType="slide"
+        customStyles={{
+          wrapper: {
+            backgroundColor: "transparent"
+          },
+          draggableIcon: {
+            backgroundColor: "#000",
+            width: 75
+
+          },
+          container: {
+            borderTopLeftRadius: 25,
+            borderTopRightRadius: 25,
+          }
+
+        }}
+      >
+        <CheckoutBottomSheet reference={refRBSheet}/>
+      </RBSheet>
+
+      {/* <Actionsheet isOpen={isOpen} onClose={onClose}>
             <Actionsheet.Content style={{backgroundColor:"#edebeb"}}>
             <View style={Style.order_detail}>
             <Text style={Style.head}>Order details</Text>
@@ -209,167 +240,167 @@ const AddToCart = () => {
               <Text style={Style.Total_text}>Rs 190.00</Text>
             </View>
             <View style={Style.checkout_view}>
-              <TouchableOpacity style={Style.checkout_view_btn} activeOpacity={0.8}>
+              <TouchableOpacity style={Style.checkout_view_btn} activeOpacity={0.8} onPress={()=>navigate.navigate('AddressBook')}>
                 <Text style={Style.checkout_view_text}>Check Out</Text>
               </TouchableOpacity>
             </View>
           </View>
             </Actionsheet.Content>
-          </Actionsheet>
+          </Actionsheet> */}
     </View>
-          </NativeBaseProvider>
+    // </NativeBaseProvider>
   )
 }
-const Style=StyleSheet.create({
-    main:{
-      width:"100%",
-      backgroundColor:"#e8e6e6",
-      height:"100%"
-    },
-    topHeader:{
-      width:"100%",
-      alignItems:"center",
-      shadowColor: "#000",
-      shadowOpacity: 0.55,
-      shadowRadius: 3.84,
-      elevation: 5,
-      backgroundColor:"white",
-      zIndex:99999
-    },
-    topHeader_inside:{
-      display:"flex",
-      flexDirection:"row",
-      justifyContent:"space-between",
-      width:"95%",
-      padding:5,
-      backgroundColor:"white"
-    },
-    topHeader_inside_text1:{
-      color:"black",
-      fontWeight:"bold"
-    },
-    topHeader_inside_text2:{
-      color:"black",
-      fontWeight:"bold"
-    },
-    item:{
-      width:"100%",
-      alignItems:"center",
-      paddingBottom:"14%"
-    },
-    item_inside:{
-      width:"95%",
-      display:"flex",
-      flexDirection:"row",
-      backgroundColor:"#fff",
-      borderRadius:5,
-      marginTop:"3%"
-    },
-    img_view:{
-      padding:5,
-      width:"35%",
-      justifyContent:"center",
-      alignItems:"center"
-    },img:{
-      height:100,
-      width:100
-    },
-    details:{
-      width:"65%",
-      padding:3,
-    },detail_text:{
-      color:"black",
-      marginVertical:"1%"
-    },
-    details_bottom:{
-      display:"flex",
-      flexDirection:"row",
-      justifyContent:"space-between"
-    },
-    counter:{
-      display:"flex",
-      flexDirection:"row",
-      marginRight:"5%",
-      marginVertical:"1%"
-    },
-    counter_btn:{
-      backgroundColor:"#5A56E9",
-      width:20,
-      alignItems:"center",
-      borderRadius:3,
-      justifyContent:"center",
-    },
-    counter_variable:{
-      color:"black",
-      marginHorizontal:3
-    },
-    counter_btn_text:{
-      color:"#fff",
-      marginHorizontal:3,
-      fontWeight:"bold"
-    },
-    order_detail:{
-      marginTop:"3%",
-      width:"100%",
-      backgroundColor:"lightgray",
-     
-      borderRadius:15,
-      borderColor:"#fff"
-    },
-    head:{
-      color:"black",
-      fontWeight:"bold",
-      fontSize:17,
-      margin:"3%"
-    },
-    cartTotal:{
-      display:"flex",
-      flexDirection:"row",
-      justifyContent:"space-between",
-      margin:"3%",
-      backgroundColor:"#fff"
-    },cartTotal_text:{
-      color:"black"
-    },
-    total:{
-      borderTopWidth:1,
-      borderTopColor:"lightgray",
-      display:"flex",
-      flexDirection:"row",
-      justifyContent:"space-between",
-      padding:"3%",
-      width:"100%",
-      backgroundColor:"#fff",
-    },
-    Total_text:{
-      color:"black",
-      fontWeight:"bold"
-    },
-    checkout_view:{
-      borderTopWidth:1,
-      borderTopColor:"lightgray",
-      width:"100%",
-      alignItems:"center",
-      justifyContent:"center",
-      padding:"3%",
-      backgroundColor:"#fff",
-      borderBottomLeftRadius:15,
-      borderBottomRightRadius:15
-      
-    },
-    checkout_view_btn:{
-      width:"80%",
-      alignItems:"center",
-      justifyContent:"center",
-      padding:"4%",
-      backgroundColor:"#5A56E9",
-      borderRadius:10
-    },
-    checkout_view_text:{
-      color:"#fff",
-      fontWeight:"bold"
-    }
-    
+const Style = StyleSheet.create({
+  main: {
+    width: "100%",
+    backgroundColor: "#e8e6e6",
+    height: "100%"
+  },
+  topHeader: {
+    width: "100%",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.55,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: "white",
+    zIndex: 99999
+  },
+  topHeader_inside: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "95%",
+    padding: 5,
+    backgroundColor: "white"
+  },
+  topHeader_inside_text1: {
+    color: "black",
+    fontWeight: "bold"
+  },
+  topHeader_inside_text2: {
+    color: "black",
+    fontWeight: "bold"
+  },
+  item: {
+    width: "100%",
+    alignItems: "center",
+    paddingBottom: "14%"
+  },
+  item_inside: {
+    width: "95%",
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    marginTop: "3%"
+  },
+  img_view: {
+    padding: 5,
+    width: "35%",
+    justifyContent: "center",
+    alignItems: "center"
+  }, img: {
+    height: 100,
+    width: 100
+  },
+  details: {
+    width: "65%",
+    padding: 3,
+  }, detail_text: {
+    color: "black",
+    marginVertical: "1%"
+  },
+  details_bottom: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  counter: {
+    display: "flex",
+    flexDirection: "row",
+    marginRight: "5%",
+    marginVertical: "1%"
+  },
+  counter_btn: {
+    backgroundColor: "#5A56E9",
+    width: 20,
+    alignItems: "center",
+    borderRadius: 3,
+    justifyContent: "center",
+  },
+  counter_variable: {
+    color: "black",
+    marginHorizontal: 3
+  },
+  counter_btn_text: {
+    color: "#fff",
+    marginHorizontal: 3,
+    fontWeight: "bold"
+  },
+  order_detail: {
+    marginTop: "3%",
+    width: "100%",
+    backgroundColor: "lightgray",
+
+    borderRadius: 15,
+    borderColor: "#fff"
+  },
+  head: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 17,
+    margin: "3%"
+  },
+  cartTotal: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: "3%",
+    backgroundColor: "#fff"
+  }, cartTotal_text: {
+    color: "black"
+  },
+  total: {
+    borderTopWidth: 1,
+    borderTopColor: "lightgray",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: "3%",
+    width: "100%",
+    backgroundColor: "#fff",
+  },
+  Total_text: {
+    color: "black",
+    fontWeight: "bold"
+  },
+  checkout_view: {
+    borderTopWidth: 1,
+    borderTopColor: "lightgray",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "3%",
+    backgroundColor: "#fff",
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15
+
+  },
+  checkout_view_btn: {
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "4%",
+    backgroundColor: "#5A56E9",
+    borderRadius: 10
+  },
+  checkout_view_text: {
+    color: "#fff",
+    fontWeight: "bold"
+  }
+
 })
 
 export default AddToCart;

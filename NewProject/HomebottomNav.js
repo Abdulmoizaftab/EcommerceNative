@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useReducer} from 'react';
 import {Text} from 'react-native';
 import Home from './screens/Home';
 import Favourites from './screens/Favourites';
@@ -6,9 +6,13 @@ import Notification from './screens/Notification';
 import Orders from './screens/Orders';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Reducer from './Reducer/reducer';
+
 
 const Tab = createBottomTabNavigator();
 const BottomNav = () => {
+
+
   return (
       <Tab.Navigator
       initialRouteName='Home'
@@ -38,7 +42,7 @@ const BottomNav = () => {
       })}
       
       >
-        <Tab.Screen name="Home" component={Home} options={{
+        <Tab.Screen name="Home"  component={Home} options={{
           tabBarLabel: () => (
             <Text style={{color: "#5A56E9",fontSize:12,flexDirection:"column"}}>Home</Text>
           ),
@@ -49,7 +53,8 @@ const BottomNav = () => {
         <Tab.Screen name="Favourites" component={Favourites} options={{
           tabBarLabel: () => (
             <Text style={{color: "#5A56E9",fontSize:12}}>Favourites</Text>
-          )
+          ), 
+          unmountOnBlur:true
         }} />
         <Tab.Screen name="Notification" component={Notification} options={{
           tabBarLabel: () => (
