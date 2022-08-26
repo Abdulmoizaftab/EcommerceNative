@@ -7,7 +7,7 @@ const jwt=require('jsonwebtoken');
 
 
 router.get("/suggest/:prod", (req,res) =>{
-    req.app.locals.db.query(`select top(15) * from product WHERE name LIKE '%${req.params.prod}%'`, function(err, recordset) {
+    req.app.locals.db.query(`select top(5) * from product WHERE name LIKE '%${req.params.prod}%'`, function(err, recordset) {
         if (err) {
           console.error(err)
           res.status(500).send('SERVER ERROR')
@@ -26,6 +26,28 @@ router.get("/all/:limit", (req,res) =>{
       }
       res.status(200).json(recordset.recordset)
     })
+})
+
+router.get('/allVenders',(req,res)=>{
+  req.app.locals.db.query(`select * from vendors`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/venderProduct/:id',(req,res)=>{
+  req.app.locals.db.query(`select * from product where vendor_id = ${req.params.id}`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
 })
 
 router.post("/register",  (req,res) =>{

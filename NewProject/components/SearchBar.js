@@ -10,17 +10,19 @@ import {
 import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
 
 
-const SearchBar = ({ navigate }) => {
+
+const SearchBar = () => {
     //const [isSearching , setIsSearching] = useState(false)
     const [searchText , setSearchText] = useState("");
-    console.log("🚀 ~ file: SearchBar.js ~ line 22 ~ SearchBar ~ searchText", searchText, filterData)
     const [filterData,setFilterData]=useState([]);
+    const navigate = useNavigation()
     
     useEffect(() => {
       // const fetchAndSet = async()=>{
@@ -44,8 +46,7 @@ const SearchBar = ({ navigate }) => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.11:5000/sql/suggest/${searchText}`);
-            console.log("Data is>==",result.data);
+            const result= await axios.get(`http://192.168.1.7:5000/sql/suggest/${searchText}`);
           if (result.data) {
             result.data.map(item => {
               return arr.push(item.name);
@@ -71,26 +72,14 @@ const SearchBar = ({ navigate }) => {
     const onChange = (text)=> {
       if(text){
         setSearchText(text)
-        // const temp = text.toLowerCase()
-        // dataSource && dataSource.map(item => {
-        //   filterData.push(item)
-        // })
-        // const tempList = dataSource && dataSource.filter(item => {
-        //   if(item.name.match(temp)){
-        //     return item.name
-        //   }
-        // })
-        // setFiltered(tempList)
-  
-        // console.log(tempList);
-        // console.log(filterData)
       }
       else{
-        //setIsSearching(false)
         setFilterData([])
       }
     }
     
+
+   
   
     return (
         <>
@@ -106,7 +95,7 @@ const SearchBar = ({ navigate }) => {
                 </View>
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
-            <SearchDropdown dataSource={filterData} /> 
+            <SearchDropdown dataSource={filterData} searchTextInSearch={searchText}/> 
         </>
     );
   };
@@ -121,6 +110,7 @@ const SearchBar = ({ navigate }) => {
       height:65
     },
     searchView:{
+
         flexDirection:'row',
         alignItems:'center',
         borderWidth:1.5,
@@ -139,15 +129,18 @@ const SearchBar = ({ navigate }) => {
       height:40,
     },
     searchIcon:{
+
         color:"#EAE9FC",
         fontSize:20,
         
     },
     accountIcon:{
+
         color:"#EAE9FC",
         fontSize:25
     },
     cartIcon:{
+
         color:"#EAE9FC",
         fontSize:25
     }
