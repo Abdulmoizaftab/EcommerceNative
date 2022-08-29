@@ -47,7 +47,7 @@ const CheckOutScreen = () => {
 
   return (
     <ScrollView>
-      <View style={styles.Container1}>
+      {/* <View style={styles.Container1}>
         <View style={styles.imageIcon}>
           <Image
             style={styles.arrow}
@@ -55,7 +55,7 @@ const CheckOutScreen = () => {
           />
         </View>
         <Text style={styles.heading}>Checkout</Text>
-      </View>
+      </View> */}
 
       <View style={{ height: css }}>
         <View style={styles.add}>
@@ -138,13 +138,11 @@ const CheckOutScreen = () => {
 
 
       </View>
-      <View style={{ padding: 8, marginTop: 180, flexDirection: 'row', justifyContent: 'center' }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 320, marginTop: 30 }}>
+      {/* <View style={{ padding: 8, marginTop: 180, flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "90%", marginTop: 30 }}>
           <Text style={styles.total}>Total</Text>
           <Text style={styles.total1}>$ 954</Text>
-
         </View>
-
       </View>
    
      <TouchableOpacity>
@@ -153,7 +151,7 @@ const CheckOutScreen = () => {
           <Text style={styles.payButton}>Confirm and pay</Text>
         </View>
       </View>
-     </TouchableOpacity>
+     </TouchableOpacity> */}
     
     </ScrollView>
 
@@ -320,7 +318,7 @@ const styles = StyleSheet.create({
   parentPayDiv:{
     alignItems:'center',
     justifyContent:'center',
-    marginTop:20
+    marginVertical:"5%"
   }
 
 

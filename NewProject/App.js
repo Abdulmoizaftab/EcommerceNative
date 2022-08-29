@@ -44,7 +44,14 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
-        <Stack.Screen name="CheckoutScreen" component={CheckOutScreen} />
+        <Stack.Screen name="CheckoutScreen" options={{headerShown:true,
+          title:"Checkout",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}} component={CheckOutScreen} />
         <Stack.Screen
           options={{headerShown:true,
             title:"Address Book",

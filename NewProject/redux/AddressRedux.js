@@ -16,7 +16,6 @@ const addressSlice = createSlice({
             const modifiedAddresses = state.addresses.filter(item => item._id !== action.payload)
             state.addresses = modifiedAddresses;
             // state.products.splice(state.products.findIndex((data) => data.id === action.payload), 1);
-
         },
 
        

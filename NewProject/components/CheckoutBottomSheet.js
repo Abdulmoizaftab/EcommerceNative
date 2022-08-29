@@ -38,7 +38,7 @@ export default CheckoutBottomSheet
 
 const Style = StyleSheet.create({
     order_detail: {
-        marginTop: "3%",
+        marginTop: "8%",
         width: "100%",
         backgroundColor: "lightgray",
     
