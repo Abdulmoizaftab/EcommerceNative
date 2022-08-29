@@ -46,9 +46,20 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
+<<<<<<< HEAD
         <Stack.Screen name="CheckoutScreen" component={CheckOutScreen} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
+=======
+        <Stack.Screen name="CheckoutScreen" options={{headerShown:true,
+          title:"Checkout",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}} component={CheckOutScreen} />
+>>>>>>> origin/branch-umair
         <Stack.Screen
           options={{headerShown:true,
             title:"Address Book",
