@@ -44,10 +44,10 @@ const SearchBar = () => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.15:5000/sql/suggest/${searchText}`);
+            const result= await axios.get(`http://192.168.1.14:5000/sql/suggest/${searchText}/10`);
           if (result.data) {
             result.data.map(item => {
-              return arr.push(item.name);
+              return arr.push(item);
             })
             setFilterData(arr)
           }
@@ -66,7 +66,11 @@ const SearchBar = () => {
     }, [searchText])
     
   
-  
+  const onSearch = () => {
+    navigate.navigate('SearchScreen',searchText)
+  }
+
+
     const onChange = (text)=> {
       if(text){
         setSearchText(text)
@@ -98,6 +102,8 @@ const SearchBar = () => {
                 <View style={styles.searchView}>
                     <Ionicons name='search-outline' style={styles.searchIcon} />
                     <TextInput
+                        onSubmitEditing={onSearch}
+                        returnKeyType="search"
                         style={styles.search}
                         placeholder="Search Here"
                         placeholderTextColor="#EAE9FC"
@@ -105,7 +111,7 @@ const SearchBar = () => {
                 </View>
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
-            <SearchDropdown dataSource={filterData} /> 
+            <SearchDropdown dataSource={filterData} navigate={navigate}/> 
         </>
     );
   };

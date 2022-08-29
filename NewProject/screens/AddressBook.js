@@ -1,23 +1,47 @@
-import { StyleSheet, Text, View,Button, Touchable, TouchableOpacity,Image } from 'react-native'
-import React,{useRef} from 'react'
+import { StyleSheet, Text, View,Button, TouchableOpacity,Image } from 'react-native'
+import React,{useRef,useEffect} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import RBSheet from "react-native-raw-bottom-sheet";
 import AddressBottomSheet from '../components/AddressBottomSheet';
 import addressImg from '../image/address1.png'
 import { useDispatch,useSelector } from 'react-redux';
+import { deleteAddress } from '../redux/AddressRedux'
+
 
 const AddressBook = () => {
     const navigate = useNavigation()
     const dispatch = useDispatch()
-    const addresses = useSelector(state => state.address)
+    const address = useSelector(state => state.address)
     const refRBSheet = useRef();
+
+  useEffect(() => {
+    console.log(address)
+  }, [address])
+  
+  
+
   return (
     <View style={styles.main}>
-      <View style={styles.imgView}>
-        <Image style={styles.imgStyle} source={addressImg}></Image>
-        <Text style={{color:'gray', fontWeight:'400'}}>Click the icon to add an address</Text>
-      </View>
+      {
+        address.addresses.length !==0 ? (
+          address.addresses.map((element,key)=>(
+            <View key={key}>
+              <Text>{element.title}</Text>
+              <Text>{element.address}</Text>
+              <Text>Recipent: {element.recipent}</Text>
+              <Text>{element.phone}</Text>
+              <Button title='Delete' onPress={()=>dispatch(deleteAddress(element.address))}/>
+            </View>
+          ))
+        ):(
+            <View style={styles.imgView}>
+              <Image style={styles.imgStyle} source={addressImg}></Image>
+              <Text style={{ color: 'gray', fontWeight: '400' }}>Click the icon to add an address</Text>
+            </View>
+        )
+      }
+      
       <TouchableOpacity style={styles.iconView} activeOpacity={0.7} onPress={() => refRBSheet.current.open()}>
           <MaterialIcons name='add-location-alt' color='#E9ECFF' size={40}/>
       </TouchableOpacity>

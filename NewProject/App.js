@@ -14,6 +14,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
 import AddressBook from './screens/AddressBook';
 import CheckOutScreen from './screens/CheckOutScreen';
+import SeeAllPopular from './screens/SeeAllPopular';
+import SearchScreen from './screens/SearchScreen';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -45,6 +47,8 @@ const App = () => {
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
         <Stack.Screen name="CheckoutScreen" component={CheckOutScreen} />
+        <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
+        <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen
           options={{headerShown:true,
             title:"Address Book",

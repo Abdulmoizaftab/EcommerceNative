@@ -13,7 +13,7 @@ const addressSlice = createSlice({
         },
         deleteAddress:(state,action)=>{
             state.quantity-=1
-            const modifiedAddresses = state.addresses.filter(item => item._id !== action.payload)
+            const modifiedAddresses = state.addresses.filter(item => item.address !== action.payload)
             state.addresses = modifiedAddresses;
             // state.products.splice(state.products.findIndex((data) => data.id === action.payload), 1);
 

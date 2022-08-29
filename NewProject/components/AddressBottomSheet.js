@@ -1,24 +1,27 @@
-import { StyleSheet, Text, View, TextInput, Touchable } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { addAddress } from '../redux/AddressRedux'
+import { useDispatch } from 'react-redux'
 
 const AddressBottomSheet = ({reference}) => {
+    const dispatch = useDispatch()
     const [title, setTttle] = useState("")
     const [recipent, setRecipent] = useState("")
     const [address, setAddress] = useState("")
-    const [phone, setPhone] = useState(0)
+    const [phoneInput, setPhoneInput] = useState("")
 
-    // const handlePress = () => {
-    //     const payload = {
-    //         title,
-    //         recipent,
-    //         address,
-    //         phone
-    //     }
-    //     dispatchEvent(addAddress(payload))
-    //}
+    const handlePress = () => {
+        const phone = parseInt(phoneInput)
+        const payload = {
+            title,
+            recipent,
+            address,
+            phone,
+        }
+        dispatch(addAddress(payload))
+    }
+
     return (
         <View style={styles.main}>
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='card-text-outline' color='gray' size={20} /> Address Title</Text>
@@ -31,9 +34,9 @@ const AddressBottomSheet = ({reference}) => {
             <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setAddress} value={address}/>
 
             <Text style={styles.inputLabelStyle} ><MaterialCommunityIcons name='phone-outline' color='gray' size={20} /> Phone #</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} keyboardType='numeric' onChangeText={setPhone} value={phone}/>
+            <TextInput selectionColor='black' style={styles.inputStyle} keyboardType='numeric' onChangeText={setPhoneInput} value={phoneInput}/>
 
-            <TouchableOpacity style={styles.btnStyle} >
+            <TouchableOpacity style={styles.btnStyle} onPress={handlePress}>
                 <Text style={styles.btnText}>Add Address</Text>
             </TouchableOpacity>
         </View>

@@ -6,7 +6,6 @@ import Notification from './screens/Notification';
 import Orders from './screens/Orders';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Reducer from './Reducer/reducer';
 
 
 const Tab = createBottomTabNavigator();

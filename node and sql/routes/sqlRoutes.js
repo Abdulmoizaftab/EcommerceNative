@@ -6,8 +6,8 @@ const jwt=require('jsonwebtoken');
 
 
 
-router.get("/suggest/:prod", (req,res) =>{
-    req.app.locals.db.query(`select top(15) * from product WHERE name LIKE '%${req.params.prod}%'`, function(err, recordset) {
+router.get("/suggest/:prod/:limit", (req,res) =>{
+    req.app.locals.db.query(`select top(${req.params.limit}) * from product WHERE name LIKE '%${req.params.prod}%'`, function(err, recordset) {
         if (err) {
           console.error(err)
           res.status(500).send('SERVER ERROR')
@@ -94,7 +94,20 @@ router.post("/login",  (req,res) =>{
   })
 })
   
-
+router.get("/popular/:limit", (req,res) =>{
+  req.app.locals.db.query(`SELECT top(10) SUM(order_items.quantity) as total_Orders, order_items.product_id,product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
+  FROM order_items
+  INNER JOIN product ON order_items.product_id = product.product_id
+  GROUP BY order_items.product_id, product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
+  ORDER BY total_Orders desc`, function(err, recordset) {
+      if (err) {
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      res.status(200).json(recordset.recordset)
+    })
+})
 
 
 
