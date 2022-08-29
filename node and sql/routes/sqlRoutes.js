@@ -50,6 +50,17 @@ router.get('/venderProduct/:id',(req,res)=>{
   })
 })
 
+router.get('/recommend/:word',(req,res)=>{
+  req.app.locals.db.query(`select top(10)* from product where product.name like '%${req.params.word}%'`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
 router.post("/register",  (req,res) =>{
   const {username,email,password,first_name,last_name,address,telephone} = req.body
   req.app.locals.db.query(`select * from users where email='${email}'`, async function(err, recordset) {
