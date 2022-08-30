@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SearchDropdown = ({ dataSource, searchTextInSearch }) => {
 
   const [asyncStorageData,setAsyncStorageData]= useState([])
-  console.log("🚀 ~ file: SearchDropdown.js ~ line 10 ~ SearchDropdown ~ asyncStorageData", asyncStorageData)
   // const { dataSource,searchText } = props
 
   const addSuggestionWord = async () => {

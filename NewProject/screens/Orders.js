@@ -1,42 +1,43 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState,  } from 'react'
+import React, { useEffect, useState, } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const Item = () => (
-  <View >
-    <Text >hello</Text>
-  </View>
-);
 
 
 const Orders = () => {
 
-  useEffect(()=>{
-    getProductData()
-  },[])
-
-
-  const [asyncStorageData,setAsyncStorageData]= useState([])
+  const [asyncStorageData, setAsyncStorageData] = useState([])
   const [products, setProducts] = useState([]);
-  console.log("🚀 ~ file: Orders.js ~ line 22 ~ Orders ~ products", products)
+  console.log("🚀 ~ file: Orders.js ~ line 11 ~ Orders ~ products", products)
+
+  useEffect(() => {
+    getData()
+   
+  }, [])
+
+  useEffect(()=>{
+    asyncStorageData.length >=0 && asyncStorageData.map((obj) => {
+      getProductData(obj)
+    })
+  },[asyncStorageData])
 
 
 
   const getData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@searchItems')
-      setAsyncStorageData(jsonValue)
+      const asyncData = JSON.parse(jsonValue);
+      setAsyncStorageData(asyncData)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       alert('Something went wrong');
     }
   }
-
-  const getProductData = async () => {
-    await fetch(`http://192.168.1.7:5000/sql/recommend/women`)
-    .then((response) => response.json())
-      .then((json) => { setProducts(json) })
+//console.log("data==>",asyncStorageData);
+  const getProductData = async (obj) => {
+    await fetch(`http://192.168.1.7:5000/sql/recommend/${obj}`)
+      .then((response) => response.json())
+      .then((json) => { setProducts([...products,json]) })
       .catch((error) => console.error(error))
   }
 
@@ -44,7 +45,7 @@ const Orders = () => {
 
   return (
     <View>
-      <Text>Orders</Text>
+      <Text>ll</Text>
     </View>
   )
 }
