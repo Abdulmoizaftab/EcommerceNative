@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const CheckoutBottomSheet = ({reference}) => {
+const CheckoutBottomSheet = ({reference,total}) => {
     const navigate = useNavigation();
     const switchScreen = ()=>{
         reference.current.close();
@@ -14,7 +14,7 @@ const CheckoutBottomSheet = ({reference}) => {
             <View style={{width:"100%",backgroundColor:"#fff"}}>
               <View style={Style.cartTotal}>
                 <Text style={Style.cartTotal_text}>Cart Total:</Text>
-                <Text style={Style.cartTotal_text}>Rs 200.00</Text>
+                <Text style={Style.cartTotal_text}>Rs {total}.00</Text>
               </View>
               <View style={Style.cartTotal}>
                 <Text style={Style.cartTotal_text}>Discount:</Text>
@@ -23,7 +23,7 @@ const CheckoutBottomSheet = ({reference}) => {
             </View>
             <View style={Style.total}>
               <Text style={Style.Total_text}>Total Payable:</Text>
-              <Text style={Style.Total_text}>Rs 190.00</Text>
+              <Text style={Style.Total_text}>Rs {total-10}.00</Text>
             </View>
             <View style={Style.checkout_view}>
               <TouchableOpacity style={Style.checkout_view_btn} activeOpacity={0.8} onPress={switchScreen}>

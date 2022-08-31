@@ -3,6 +3,7 @@ import userReducer from './LoginRedux'
 import registerReducer from "./RegisterRedux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import addressReducer from "./AddressRedux";
+import cartReducer from "./CartRedux";
 
 import {
     persistStore,
@@ -22,7 +23,7 @@ import {
     // whitelist: ["Student"]
   }
   
-  const rootReducer = combineReducers({ user: userReducer , register: registerReducer ,address: addressReducer});
+  const rootReducer = combineReducers({ user: userReducer , register: registerReducer ,address: addressReducer, cart:cartReducer});
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({

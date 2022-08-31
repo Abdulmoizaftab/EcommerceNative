@@ -124,7 +124,7 @@ const Product_detail = ({route}) => {
          
         }}
       >
-        <BottomSheet reference={refRBSheet}/>
+        <BottomSheet reference={refRBSheet} prodData={paramData}/>
       </RBSheet>
        
     </View>
