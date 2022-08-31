@@ -6,7 +6,9 @@ import {
   Text,
   TextInput,
   View,
+  TouchableOpacity
 } from 'react-native';
+
 import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -67,6 +69,14 @@ const SearchBar = () => {
       
     }, [searchText])
     
+    const removeValue = async () => {
+      try {
+        await AsyncStorage.removeItem('@searchItems')
+      } catch (e) {
+        // remove error
+      }
+      console.log('Done.')
+    }
   
   
     const onChange = (text)=> {
@@ -96,6 +106,7 @@ const SearchBar = () => {
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
             <SearchDropdown dataSource={filterData} searchTextInSearch={searchText}/> 
+
         </>
     );
   };

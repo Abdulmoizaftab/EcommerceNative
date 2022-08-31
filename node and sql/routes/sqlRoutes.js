@@ -51,7 +51,7 @@ router.get('/venderProduct/:id',(req,res)=>{
 })
 
 router.get('/recommend/:word',(req,res)=>{
-  req.app.locals.db.query(`select top(2)* from product where product.name like '%${req.params.word}%'`, function(err, recordset){
+  req.app.locals.db.query(`select top(5)* from product where product.name like '%${req.params.word}%'`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')

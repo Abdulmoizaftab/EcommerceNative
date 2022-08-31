@@ -1,13 +1,12 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState,  } from 'react'
+import React, { useEffect, useState, } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const SearchDropdown = ({ dataSource, searchTextInSearch }) => {
 
-  const [asyncStorageData,setAsyncStorageData]= useState([])
-  // const { dataSource,searchText } = props
+  const [asyncStorageData, setAsyncStorageData] = useState([])
 
   const addSuggestionWord = async () => {
     try {
@@ -39,9 +38,9 @@ const SearchDropdown = ({ dataSource, searchTextInSearch }) => {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getData()
-  },[])
+  }, [])
 
   return (
 
@@ -50,11 +49,17 @@ const SearchDropdown = ({ dataSource, searchTextInSearch }) => {
       {
         dataSource.map((item, key) => {
           return (
-            <TouchableOpacity onPress={addSuggestionWord}>
-              <View key={key}>
-                <Text style={{ borderBottomWidth: 1, borderColor: "grey", marginVertical: 10 }}>{item}</Text>
-              </View>
-            </TouchableOpacity>
+
+            <View>
+
+              <TouchableOpacity onPress={addSuggestionWord}>
+                <View key={key}>
+                  <Text style={{ borderBottomWidth: 1, borderColor: "grey", marginVertical: 10 }}>{item}</Text>
+                </View>
+              </TouchableOpacity>
+
+            </View>
+
           )
         })
       }

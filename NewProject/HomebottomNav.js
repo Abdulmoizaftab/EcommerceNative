@@ -63,7 +63,7 @@ const BottomNav = () => {
         }}/>
         <Tab.Screen name="Orders" component={Orders} options={{
           tabBarLabel: () => (
-            <Text style={{color: "#5A56E9",fontSize:12}}>Orders</Text>
+            <Text style={{color: "#5A56E9",fontSize:12}}>For You</Text>
           ),
           unmountOnBlur:true
         }}/>
