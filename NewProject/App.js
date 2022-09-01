@@ -12,6 +12,8 @@ import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
+import CheckOutScreen from './screens/CheckOutScreen';
+import Allproducts from './screens/Allproducts';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -28,6 +30,16 @@ const App = () => {
         <Stack.Screen name="TabNav" component={TabNav} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Sign_up" component={Sign_up} />
+        <Stack.Screen
+        options={{headerShown:true,
+          title:"All Products",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}}
+         name="Allproducts" component={Allproducts} />
 
         <Stack.Screen
          options={{headerShown:true,
@@ -42,6 +54,7 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
+        <Stack.Screen name="CheckoutScreen" component={CheckOutScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

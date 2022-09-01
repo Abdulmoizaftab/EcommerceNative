@@ -14,6 +14,13 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-NewProject-NewProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-NewProject-NewProjectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A7FC709782884434B13FC5D4 /* Mukta-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E23931CB1C74ADFB799E7D5 /* Mukta-Bold.ttf */; };
+		21E25456639847EC9842306D /* Mukta-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 460F71A75C3A45A0A1145F80 /* Mukta-ExtraBold.ttf */; };
+		8655B8F4E1E641D9B0C00445 /* Mukta-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1D758471FDA4216B9D5C267 /* Mukta-ExtraLight.ttf */; };
+		6D9B6341B4D342C4BAA5B121 /* Mukta-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9A5585ED2BF45658E1225F8 /* Mukta-Light.ttf */; };
+		C2F726EAD2D146299D9700F7 /* Mukta-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8785B2C762A4092BA6C63FA /* Mukta-Medium.ttf */; };
+		A0593A88E78F440BA5ADFFBA /* Mukta-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A0147DFCD894E8E836F3392 /* Mukta-Regular.ttf */; };
+		72E80254919145ADBBD30B0B /* Mukta-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 654C5F305ACE4C759DC1C58E /* Mukta-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +51,13 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NewProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-NewProject-NewProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewProject-NewProjectTests.release.xcconfig"; path = "Target Support Files/Pods-NewProject-NewProjectTests/Pods-NewProject-NewProjectTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		5E23931CB1C74ADFB799E7D5 /* Mukta-Bold.ttf */ = {isa = PBXFileReference; name = "Mukta-Bold.ttf"; path = "../assets/fonts/Mukta-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		460F71A75C3A45A0A1145F80 /* Mukta-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Mukta-ExtraBold.ttf"; path = "../assets/fonts/Mukta-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A1D758471FDA4216B9D5C267 /* Mukta-ExtraLight.ttf */ = {isa = PBXFileReference; name = "Mukta-ExtraLight.ttf"; path = "../assets/fonts/Mukta-ExtraLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D9A5585ED2BF45658E1225F8 /* Mukta-Light.ttf */ = {isa = PBXFileReference; name = "Mukta-Light.ttf"; path = "../assets/fonts/Mukta-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A8785B2C762A4092BA6C63FA /* Mukta-Medium.ttf */ = {isa = PBXFileReference; name = "Mukta-Medium.ttf"; path = "../assets/fonts/Mukta-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1A0147DFCD894E8E836F3392 /* Mukta-Regular.ttf */ = {isa = PBXFileReference; name = "Mukta-Regular.ttf"; path = "../assets/fonts/Mukta-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		654C5F305ACE4C759DC1C58E /* Mukta-SemiBold.ttf */ = {isa = PBXFileReference; name = "Mukta-SemiBold.ttf"; path = "../assets/fonts/Mukta-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +136,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				31F35E08BD91499F9C00A433 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +162,21 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		31F35E08BD91499F9C00A433 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				5E23931CB1C74ADFB799E7D5 /* Mukta-Bold.ttf */,
+				460F71A75C3A45A0A1145F80 /* Mukta-ExtraBold.ttf */,
+				A1D758471FDA4216B9D5C267 /* Mukta-ExtraLight.ttf */,
+				D9A5585ED2BF45658E1225F8 /* Mukta-Light.ttf */,
+				A8785B2C762A4092BA6C63FA /* Mukta-Medium.ttf */,
+				1A0147DFCD894E8E836F3392 /* Mukta-Regular.ttf */,
+				654C5F305ACE4C759DC1C58E /* Mukta-SemiBold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +274,13 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				A7FC709782884434B13FC5D4 /* Mukta-Bold.ttf in Resources */,
+				21E25456639847EC9842306D /* Mukta-ExtraBold.ttf in Resources */,
+				8655B8F4E1E641D9B0C00445 /* Mukta-ExtraLight.ttf in Resources */,
+				6D9B6341B4D342C4BAA5B121 /* Mukta-Light.ttf in Resources */,
+				C2F726EAD2D146299D9700F7 /* Mukta-Medium.ttf in Resources */,
+				A0593A88E78F440BA5ADFFBA /* Mukta-Regular.ttf in Resources */,
+				72E80254919145ADBBD30B0B /* Mukta-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

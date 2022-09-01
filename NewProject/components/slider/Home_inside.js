@@ -8,6 +8,7 @@ import Carousel from '../carousel/carousel';
 import { dummyData } from '../../data/Carousel_data'
 import Popuplar_slider from './popuplar_slider';
 import Categories from '../Categories';
+import VendorSlider from '../VendorSlider';
 
 const Home_inside = ({ navigate }) => {
 
@@ -86,6 +87,8 @@ const Home_inside = ({ navigate }) => {
           <SearchBar navigate={navigate} />
         <Carousel data={dummyData} />
         <Categories navigate={navigate}/>
+        <VendorSlider/>
+        
         <Popuplar_slider navigate={navigate}/>
         <View style={Style.middle2}>
         <View style={Style.middle2_1}>

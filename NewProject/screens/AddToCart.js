@@ -2,9 +2,10 @@ import { View, Text, StyleSheet,ScrollView,Image, TouchableOpacity } from 'react
 import React from 'react';
 import { Actionsheet,NativeBaseProvider,useDisclose } from 'native-base';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
-
+import { useNavigation } from '@react-navigation/native';
 const AddToCart = () => {
 
+  const navigate = useNavigation();
   const {
     isOpen,
     onOpen,
@@ -209,8 +210,8 @@ const AddToCart = () => {
               <Text style={Style.Total_text}>Rs 190.00</Text>
             </View>
             <View style={Style.checkout_view}>
-              <TouchableOpacity style={Style.checkout_view_btn} activeOpacity={0.8}>
-                <Text style={Style.checkout_view_text}>Check Out</Text>
+              <TouchableOpacity style={Style.checkout_view_btn} activeOpacity={0.8}  onPress={() => navigate.navigate('CheckoutScreen')} >
+                <Text style={Style.checkout_view_text}>check Out</Text>
               </TouchableOpacity>
             </View>
           </View>

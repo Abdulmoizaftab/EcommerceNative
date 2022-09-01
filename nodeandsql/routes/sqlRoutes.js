@@ -93,6 +93,28 @@ router.post("/login",  (req,res) =>{
     }
   })
 })
+
+router.get('/allVenders',(req,res)=>{
+  req.app.locals.db.query(`select * from vendors`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/venderProduct/:id',(req,res)=>{
+  req.app.locals.db.query(`select * from product where vendor_id = ${req.params.id}`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
   
 
 
