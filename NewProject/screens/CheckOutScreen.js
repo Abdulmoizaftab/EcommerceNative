@@ -4,9 +4,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { NativeBaseProvider, Radio } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 
 
 const CheckOutScreen = () => {
+    const navigate = useNavigation()
   const [css, setCss] = useState(140)
   const Example = () => {
     return <Radio.Group defaultValue="1" name="exampleGroup" accessibilityLabel="favorite colorscheme">
@@ -19,7 +21,7 @@ const CheckOutScreen = () => {
                 uri: 'https://www.kindpng.com/picc/m/291-2918629_visa-logo-png-visa-logo-vector-transparent-png.png',
               }}
             />
-            <Text style={{ marginLeft: 20, fontSize: 17 }}>**** **** **** 1234</Text>
+            <Text style={{ marginLeft: 20, fontSize: 17 }}>*** *** **** 1234</Text>
           </Radio>
         </View>
         <View tyle={styles.radio2}>
@@ -30,7 +32,7 @@ const CheckOutScreen = () => {
                 uri: 'https://p7.hiclipart.com/preview/648/903/662/logo-payment-visa-mastercard-paypal-mastercard-icon-png.jpg',
               }}
             />
-            <Text style={{ marginLeft: 20, fontSize: 17 }}>**** **** **** 1234</Text>
+            <Text style={{ marginLeft: 20, fontSize: 17 }}>*** *** **** 1234</Text>
           </Radio>
         </View>
       </View>
@@ -45,7 +47,7 @@ const CheckOutScreen = () => {
 
   return (
     <ScrollView>
-      <View style={styles.Container1}>
+      {/* <View style={styles.Container1}>
         <View style={styles.imageIcon}>
           <Image
             style={styles.arrow}
@@ -53,12 +55,12 @@ const CheckOutScreen = () => {
           />
         </View>
         <Text style={styles.heading}>Checkout</Text>
-      </View>
+      </View> */}
 
       <View style={{ height: css }}>
         <View style={styles.add}>
           <Text style={styles.ship}>Shipping information</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigate.navigate('AddressBook')}>
             <Text style={styles.buttonAdd}>Add</Text>
           </TouchableOpacity>
 
@@ -136,13 +138,11 @@ const CheckOutScreen = () => {
 
 
       </View>
-      <View style={{ padding: 8, marginTop: 180, flexDirection: 'row', justifyContent: 'center' }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 320, marginTop: 30 }}>
+      {/* <View style={{ padding: 8, marginTop: 180, flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "90%", marginTop: 30 }}>
           <Text style={styles.total}>Total</Text>
           <Text style={styles.total1}>$ 954</Text>
-
         </View>
-
       </View>
    
      <TouchableOpacity>
@@ -151,7 +151,7 @@ const CheckOutScreen = () => {
           <Text style={styles.payButton}>Confirm and pay</Text>
         </View>
       </View>
-     </TouchableOpacity>
+     </TouchableOpacity> */}
     
     </ScrollView>
 
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   parentPayDiv:{
     alignItems:'center',
     justifyContent:'center',
-    marginTop:20
+    marginVertical:"5%"
   }
 
 

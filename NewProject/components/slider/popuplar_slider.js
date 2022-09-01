@@ -7,39 +7,69 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
-import React from 'react';
+import React , {useState,useEffect} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SkeletonJs from '../Skeleton';
+import { NativeBaseProvider } from 'native-base';
 
-const Popuplar_slider = ({navigate}) => {
+
+const Popuplar_slider = ({ navigate }) => {
+
+  const [products, setProducts] = useState([]);
+  const [limit, setlimit] = useState(10);
+  const [isLoading, setIsloading] = useState(true);
+
+
+  const getdata = async () => {
+    setIsloading(true)
+    await fetch(`http://192.168.1.14:5000/sql/popular/${limit}`)
+      .then((response) => response.json())
+      .then((json) => { setProducts(json) })
+      .catch((error) => console.error(error))
+
+    setIsloading(false)
+  }
+
+  useEffect(() => {
+    getdata()
+  }, [limit]);
+
   return (
     <View style={Styles.main}>
       <View style={Styles.middle2}>
         <View style={Styles.middle2_1}>
           <Text style={Styles.middle2_1_text1}>Popular Items</Text>
         </View>
-        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.6}>
+        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.6} onPress={()=>navigate.navigate('SeeAllPopular')}>
           <Text style={Styles.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Styles.middle2_2_icon} />
         </TouchableOpacity>
       </View>
-      
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={{width: '100%', flexDirection: 'row',}}>
-          <TouchableOpacity onPress={()=>navigate.navigate('Product_detail')}>
+        <View style={{ width: '100%', flexDirection: 'row', }}>
+    {
+      isLoading?(
+        <NativeBaseProvider>
+          <View>
+            <SkeletonJs />
+          </View>
+        </NativeBaseProvider>
+      ):products?.map((element,key)=>(
+        <TouchableOpacity key={key} onPress={() => navigate.navigate('Product_detail',element)}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image
                   style={Styles.cardImg}
                   source={{
-                    uri: 'https://kimerahome.b-cdn.net/wp-content/uploads/2022/01/CADBURY-SILK-HEART-BLUSH-150-GM.jpg',
+                    uri: element.imgs,
                   }}></Image>
               </View>
               <View style={Styles.cardDesc}>
                 <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
+                  {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
                 </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
+                <Text style={Styles.cardPrice}>RS. {element.price}</Text>
                 <View style={Styles.cardBotm}>
                   <Icon style={Styles.favIcon} name="md-heart-outline" />
                   <Text style={Styles.rating}>
@@ -50,150 +80,8 @@ const Popuplar_slider = ({navigate}) => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: 'https://images.officeworks.com.au/api/2/img///s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/TD1107346_.jpg/resize?size=600&auth=MjA5OTcwODkwMg__',
-                  }}></Image>
-              </View>
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
-                </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
-                <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
-                  <Text style={Styles.rating}>
-                    4.5{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: 'https://cdn0.woolworths.media/content/wowproductimages/large/194423.jpg',
-                  }}></Image>
-              </View>
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
-                </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
-                <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
-                  <Text style={Styles.rating}>
-                    4.5{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: 'https://www.thestockport.com/pub/media/catalog/product/cache/b35bf2d1a59577a83aeb3ac52e6f69c5/7/1/718lyyrmfil._sl1000_.jpg',
-                  }}></Image>
-              </View>
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
-                </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
-                <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
-                  <Text style={Styles.rating}>
-                    4.5{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: 'https://cdn.shopify.com/s/files/1/0474/6828/2012/products/FOPBarsPO6_2pcEach.jpg?v=1642502710',
-                  }}></Image>
-              </View>
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
-                </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
-                <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
-                  <Text style={Styles.rating}>
-                    4.5{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: 'https://cdnprod.mafretailproxy.com/sys-master-root/h41/he0/26563681288222/1850544_main.jpg_480Wx480H',
-                  }}></Image>
-              </View>
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
-                </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
-                <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
-                  <Text style={Styles.rating}>
-                    4.5{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: 'https://cdn.shopify.com/s/files/1/0074/0429/0111/products/Galaxy_Smooth_Milk_Chocolate_Bar_42g_1000x1000.jpg?v=1581378177',
-                  }}></Image>
-              </View>
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  AirPods Pro Light Blue Exquisite Design
-                </Text>
-                <Text style={Styles.cardPrice}>RS. 500</Text>
-                <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
-                  <Text style={Styles.rating}>
-                    4.5{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
+      ))
+    }
         </View>
       </ScrollView>
     </View>
@@ -203,7 +91,7 @@ const Popuplar_slider = ({navigate}) => {
 const Styles = StyleSheet.create({
   main: {
     width: '100%',
-    backgroundColor:"#e8e7e6"
+    backgroundColor: "#e8e7e6"
   },
   middle2: {
     flexDirection: 'row',
@@ -239,8 +127,8 @@ const Styles = StyleSheet.create({
   },
   middle2_2_icon: {
     fontSize: 15,
-    marginRight:10,
-    color:"gray"
+    marginRight: 10,
+    color: "gray"
   },
   cardDesc: {
     paddingHorizontal: 10,
@@ -272,7 +160,7 @@ const Styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
     flexWrap: 'wrap',
-    color:"black"
+    color: "black"
   },
   cardPrice: {
     fontSize: 17,
@@ -285,7 +173,7 @@ const Styles = StyleSheet.create({
   },
   rating: {
     color: '#E3A500',
-    fontSize:12
+    fontSize: 12
   },
   cardBotm: {
     flexDirection: 'row',

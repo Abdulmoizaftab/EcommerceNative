@@ -12,8 +12,11 @@ import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
-import CheckOutScreen from './screens/CheckOutScreen';
 import Allproducts from './screens/Allproducts';
+import AddressBook from './screens/AddressBook';
+import CheckOutScreen from './screens/CheckOutScreen';
+import SeeAllPopular from './screens/SeeAllPopular';
+import SearchScreen from './screens/SearchScreen';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -54,7 +57,29 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
-        <Stack.Screen name="CheckoutScreen" component={CheckOutScreen} />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            title: "Checkout",
+            headerStyle: { backgroundColor: "#5A56E9" },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+            headerTitleAlign: "center"
+          }} name="CheckoutScreen" component={CheckOutScreen} />
+        <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
+        <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        <Stack.Screen
+          options={{headerShown:true,
+            title:"Address Book",
+           headerStyle:{backgroundColor:"#5A56E9"},
+           headerTintColor: '#fff',
+           headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+           headerTitleAlign:"center"}}
+        name="AddressBook" component={AddressBook} />
       </Stack.Navigator>
     </NavigationContainer>
   );

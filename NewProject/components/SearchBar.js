@@ -10,17 +10,17 @@ import {
 import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
 
-
-const SearchBar = ({ navigate }) => {
+const SearchBar = () => {
     //const [isSearching , setIsSearching] = useState(false)
     const [searchText , setSearchText] = useState("");
-    console.log("🚀 ~ file: SearchBar.js ~ line 22 ~ SearchBar ~ searchText", searchText, filterData)
     const [filterData,setFilterData]=useState([]);
+    const navigate = useNavigation()
     
     useEffect(() => {
       // const fetchAndSet = async()=>{
@@ -44,10 +44,10 @@ const SearchBar = ({ navigate }) => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.9:5000/sql/suggest/${searchText}`);
+            const result= await axios.get(`http://192.168.1.14:5000/sql/suggest/${searchText}/10`);
           if (result.data) {
             result.data.map(item => {
-              return arr.push(item.name);
+              return arr.push(item);
             })
             setFilterData(arr)
           }
@@ -66,7 +66,11 @@ const SearchBar = ({ navigate }) => {
     }, [searchText])
     
   
-  
+  const onSearch = () => {
+    navigate.navigate('SearchScreen',searchText)
+  }
+
+
     const onChange = (text)=> {
       if(text){
         setSearchText(text)
@@ -98,6 +102,8 @@ const SearchBar = ({ navigate }) => {
                 <View style={styles.searchView}>
                     <Ionicons name='search-outline' style={styles.searchIcon} />
                     <TextInput
+                        onSubmitEditing={onSearch}
+                        returnKeyType="search"
                         style={styles.search}
                         placeholder="Search Here"
                         placeholderTextColor="#EAE9FC"
@@ -105,7 +111,7 @@ const SearchBar = ({ navigate }) => {
                 </View>
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
-            <SearchDropdown dataSource={filterData} /> 
+            <SearchDropdown dataSource={filterData} navigate={navigate}/> 
         </>
     );
   };

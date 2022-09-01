@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndi
 import React, { useEffect, useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SkeletonJs from '../Skeleton'
 import SearchBar from '../SearchBar';
 import Carousel from '../carousel/carousel';
@@ -9,20 +10,24 @@ import { dummyData } from '../../data/Carousel_data'
 import Popuplar_slider from './popuplar_slider';
 import Categories from '../Categories';
 import VendorSlider from '../VendorSlider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeBaseProvider } from 'native-base';
+
 
 const Home_inside = ({ navigate }) => {
 
   const [products, setProducts] = useState([]);
-  const [limit,setlimit]=useState(6);
-  const [isLoading,setIsloading]=useState(true);
-  const [IsRefreshing,setIsRefreshing]=useState(false);
+  // console.log(products)
+  const [limit, setlimit] = useState(6);
+  const [isLoading, setIsloading] = useState(true);
+  const [IsRefreshing, setIsRefreshing] = useState(false);
 
 
-  const getdata=async()=>{
+  const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.9:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.14:5000/sql/all/${limit}`)
       .then((response) => response.json())
-      .then((json) => {setProducts(json)})
+      .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
   }
 
@@ -30,53 +35,162 @@ const Home_inside = ({ navigate }) => {
     getdata()
   }, [limit]);
 
-  const flatlistEnd=()=>{
-    return(
-      isLoading?
-      <View>
-        <SkeletonJs/>
-      </View>:null
+  const flatlistEnd = () => {
+    return (
+      isLoading ?
+        <NativeBaseProvider>
+          <View>
+            <SkeletonJs />
+          </View> 
+        </NativeBaseProvider>: null
     );
   }
 
-  const renderItem=(element)=>{
-    
-      return  (<View style={Style.all_item_main2}>
-                 <View style={Style.all_item_main3}>
-                   <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
-                     <Image style={Style.all_item_main4_img}
-                       resizeMode="cover"
-                       source={{ uri: element.item.imgs }}
-                    />
-                  </TouchableOpacity>
-                  <View>
-                    <Text style={Style.cardTitle}>
-                      {element.item.name.split(/\s+/).slice(0, 4).join(" ")+"..."}
-                    </Text>
-                    <View style={Style.cardBotm}>
-                    <Text
-                      style={Style.cardPrice}>
-                      RS. {element.item.price}
-                    </Text>
-                      <Text style={Style.rating}>
-                        4.5{' '}
-                        <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>)
+  const addToCart = async (productData) => {
+    try {
+      let asyncData = await AsyncStorage.getItem('@cartItems');
+      asyncData = JSON.parse(asyncData);
+      if (asyncData) {
+        let cartItem = asyncData;
+        cartItem.push(productData);
+        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+      }
+      else {
+        let cartItem = [];
+        cartItem.push(productData);
+        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+      }
+    } catch (error) {
+      alert('Something went wrong');
+    }
   }
-  const onEndReached=()=>{
-    setlimit(limit+4);
+
+  const removeSpecificProduct = async (productData) => {
+    try {
+      let asyncData = await AsyncStorage.getItem('@cartItems');
+      asyncData = JSON.parse(asyncData);
+      if (asyncData) {
+        let cartItem = asyncData;
+        const removedData = cartItem.filter(object => object.product_id != productData.product_id)
+        console.log("🚀  file: Home_inside.js  line 71  removeSpecificProduct  removedData", removedData)
+        await AsyncStorage.removeItem('@cartItems')
+        await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
+      }
+    } catch (error) {
+      alert('Something went wrong');
+    }
+  }
+
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@cartItems')
+      console.log("🚀  file: Home_inside.js  line 167  getData  jsonValue", jsonValue)
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+      alert('Something went wrong');
+    }
+  }
+
+
+
+
+  const removeValue = async () => {
+    try {
+      await AsyncStorage.removeItem('@cartItems')
+    } catch (e) {
+      // remove error
+    }
+    console.log('Done.')
+  }
+
+
+  const renderItem = (element) => {
+
+    const USER_1 = {
+      name: 'Tom',
+      age: 20,
+      traits: {
+        hair: 'black',
+        eyes: 'blue'
+      }
+    }
+
+    const USER_2 = {
+      name: 'Sarah',
+      age: 21,
+      hobby: 'cars',
+      traits: {
+        eyes: 'green',
+      }
+    }
+
+    const productDetail = {
+      product_id: element.item.product_id,
+      name: element.item.name,
+      price: element.item.price,
+      image: element.item.imgs
+    }
+
+    return (
+      <View style={Style.all_item_main2}>
+        <View style={Style.all_item_main3}>
+          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)}>
+            <Image style={Style.all_item_main4_img}
+              resizeMode="cover"
+              source={{ uri: element.item.imgs }}
+            />
+          </TouchableOpacity>
+          <View>
+            <Text style={Style.cardTitle}>
+              {element.item.name.split(/\s+/).slice(0, 4).join(" ") + "..."}
+            </Text>
+            <View style={Style.cardBotm}>
+              <Text
+                style={Style.cardPrice}>
+                RS. {element.item.price}
+              </Text>
+              <Text style={Style.rating}>
+                4.5{' '}
+                <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
+              </Text>
+            </View>
+          </View>
+
+          <TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
+          </TouchableOpacity>
+
+          {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={removeValue} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            <Feather name="delete" style={Style.middle2_2_icon} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => removeSpecificProduct(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            <Feather name="home" style={Style.middle2_2_icon} />
+          </TouchableOpacity> */}
+
+          {/*<TouchableOpacity onPress={() => storeMergeData(product)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+          <Feather name="flower" style={Style.middle2_2_icon} />
+        </TouchableOpacity> */}
+
+        </View>
+      </View>
+    )
+  }
+  const onEndReached = () => {
+    setlimit(limit + 4);
     setIsloading(false)
   }
 
-  const onRefresh=()=>{
-      setIsRefreshing(true);
-      setProducts([]);
-      setlimit(6);
-      setIsRefreshing(false)
+  const onRefresh = () => {
+    setIsRefreshing(true);
+    setProducts([]);
+    setlimit(6);
+    setIsRefreshing(false)
   }
 
   return (
@@ -144,17 +258,17 @@ const Style = StyleSheet.create({
   middle2_2_icon: {
     fontSize: 15,
     marginRight: 10,
-    color: "gray"
+    color: "#C92252"
   },
   all_item_main: {
-    flex:1,
-    width:"100%",
-    backgroundColor:"#e8e7e6",
+    flex: 1,
+    width: "100%",
+    backgroundColor: "#e8e7e6",
   },
   all_item_main2: {
     width: '50%',
-    padding:4,
-    justifyContent:"center"
+    padding: 4,
+    justifyContent: "center"
   },
   all_item_main3: {
     padding: 5,

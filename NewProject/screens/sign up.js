@@ -1,11 +1,13 @@
 import {View, Text, StyleSheet,TextInput, TouchableOpacity} from 'react-native';
 import React, { useState } from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import {useDispatch,useSelector} from 'react-redux' 
 import { register } from '../redux/apiCalls';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Gmail_auth from '../components/Gmail_auth';
+import Facebook_auth from '../components/Facebook_auth';
 
 const Sign_up = ({navigation}) => {
 
@@ -81,8 +83,8 @@ const Sign_up = ({navigation}) => {
             <Text style={Style.log_in_btn_text}>Log in instead</Text>
           </TouchableOpacity>
           <View style={Style.auth_view}>
-            <AntDesign style={Style.auth_icon} name='google'/>
-            <FontAwesome5Pro style={Style.auth_icon} name='facebook'/>
+            <AntDesign style={Style.auth_icon} name='google' onPress={Gmail_auth}/>
+            <FontAwesome5Pro style={Style.auth_icon} name='facebook' onPress={Facebook_auth}/>
           </View>
         </View>        
       </View>

@@ -1,4 +1,4 @@
-package com.newproject;
+package com.ecommercenative.newproject;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen; // here

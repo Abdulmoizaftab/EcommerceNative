@@ -11,11 +11,14 @@ import FlatButton from '../components/Button';
 
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
-const Product_detail = () => {
+const Product_detail = ({route}) => {
+  const paramData = route.params
   const [imgArr, setImgArr] = useState(["https://kimerahome.b-cdn.net/wp-content/uploads/2022/01/CADBURY-SILK-HEART-BLUSH-150-GM.jpg", "https://cdn.shopify.com/s/files/1/0474/6828/2012/products/FOPBarsPO6_2pcEach.jpg?v=1642502710", "https://cdn0.woolworths.media/content/wowproductimages/large/194423.jpg"])
   const [prdSize, setPrdSize] = useState(['Small', 'Medium', 'Large'])
   const [prdColor, setPrdColor] = useState(['Green', 'Blue', 'Red'])
   const [isFav, setIsFav] = useState(false)
+  const [price, setPrice] = useState(0)
+  const [prdName, setPrdName] = useState("")
   const refRBSheet = useRef();
 
     const renderSize = ({item}) =>(
@@ -31,14 +34,17 @@ const Product_detail = () => {
       )
     const navigate = useNavigation()
     
-    const closeBtmSheet=()=>{
-      refRBSheet.current.close()
-    }
+    useEffect(() => {
+      setImgArr([paramData.imgs,paramData.imgs])
+      setPrice(paramData.price)
+      setPrdName(paramData.name)
+    },[paramData])
+    
 
   return (
     <ScrollView scrollEnabled={true}>
     <View style={Style.container} >
-      <View style={Style.sliderView} >
+      <View style={{flexDirection:'row',justifyContent:'center'}} >
         
         <Icon style={Style.backBtn} name='arrow-back-circle' onPress={()=>navigate.goBack()}/>
         {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={()=>setIsFav(!isFav)}/> : <Icon style={Style.heartBtn} name='heart-outline' onPress={()=>setIsFav(!isFav)}/>}
@@ -48,7 +54,7 @@ const Product_detail = () => {
         <SliderBox
           images={imgArr}
           sliderBoxHeight={SCREEN_HEIGHT/2}
-          ImageComponentStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0, width: "100%", borderWidth: 1, borderColor: "#d5d5d5" }}
+          ImageComponentStyle={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0, width: "100%",  borderColor: "#d5d5d5" }}
           dotColor="#FFEE58"
           inactiveDotColor="#90A4AE"
           paginationBoxStyle={{
@@ -67,8 +73,8 @@ const Product_detail = () => {
       </View>
 
         <View style={Style.detailsView}>
-          <Text style={Style.detailsHeading}>KitKat Extra Chocolate Extra Wafers</Text>
-          <Text style={Style.detailsPrice}>$25</Text>
+          <Text style={Style.detailsHeading}>{prdName}</Text>
+          <Text style={Style.detailsPrice}>${price}</Text>
           <Text style={Style.detailSizeHeading}>Sizes:</Text>
           <FlatList
                 horizontal={true}
@@ -118,7 +124,7 @@ const Product_detail = () => {
          
         }}
       >
-        <BottomSheet reference={refRBSheet}/>
+        <BottomSheet reference={refRBSheet} prodData={paramData}/>
       </RBSheet>
        
     </View>
@@ -142,7 +148,7 @@ const Style = StyleSheet.create({
   detailsHeading: {
     fontSize: 25,
     paddingTop: 20,
-    paddingLeft: 20,
+    paddingHorizontal: 20,
     color: 'black',
     fontWeight: '900'
   },
