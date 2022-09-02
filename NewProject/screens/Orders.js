@@ -1,16 +1,15 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState, } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import RecommendedProduct from '../components/recommendedProduct'
 
 
 const Orders = () => {
 
   const [asyncStorageData, setAsyncStorageData] = useState([])
   const [products, setProducts] = useState([]);
-  console.log("🚀 ~ file: Orders.js ~ line 11 ~ Orders ~ products", products)
-
-  const [start, setStart] = useState(true)
+  
+  const [allObject, setAllObject] = useState([]);
 
   useEffect(async () => {
     await getData();
@@ -24,37 +23,16 @@ const Orders = () => {
     asyncStorageData.length >= 0 && asyncStorageData.map((obj) => {
       getProductData(obj)
     })
-  }, [asyncStorageData >=0])
+  }, [asyncStorageData >= 0])
 
 
   const getProductData = async (obj) => {
-    setStart(false)
-    let arr = []
-    await fetch(`http://192.168.1.7:5000/sql/recommend/${obj}`)
+    await fetch(`http://192.168.1.10:5000/sql/recommend/${obj}`)
       .then((response) => response.json())
-      .then((valueIndex=> {console.log('==>',valueIndex)}))
-      // .then((json) => { setProducts(current => [...current,json]) })
-      .then(setStart(true))
+      .then((json) => { setProducts(current => [...current, json]) })
       .catch((error) => console.error(error))
 
   }
-
-
-  // const getProductData=async()=>{
-
-  //     for (let index = 0; index < asyncStorageData.length; index++) {
-  //       await fetch(`http://192.168.1.7:5000/sql/recommend/${asyncStorageData[index]}`)
-  //       .then(async (response) =>await response.json())
-  //       // .then((response) => {console.log('json data=>',response[0])})
-  //       .then((json) => {   
-  //         setProducts([...products,json])}
-  //         )
-  //         .catch((error) => console.error(error))
-  //       }
-
-  //   }
-
-
 
   const getData = async () => {
     try {
@@ -76,39 +54,37 @@ const Orders = () => {
     console.log('Done.')
   }
 
+  useEffect(() => {
+    getDataFromArray()
+  }, [products])
 
-  // const getProductData = async (obj) => {
-  //   let arr = []
-  //   await fetch(`http://192.168.1.7:5000/sql/recommend/${obj}`)
-  //   .then(async (response) =>await response.json())
-  //   // .then((response) => {console.log('json data=>',response[0])})
-  //   .then((json) => {   
-  //   setProducts([...products,json])}
-  //   )
-
-  //   .catch((error) => console.error(error))
-  // }
-
-
-  // const fetchData = () => {
-  //   let response = await getAllPokemon(initialURL)
-  //   setNextUrl(response.next);
-  //   setPrevUrl(response.previous);
-  //   await loadPokemon(response.results);
-  //   setLoading(false);
-  // }
+  const getDataFromArray = () => {
+    var arr = []
+    products && products.map((obj) => {
+      obj && obj.map((object) => {
+        arr.push(object)
+      })
+    })
+    setAllObject(arr)
+  }
 
   return (
     <ScrollView>
 
       <View>
-        <Text>order</Text>
+        <Text>RecommendedProduct</Text>
 
         <TouchableOpacity onPress={removeValue}>
           <View>
             <Text style={{ borderBottomWidth: 1, borderColor: "grey", marginVertical: 10 }}>delete</Text>
           </View>
         </TouchableOpacity>
+
+      </View>
+
+
+      <View>
+          <RecommendedProduct productData={allObject} />
       </View>
     </ScrollView>
   )

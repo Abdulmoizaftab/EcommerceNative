@@ -23,7 +23,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.7:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.10:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))

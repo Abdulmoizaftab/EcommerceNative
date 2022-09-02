@@ -48,7 +48,7 @@ const SearchBar = () => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.7:5000/sql/suggest/${searchText}`);
+            const result= await axios.get(`http://192.168.1.10:5000/sql/suggest/${searchText}`);
           if (result.data) {
             result.data.map(item => {
               return arr.push(item.name);
