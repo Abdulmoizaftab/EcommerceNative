@@ -34,7 +34,8 @@ const VendorSlider = () => {
 
         {apiData.map((item, index) => (
           <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 20 }} onPress={() => {
-            navigation.navigate('AllVendorProducts', item.vendorsId)
+            navigation.navigate('AllVendorProducts', {vendorId:item.vendorsId,
+               vendorName: item.vendorName})
             // console.log(item.vendorsId)
             // VendorId={apiData.vendorsId}
           }}  >
