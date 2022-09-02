@@ -20,7 +20,7 @@ const VendorSlider = () => {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
-  const navigation=useNavigation();
+  const navigation = useNavigation();
   return (
     <View style={{
       marginTop: 5,
@@ -29,19 +29,22 @@ const VendorSlider = () => {
       paddingLeft: 20,
 
     }}>
-{/* onPress={()=>navigation.navigate('Allproducts')} */}
+      <Text style={{fontSize:19,fontWeight:'bold', color:'black',marginBottom:9,marginLeft:-10}}>Popular Vendors</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
         {apiData.map((item, index) => (
-          <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 30 }} onPress={()=>{
-            navigation.navigate('Allproducts',item.vendorsId)
+          <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 20 }} onPress={() => {
+            navigation.navigate('AllVendorProducts', item.vendorsId)
             // console.log(item.vendorsId)
             // VendorId={apiData.vendorsId}
-            }}  >
-            <Image source={require('../assets/fonts/images/apple.png')} 
-            style={{  width: 70,
-              height: 60,
-              resizeMode: 'contain'}}/>
-            
+          }}  >
+            <Image source={require('../assets/fonts/images/samsung.png')}
+              style={{
+                width: 70,
+                height: 60,
+                resizeMode: 'contain'
+              }} />
+
 
 
             {/* below code is optional if you want to add text below the logos */}

@@ -12,11 +12,11 @@ import { store, persistor } from './redux/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
-import Allproducts from './screens/Allproducts';
 import AddressBook from './screens/AddressBook';
 import CheckOutScreen from './screens/CheckOutScreen';
 import SeeAllPopular from './screens/SeeAllPopular';
 import SearchScreen from './screens/SearchScreen';
+import AllVendorProducts from './screens/AllVendorProducts';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -33,16 +33,7 @@ const App = () => {
         <Stack.Screen name="TabNav" component={TabNav} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Sign_up" component={Sign_up} />
-        <Stack.Screen
-        options={{headerShown:true,
-          title:"All Products",
-         headerStyle:{backgroundColor:"#5A56E9"},
-         headerTintColor: '#fff',
-         headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-         headerTitleAlign:"center"}}
-         name="Allproducts" component={Allproducts} />
+        <Stack.Screen name="AllVendorProducts" component={AllVendorProducts} />
 
         <Stack.Screen
          options={{headerShown:true,
