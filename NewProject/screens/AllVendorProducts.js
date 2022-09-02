@@ -8,6 +8,7 @@ import { NativeBaseProvider } from 'native-base';
 import SearchBar from '../components/SearchBar';
 
 const AllVendorProducts = ({ route }) => {
+    const vendorObj = route.params;
     const navigate = useNavigation();
     const [VendorId, setVendorId] = useState([]);
     const [limit, setlimit] = useState(20);
@@ -15,9 +16,8 @@ const AllVendorProducts = ({ route }) => {
     const [isLoading, setIsloading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://192.168.1.14:5000/sql/venderProduct/${route.params}`)
+        fetch(`http://192.168.1.19:5000/sql/venderProduct/${vendorObj.vendorId}`)
             .then((response) => response.json())
-
             .then((json) => setVendorId(json))
             .catch((error) => console.error(error))
 
@@ -86,7 +86,7 @@ const AllVendorProducts = ({ route }) => {
                 ListHeaderComponent={
                     <View>
                         <SearchBar navigate={navigate} />
-                        <Text style={Style.mainHead}>Vendor Items</Text>
+                        <Text style={Style.mainHead}>Products for: {vendorObj.vendorName}</Text>
                     </View>
                 }
                 data={VendorId} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
