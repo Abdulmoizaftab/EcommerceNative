@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity,TouchableWithoutFeedback,Keyboard } from 'react-native';
 import React , {useState,useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -21,6 +21,10 @@ const Login = ({ navigation }) => {
   }
   
   return (
+
+    <TouchableWithoutFeedback onPress={()=>{
+      Keyboard.dismiss()
+    }}>
     <View style={Style.main}>
       <View style={Style.dot1}></View>
       <View style={Style.dot2}></View>
@@ -58,6 +62,7 @@ const Login = ({ navigation }) => {
         </View>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 const Style = StyleSheet.create({

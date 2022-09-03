@@ -199,7 +199,7 @@ const Home_inside = ({ navigate }) => {
         <View style={{flex:1,width:"100%"}}>
           <SearchBar navigate={navigate} />
         <Carousel data={dummyData} />
-        <Categories />
+        <Categories navigate={navigate} />
         <Popuplar_slider navigate={navigate}/>
         <View style={Style.middle2}>
         <View style={Style.middle2_1}>

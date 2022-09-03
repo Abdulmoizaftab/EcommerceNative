@@ -17,7 +17,7 @@ const CategoryScreen = () => {
        {arr.map(item=>(
         <View style={{marginVertical:"2%",width: "90%"}}>
              <LinearGradient style={styles.categoryCard} start={{x: 0, y: 0}} end={{x: 1.2, y: 0}} colors={['#fff', '#D1D1ED']}>
-             <Text style={styles.cardText}>Electronics</Text>
+             <Text style={styles.cardText}>Electronic</Text>
              <Image
              style={styles.logo}
              source={{
