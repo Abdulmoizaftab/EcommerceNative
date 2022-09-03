@@ -131,6 +131,28 @@ router.post("/login",  (req,res) =>{
     }
   })
 })
+
+router.get('/allVenders',(req,res)=>{
+  req.app.locals.db.query(`select * from vendors`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/venderProduct/:id',(req,res)=>{
+  req.app.locals.db.query(`select * from product where vendor_id = ${req.params.id}`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
   
 router.get("/popular/:limit", (req,res) =>{
   req.app.locals.db.query(`SELECT top(10) SUM(order_items.quantity) as total_Orders, order_items.product_id,product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
