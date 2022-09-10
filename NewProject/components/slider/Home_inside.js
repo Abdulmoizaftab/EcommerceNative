@@ -10,11 +10,14 @@ import { dummyData } from '../../data/Carousel_data'
 import Popuplar_slider from './popuplar_slider';
 import Categories from '../Categories';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IP_ADDRESS} from "@env"
+
+
 
 
 
 const Home_inside = ({ navigate }) => {
-
+  
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(6);
   const [isLoading, setIsloading] = useState(true);
@@ -23,7 +26,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.10:5000/sql/all/${limit}`)
+    await fetch(`http://${IP_ADDRESS}:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))

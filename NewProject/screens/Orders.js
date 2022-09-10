@@ -27,7 +27,7 @@ const Orders = () => {
 
 
   const getProductData = async (obj) => {
-    await fetch(`http://192.168.1.10:5000/sql/recommend/${obj}`)
+    await fetch(`http://192.168.1.28:5000/sql/recommend/${obj}`)
       .then((response) => response.json())
       .then((json) => { setProducts(current => [...current, json]) })
       .catch((error) => console.error(error))
