@@ -17,6 +17,7 @@ import CheckOutScreen from './screens/CheckOutScreen';
 import SeeAllPopular from './screens/SeeAllPopular';
 import SearchScreen from './screens/SearchScreen';
 import AllVendorProducts from './screens/AllVendorProducts';
+import Subcategory from './screens/subcategory';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -71,6 +72,8 @@ const App = () => {
           },
            headerTitleAlign:"center"}}
         name="AddressBook" component={AddressBook} />
+        <Stack.Screen
+        name="Subcategory" component={Subcategory} />
       </Stack.Navigator>
     </NavigationContainer>
   );

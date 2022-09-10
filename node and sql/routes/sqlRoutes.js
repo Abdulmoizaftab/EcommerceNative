@@ -3,6 +3,7 @@ const router = require("express").Router();
 const bcrypt = require('bcryptjs');
 // const validator = require('validator');
 const jwt=require('jsonwebtoken');
+const nodemailer=require('nodemailer');
 
 
 
@@ -28,6 +29,41 @@ router.get("/all/:limit", (req,res) =>{
     })
 })
 
+const check=()=>{
+  console.log("Its working....");
+}
+const sendMail=(email,name)=>{
+  try {
+    const transporter=nodemailer.createTransport({
+      host:'smtp.gmail.com',
+      port:587,
+      secure:false,
+      requireTLS:true,
+      auth:{
+        user:'digevoldevs@gmail.com',
+        pass:'vrrrakdeevotsepa'
+      }
+    })
+    const mailOptions={
+      from:'digevoldevs@gmail.com',
+      to:email,
+      subject:'For verify your email',
+      html:"<p>Hey "+name+" please verify you mail.</p> <a href='google.com'>Click to verify</a>"
+    
+    }
+//<button onclick="check()" style="background-color: turquoise; border: none; border-radius: 5px; color: #333; padding: 15px 32px">Click to verify</button>
+    transporter.sendMail(mailOptions,function(error,info){
+      if(error){
+        console.log(error);
+      }
+      else{
+        console.log("Email has been sent==> ",info.response);
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
 router.post("/register",  (req,res) =>{
   const {username,email,password,first_name,last_name} = req.body
   req.app.locals.db.query(`select * from users where email='${email}'`, async function(err, recordset) {
@@ -40,31 +76,33 @@ router.post("/register",  (req,res) =>{
         res.status(200).json("Email already in use")
       }
       else{
-        const encrypt_pswd = await bcrypt.hash(password,10);
-        req.app.locals.db.query(`insert into users (username , password,first_name,last_name,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}')`, function(err, recordset) {
-          if (err) {
-            console.error(err)
-            res.status(500).send('SERVER ERROR')
-            return
-          }
-          else{
-            req.app.locals.db.query(`select user_id, username from users where email = '${email}'`, function(err, recordset) {
-              if (err) {
-                console.error(err)
-                res.status(500).send('SERVER ERROR')
-                return
-              }
+        //check()
+        sendMail(email,first_name)
+        res.send("working")
+        // const encrypt_pswd = await bcrypt.hash(password,10);
+        // req.app.locals.db.query(`insert into users (username , password,first_name,last_name,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}')`, function(err, recordset) {
+        //   if (err) {
+        //     console.error(err)
+        //     res.status(500).send('SERVER ERROR')
+        //     return
+        //   }
+        //   else{
+        //     req.app.locals.db.query(`select user_id, username from users where email = '${email}'`, function(err, recordset) {
+        //       if (err) {
+        //         console.error(err)
+        //         res.status(500).send('SERVER ERROR')
+        //         return
+        //       }
               
-              const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
-              res.status(201).json({user:recordset.recordset,token:token});
-            })
+        //       const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
+        //       res.status(201).json({user:recordset.recordset,token:token});
+        //     })
 
-          }
-        })
+        //   }
+        // })
       }
     }
   })
-  
 } 
 )
 
