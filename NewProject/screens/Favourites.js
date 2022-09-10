@@ -123,16 +123,16 @@ const Favorites = ({navigation}) => {
 
   return (
     <View style={Style.all_item_main}>
-      <View style={{display:"flex",flexDirection:"row",alignItems:"center",width:"100%",padding:"3%",backgroundColor:"#5A56E9"}}>
-        <View style={{}}>
-        <AntDesign name='arrowleft' style={{fontSize:20,color:"white"}} onPress={()=>navigation.goBack()}/>
+      <View style={Style.head_main}>
+        <View>
+        <AntDesign name='arrowleft' style={Style.head_icon} onPress={()=>navigation.goBack()}/>
         </View>
-        <View style={{width:"95%",justifyContent:"center",alignItems:"center"}}>
-          <Text style={{fontSize:19,color:"white",fontWeight:"bold"}}>Favorites items</Text>
+        <View style={Style.head_text_view}>
+          <Text style={Style.head_text}>Favorites items</Text>
         </View>
       </View>
       {
-        FavProducts.length > 0 ?
+        FavProducts && FavProducts.length > 0 ?
         <FlatList
         ListHeaderComponent={
           <View></View>
@@ -143,7 +143,7 @@ const Favorites = ({navigation}) => {
         ListFooterComponent={flatListEnd} 
         />:
         <View style={Style.main_img}>
-        <Image style={{width:"70%",height:"50%"}} source={empty_cart}/>
+        <Image style={{width:"70%",height:"35%"}} source={empty_cart}/>
         <Text style={{ color: 'gray', fontWeight: '400' }}>No Favourites Items</Text>
       </View>
       }
@@ -248,6 +248,26 @@ const Style = StyleSheet.create({
     backgroundColor:"white",
     justifyContent:"center",
     alignItems:"center"
+  },
+  head_main:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    width:"100%",
+    padding:"3%",
+    backgroundColor:"#5A56E9"
+  },
+  head_icon:{
+    fontSize:20,
+    color:"white"
+  },
+  head_text_view:{
+    width:"95%",
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  head_text:{
+    fontSize:19,color:"white",fontWeight:"bold"
   }
 });
 

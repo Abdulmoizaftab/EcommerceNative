@@ -169,6 +169,53 @@ router.get("/popular/:limit", (req,res) =>{
     })
 })
 
+router.get('/allCategories',(req,res)=>{
+  req.app.locals.db.query(`select * from product_category`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/allCategoryProducts/:limit/:parentCateg',(req,res)=>{ 
+  //products of a certain cateory
+  req.app.locals.db.query(`select top(${req.params.limit}) * from product where category_id = ${req.params.parentCateg}`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/getSubCategories/:parentId',(req,res)=>{
+  req.app.locals.db.query(`select * from Category_hierarchy where HierParent = ${req.params.parentId}`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+//
+//select top(6) * from product where HierId=${req.params.hierId}
+
+router.get('/subCategoryProducts/:limit/:hierId',(req,res)=>{ //products of a certain cateory
+  req.app.locals.db.query(`select top(${req.params.limit}) * from product where HierId like '${req.params.hierId}%'`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
 
 
 
