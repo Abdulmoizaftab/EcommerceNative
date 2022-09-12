@@ -5,10 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SkeletonJs from '../components/Skeleton';
 import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import empty_cart from '../image/empty_cart.png'
 
 import { NativeBaseProvider } from 'native-base';
 
-const Favorites = () => {
+const Favorites = ({navigation}) => {
 
   const [FavProducts, setFavProducts] = useState([]);
   const [isLoading, setLoading] = useState(true);
@@ -121,15 +123,31 @@ const Favorites = () => {
 
   return (
     <View style={Style.all_item_main}>
-      <FlatList
-      ListHeaderComponent={
-        <View></View>
-      }
+      <View style={Style.head_main}>
+        <View>
+        <AntDesign name='arrowleft' style={Style.head_icon} onPress={()=>navigation.goBack()}/>
+        </View>
+        <View style={Style.head_text_view}>
+          <Text style={Style.head_text}>Favorites items</Text>
+        </View>
+      </View>
+      {
+        FavProducts && FavProducts.length > 0 ?
+        <FlatList
+        ListHeaderComponent={
+          <View></View>
+        }
         data={FavProducts} keyExtractor={item => item.product_id} numColumns={2}
         renderItem={renderItem}
         onEndReached={onEndReached}
         ListFooterComponent={flatListEnd} 
-      />
+        />:
+        <View style={Style.main_img}>
+        <Image style={{width:"70%",height:"35%"}} source={empty_cart}/>
+        <Text style={{ color: 'gray', fontWeight: '400' }}>No Favourites Items</Text>
+      </View>
+      }
+
     </View>
   )
 }
@@ -224,6 +242,32 @@ const Style = StyleSheet.create({
     marginVertical: "5%",
     paddingLeft: "2%",
     alignItems: "center"
+  },
+  main_img:{
+    flex:1,
+    backgroundColor:"white",
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  head_main:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    width:"100%",
+    padding:"3%",
+    backgroundColor:"#5A56E9"
+  },
+  head_icon:{
+    fontSize:20,
+    color:"white"
+  },
+  head_text_view:{
+    width:"95%",
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  head_text:{
+    fontSize:19,color:"white",fontWeight:"bold"
   }
 });
 
