@@ -7,15 +7,15 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const CategoryScreen = () => {
     const arr = [1,2,3,4,5,6];
-    const arr1=["Electronics", "Computers", "Smart Home", "Arts & Home", "Automotive"];
+    // const arr1=["Electronics", "Computers", "Smart Home", "Arts & Home", "Automotive"];
   return (
     <View style={{width:"100%"}}>
       <SearchBar/>
     <ScrollView>
         <View style={{ alignItems:'center', justifyContent:'center',width:"100%",backgroundColor:"white",paddingBottom:"15%"}}>
             
-       {arr.map(item=>(
-        <View style={{marginVertical:"2%",width: "90%"}}>
+       {arr.map((item,index)=>(
+        <View style={{marginVertical:"2%",width: "90%"}} key={index}>
              <LinearGradient style={styles.categoryCard} start={{x: 0, y: 0}} end={{x: 1.2, y: 0}} colors={['#fff', '#D1D1ED']}>
              <Text style={styles.cardText}>Electronics</Text>
              <Image
