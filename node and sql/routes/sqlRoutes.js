@@ -29,10 +29,8 @@ router.get("/all/:limit", (req,res) =>{
     })
 })
 
-const check=()=>{
-  console.log("Its working....");
-}
-const sendMail=(email,name)=>{
+// REGISTRATION PROCESS
+const sendMail=(email,name,user_id)=>{
   try {
     const transporter=nodemailer.createTransport({
       host:'smtp.gmail.com',
@@ -48,10 +46,9 @@ const sendMail=(email,name)=>{
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" please verify you mail.</p> <a href='google.com'>Click to verify</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
-//<button onclick="check()" style="background-color: turquoise; border: none; border-radius: 5px; color: #333; padding: 15px 32px">Click to verify</button>
     transporter.sendMail(mailOptions,function(error,info){
       if(error){
         console.log(error);
@@ -76,35 +73,52 @@ router.post("/register",  (req,res) =>{
         res.status(200).json("Email already in use")
       }
       else{
-        //check()
-        sendMail(email,first_name)
-        res.send("working")
-        // const encrypt_pswd = await bcrypt.hash(password,10);
-        // req.app.locals.db.query(`insert into users (username , password,first_name,last_name,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}')`, function(err, recordset) {
-        //   if (err) {
-        //     console.error(err)
-        //     res.status(500).send('SERVER ERROR')
-        //     return
-        //   }
-        //   else{
-        //     req.app.locals.db.query(`select user_id, username from users where email = '${email}'`, function(err, recordset) {
-        //       if (err) {
-        //         console.error(err)
-        //         res.status(500).send('SERVER ERROR')
-        //         return
-        //       }
-              
-        //       const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
-        //       res.status(201).json({user:recordset.recordset,token:token});
-        //     })
+        const verify=0
+        const encrypt_pswd = await bcrypt.hash(password,10);
+        req.app.locals.db.query(`insert into users (username , password,first_name,last_name,email,isVerified) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}',${verify})`, function(err, recordset) {
+          if (err) {
+            console.error(err)
+            res.status(500).send('SERVER ERROR')
+            return
+          }
+          else{
+            req.app.locals.db.query(`select user_id, username from users where email = '${email}'`, function(err, recordset) {
+              if (err) {
+                console.error(err)
+                res.status(500).send('SERVER ERROR')
+                return
+              }
+              const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
+              res.status(201).json({user:recordset.recordset,token:token});
+              const user_id=recordset.recordset[0].user_id;
+              sendMail(email,first_name,user_id)
+            })
 
-        //   }
-        // })
+          }
+        })
       }
     }
   })
 } 
 )
+router.get("/verify",(req,res)=>{
+
+    req.app.locals.db.query(`update users set isVerified=1 where user_id=${req.query.id}`, function(err, recordset) {
+      if (err) {
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      else{
+        res.render('index');
+      }
+    })
+  
+
+})
+//REGISTRATION PROCESS END
+
+
 
 
 router.post("/login",  (req,res) =>{
@@ -117,7 +131,7 @@ router.post("/login",  (req,res) =>{
     else{
       if(Object.keys(recordset.recordset).length !== 0){
         const matchedPassword=await bcrypt.compare(password,recordset.recordset[0].password)
-        if(matchedPassword){
+        if(matchedPassword && recordset.recordset[0].isVerified === true){
           const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
           res.status(201).json({user:recordset.recordset,token:token});
         }
@@ -126,7 +140,7 @@ router.post("/login",  (req,res) =>{
         }
       }
       else{
-        res.status(400).json("No user found");
+        res.status(400).json("Wrong credential");
       }
     }
   })

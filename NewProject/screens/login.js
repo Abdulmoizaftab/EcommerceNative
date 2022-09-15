@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert } from 'react-native';
 import React , {useState,useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -16,8 +16,22 @@ const Login = ({ navigation }) => {
   const {isFetching,error}=useSelector((state)=>state.user)
 
   const handlePress=()=>{
-    login(dispatch,{email,password})
-    console.log("pressed");
+    if(email && password){
+      login(dispatch,{email,password})
+      //console.log("pressed");
+    }
+    else{
+      Alert.alert(
+        "Login failed",
+        "Please fill all fields",
+        [
+      {
+        text: "Ok",
+        onPress: () => console.log("Ok"),
+      }
+    ]
+    );
+    }
   }
   
   return (
@@ -36,11 +50,11 @@ const Login = ({ navigation }) => {
           <Text style={Style.log_container2_text}>Sign in</Text>
           <View style={Style.email_view}>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='email-outline' />  Email</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput} onChangeText={setEmail}/>
+            <TextInput value={email} selectionColor="black" style={Style.email_view_textinput} onChangeText={setEmail}/>
           </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline' />  Password</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPassword}/>
+            <TextInput value={password} selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPassword}/>
           </View>
           <TouchableOpacity style={Style.forgot_btn}>
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
