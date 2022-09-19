@@ -148,7 +148,7 @@ const Summary = () => {
           </View>
         </View>
       </ScrollView>
-          <TouchableOpacity activeOpacity={0.8} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4.5%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}>
+          <TouchableOpacity activeOpacity={0.8} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}>
           <Text style={{color:"white",fontWeight:"bold",fontSize:17,letterSpacing:3}}>Place Order</Text>
       </TouchableOpacity>
     </View>

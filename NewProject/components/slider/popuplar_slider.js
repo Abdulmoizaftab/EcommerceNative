@@ -69,7 +69,7 @@ const Popuplar_slider = ({ navigate }) => {
                 <Text style={Styles.cardTitle}>
                   {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
                 </Text>
-                <Text style={Styles.cardPrice}>RS. {element.price}</Text>
+                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                 <View style={Styles.cardBotm}>
                   <Icon style={Styles.favIcon} name="md-heart-outline" />
                   <Text style={Styles.rating}>
@@ -173,7 +173,7 @@ const Styles = StyleSheet.create({
   },
   rating: {
     color: '#E3A500',
-    fontSize: 12
+    fontSize: 15
   },
   cardBotm: {
     flexDirection: 'row',
@@ -182,7 +182,7 @@ const Styles = StyleSheet.create({
   },
   favIcon: {
     color: '#FB2F53',
-    fontSize: 13,
+    fontSize: 20,
     fontWeight: '800',
     marginTop: 1.5,
   },
