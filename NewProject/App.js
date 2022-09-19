@@ -18,6 +18,7 @@ import SeeAllPopular from './screens/SeeAllPopular';
 import SearchScreen from './screens/SearchScreen';
 import AllVendorProducts from './screens/AllVendorProducts';
 import Subcategory from './screens/subcategory';
+import Summary from './screens/Summary';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -74,6 +75,16 @@ const App = () => {
         name="AddressBook" component={AddressBook} />
         <Stack.Screen
         name="Subcategory" component={Subcategory} />
+        <Stack.Screen name="Summary" component={Summary} 
+        options={{headerShown:true,
+          title:"Cart Summary",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
