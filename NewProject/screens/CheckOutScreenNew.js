@@ -91,7 +91,7 @@ const CheckOutScreenNew = ({ route }) => {
       {
         address.addresses.length !==0 ? (
         <View style={styles.finalCheckout}>
-          <TouchableOpacity style={styles.checkoutBtn}>
+          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary')}>
             <Text style={styles.checkoutBtnText}>Checkout</Text>
           </TouchableOpacity>
         </View>

@@ -18,6 +18,7 @@ import SearchScreen from './screens/SearchScreen';
 import AllVendorProducts from './screens/AllVendorProducts';
 import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
+import Summary from './screens/Summary'
 
 const Stack=createNativeStackNavigator();
 const App = () => {
