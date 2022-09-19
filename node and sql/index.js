@@ -55,6 +55,7 @@ const sqlRoutes = require('./routes/sqlRoutes')
 dotenv.config();
 const app = express()
 app.use(express.json())
+app.set("view engine","hbs")
 app.use('/sql', sqlRoutes)
 
 

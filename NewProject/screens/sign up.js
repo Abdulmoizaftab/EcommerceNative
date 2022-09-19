@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet,TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet,TextInput, TouchableOpacity,Alert} from 'react-native';
 import React, { useState } from 'react';
 import {useDispatch,useSelector} from 'react-redux' 
 import { register } from '../redux/apiCalls';
@@ -21,16 +21,64 @@ const Sign_up = ({navigation}) => {
   const dispatch = useDispatch()
 
   const handlePress = ()=>{
-    let payload={
-      username,
-      email,
-      password,
-      first_name,
-      last_name
+    
+    if(first_name && last_name && username && email && password && confirmPswd){
+      if(password === confirmPswd){
+        let payload={
+          username,
+          email,
+          password,
+          first_name,
+          last_name
+        }
+        setDataBody({...payload})
+        register(dispatch,payload)
+        Alert.alert(
+          "Register successfully",
+          "Please verify your mail",
+          [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => {
+          setFirstName("")
+          setLastName("")
+          setUsername("")
+          setEmail("")
+          setPswd("")
+          setConfirmPswd("")     
+          } 
+        }
+      ]
+      );
     }
-    setDataBody({...payload})
-    register(dispatch,payload)
-    console.log("pressed");
+    else{
+      Alert.alert(
+        "Registeration failed",
+        "Password not matched",
+        [
+      {
+        text: "Ok",
+        onPress: () => console.log("Ok"),
+      }
+    ]
+    );
+    }
+    }
+    else{
+      Alert.alert(
+        "Registeration failed",
+        "Please fill all fields",
+        [
+      {
+        text: "Ok",
+        onPress: () => console.log("Ok"),
+      }
+    ]
+    );
+    }
   }
 
   return (
@@ -50,28 +98,28 @@ const Sign_up = ({navigation}) => {
           <View style={Style.fl_name_view}>
           <View>
             <Text style={Style.fl_name_view_text}><FontAwesome name='user-circle-o'/>  First Name</Text>
-            <TextInput selectionColor="black" style={Style.fl_name_view_input} onChangeText={setFirstName}/>
+            <TextInput value={first_name} selectionColor="black" style={Style.fl_name_view_input} onChangeText={setFirstName}/>
           </View>
           <View>
             <Text style={Style.fl_name_view_text}><FontAwesome name='user-circle-o'/>  Last name</Text>
-            <TextInput selectionColor="black" style={Style.fl_name_view_input} onChangeText={setLastName}/>
+            <TextInput value={last_name} selectionColor="black" style={Style.fl_name_view_input} onChangeText={setLastName}/>
           </View>
           </View>
           <View style={Style.email_view}>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='email-outline'/>  Email</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput} onChangeText={setEmail}/>
+            <TextInput value={email} selectionColor="black" style={Style.email_view_textinput} onChangeText={setEmail}/>
           </View>
           <View style={Style.email_view}>
             <Text style={Style.email_view_text}><AntDesign name='user'/>  Username</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput} onChangeText={setUsername}/>
+            <TextInput value={username} selectionColor="black" style={Style.email_view_textinput} onChangeText={setUsername}/>
           </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Password</Text>
-            <TextInput selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPswd}/>
+            <TextInput value={password} selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPswd}/>
           </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Confirm password</Text>
-            <TextInput selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setConfirmPswd}/>
+            <TextInput value={confirmPswd} selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setConfirmPswd}/>
           </View>
           <TouchableOpacity style={Style.forgot_btn}>
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
