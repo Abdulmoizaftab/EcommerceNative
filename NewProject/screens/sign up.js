@@ -155,7 +155,7 @@ const Style = StyleSheet.create({
     
   },
   email_view_text:{
-    color:"gray",fontSize:13,marginTop:"3%"
+    color:"gray",fontSize:13,marginTop:"5%"
   },
   email_view_textinput:{
     height: 25,padding: 5,borderBottomWidth:1,color:"black"
