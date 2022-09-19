@@ -12,6 +12,7 @@ const AddToCart = () => {
   const quantity = useSelector(state => state.cart.quantity)
   const total = useSelector(state => state.cart.total)
 
+  
   const refRBSheet = useRef();
 
   const navigate = useNavigation();

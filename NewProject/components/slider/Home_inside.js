@@ -9,6 +9,7 @@ import Carousel from '../carousel/carousel';
 import { dummyData } from '../../data/Carousel_data'
 import Popuplar_slider from './popuplar_slider';
 import Categories from '../Categories';
+import VendorSlider from '../VendorSlider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider } from 'native-base';
 
@@ -199,7 +200,9 @@ const Home_inside = ({ navigate }) => {
         <View style={{flex:1,width:"100%"}}>
           <SearchBar navigate={navigate} />
         <Carousel data={dummyData} />
-        <Categories navigate={navigate} />
+        <Categories navigate={navigate}/>
+        <VendorSlider/>
+        
         <Popuplar_slider navigate={navigate}/>
         <View style={Style.middle2}>
         <View style={Style.middle2_1}>

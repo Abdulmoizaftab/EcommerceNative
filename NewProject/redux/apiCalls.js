@@ -2,14 +2,16 @@ import {loginStart,loginSuccess,loginFailure} from './LoginRedux'
 import {registerStart,registerFailure,registerSuccess} from './RegisterRedux'
 import axios from 'axios';
 
+
 export const login =async (dispatch,user)=>{
     dispatch(loginStart());
     try {
         const res = await axios.post("http://192.168.1.17:5000/sql/login",user);
         dispatch(loginSuccess(res.data));
-        console.log(res.data);
+        console.log("Data==>",res);
     } catch (error) {
         dispatch(loginFailure());
+        console.log("No data");
     }
 }
 

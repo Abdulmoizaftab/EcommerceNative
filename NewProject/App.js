@@ -13,9 +13,12 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
 import AddressBook from './screens/AddressBook';
-import CheckOutScreen from './screens/CheckOutScreen';
 import SeeAllPopular from './screens/SeeAllPopular';
 import SearchScreen from './screens/SearchScreen';
+import AllVendorProducts from './screens/AllVendorProducts';
+import Subcategory from './screens/subcategory';
+import CheckOutScreenNew from './screens/CheckOutScreenNew';
+import Summary from './screens/Summary'
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -32,6 +35,7 @@ const App = () => {
         <Stack.Screen name="TabNav" component={TabNav} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Sign_up" component={Sign_up} />
+        <Stack.Screen name="AllVendorProducts" component={AllVendorProducts} />
 
         <Stack.Screen
          options={{headerShown:true,
@@ -56,7 +60,7 @@ const App = () => {
               fontWeight: 'bold',
             },
             headerTitleAlign: "center"
-          }} name="CheckoutScreen" component={CheckOutScreen} />
+          }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen
@@ -69,6 +73,18 @@ const App = () => {
           },
            headerTitleAlign:"center"}}
         name="AddressBook" component={AddressBook} />
+        <Stack.Screen
+        name="Subcategory" component={Subcategory} />
+        <Stack.Screen name="Summary" component={Summary} 
+        options={{headerShown:true,
+          title:"Cart Summary",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

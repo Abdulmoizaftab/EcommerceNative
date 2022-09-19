@@ -129,16 +129,16 @@ const SeeAllPopular = () => {
   return (
     <View style={Style.all_item_main}>
       <FlatList
-      ListHeaderComponent={
-        <View>
-          <SearchBar navigate={navigate} />
-          <Text style={Style.mainHead}>Popular Items</Text>
-        </View>
-      }
+        ListHeaderComponent={
+          <View>
+            <SearchBar navigate={navigate} />
+            <Text style={Style.mainHead}>Popular Items</Text>
+          </View>
+        }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
         ListFooterComponent={flatlistEnd}
         onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
-  </View>
+    </View>
   )
 }
 
@@ -150,7 +150,7 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 10,
-    
+
   },
   middle2_1: {
     flexDirection: 'row',
@@ -236,11 +236,11 @@ const Style = StyleSheet.create({
     paddingLeft: "2%",
     alignItems: "center"
   },
-  mainHead:{
-    fontSize:25,
-    fontWeight:'900',
-    marginVertical:'3%',
-    marginHorizontal:'2%',
-    color:'#484848'
+  mainHead: {
+    fontSize: 25,
+    fontWeight: '900',
+    marginVertical: '3%',
+    marginHorizontal: '2%',
+    color: '#484848'
   }
 });

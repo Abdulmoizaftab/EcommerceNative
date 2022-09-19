@@ -1,0 +1,183 @@
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { useNavigation } from '@react-navigation/native'
+import Entypo from 'react-native-vector-icons/Entypo'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Octicons from 'react-native-vector-icons/Octicons'
+import Feather from 'react-native-vector-icons/Feather'
+import { Radio, NativeBaseProvider } from 'native-base'
+
+import { useSelector } from 'react-redux';
+
+const CheckOutScreenNew = ({ route }) => {
+  const navigate = useNavigation()
+  const address = useSelector(state => state.address)
+  const selectedValue = route.params
+  return (
+    <>
+      <ScrollView>
+        <View style={styles.main}>
+          <View style={styles.informationView}>
+            <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Shipping Information</Text>
+            <TouchableOpacity onPress={() => navigate.navigate('AddressBook')}>
+              <Text style={styles.buttonAdd}>
+                Add
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.addAddressBtnView}>
+            {
+              address.addresses.length !== 0 ? (
+                selectedValue !== undefined ? (
+                  <View style={styles.addressDetailsView}>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.recipent}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {selectedValue.phone}</Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.addressDetailsView}>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{address.addresses[0].recipent}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{address.addresses[0].address}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {address.addresses[0].phone}</Text>
+                    </View>
+                  </View>
+                )
+              ) : (
+                <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook')}>
+                  <Entypo name="plus" size={30} color="#444" />
+                  <Text style={{ fontSize: 21 }}> Add Address</Text>
+                </TouchableOpacity>
+              )
+            }
+
+          </View>
+
+          <View style={[styles.informationView, { marginTop: '4%' }]}>
+            <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Payment Information</Text>
+            <TouchableOpacity activeOpacity={1}>
+              <Text style={[styles.buttonAdd, { color: 'transparent' }]}>
+                Add
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ width: '70%', alignSelf: 'center' }}>
+            <NativeBaseProvider>
+              <Radio.Group
+                name="paymentRadioGroup"
+                value={"cod"}
+                defaultValue={"cod"}
+              >
+                <Radio style={{ width: "90%", alignSelf: 'center', justifyContent: 'center' }} value={"cod"} my="5">
+                  <MaterialCommunityIcons name="cash" size={35} color="#7FB848" />
+                  <Text style={{ fontSize: 22, fontWeight: '600' }}> Cash On Delivery</Text>
+                </Radio>
+
+              </Radio.Group>
+            </NativeBaseProvider>
+          </View>
+        </View>
+      </ScrollView>
+      {
+        address.addresses.length !==0 ? (
+        <View style={styles.finalCheckout}>
+          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary')}>
+            <Text style={styles.checkoutBtnText}>Checkout</Text>
+          </TouchableOpacity>
+        </View>
+        ):(
+          <></>
+        )
+      }
+    </>
+  )
+}
+
+export default CheckOutScreenNew
+
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    alignSelf: 'center',
+    width: "100%",
+    marginVertical: '5%',
+  },
+  buttonAdd: {
+    color: '#5D59EE',
+    fontSize: 18,
+    fontWeight: '500',
+    opacity: 1,
+  },
+  addAddressBtnView: {
+    alignSelf: 'center',
+    marginVertical: '7%',
+    width: '75%'
+  },
+  addressDetailsView: {
+    alignSelf: 'center',
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    padding: '5%'
+  },
+  addAddressBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: 10,
+    paddingVertical: '2.5%',
+    paddingHorizontal: '2.5%',
+    backgroundColor: '#D9D9D9',
+    elevation: 10,
+    shadowColor: "#333",
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  informationView: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center'
+  },
+  addressDetailsInside: {
+    flexDirection: 'row',
+    paddingHorizontal: '5%',
+    marginVertical: '2.5%',
+    alignItems:'center'
+  },
+  detailsText: {
+    fontSize: 21,
+    color: '#666',
+    flex: 3
+  },
+  finalCheckout: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: '2%',
+    justifyContent: 'center',
+    zIndex: 999
+  },
+  checkoutBtn: {
+    backgroundColor: '#5D59EE',
+    padding: '7%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    elevation: 10,
+    shadowColor: '#333'
+  },
+  checkoutBtnText: {
+    fontSize: 22,
+    color: 'white',
+    fontWeight: '600'
+  }
+})
