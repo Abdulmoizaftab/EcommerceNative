@@ -35,6 +35,7 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Sign_up" component={Sign_up} />
         <Stack.Screen name="AllVendorProducts" component={AllVendorProducts} />
+        
 
         <Stack.Screen
          options={{headerShown:true,
