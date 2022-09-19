@@ -7,7 +7,7 @@ const { width, height } = Dimensions.get('window')
 const CarouselItem = ({ item }) => {
     return (
         <View style={styles.cardView}>
-            <Image style={styles.image} source={{ uri: item.url }} />
+            <Image style={styles.image} source={item.url } />
             <View style={styles.textView}>
                 <Text style={styles.itemTitle}> {item.title}</Text>
                 <Text style={styles.itemDescription}>{item.description}</Text>
@@ -45,7 +45,11 @@ const styles = StyleSheet.create({
     },
     image: {
         flex:1,
-        borderRadius: 10
+        borderRadius: 10,
+        resizeMode:'stretch',
+        
+
+
     },
     itemTitle: {
         color: 'white',
