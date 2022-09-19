@@ -1,25 +1,21 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { addAddress } from '../redux/AddressRedux'
+import { updateAddress } from '../redux/AddressRedux'
 import { useDispatch,useSelector } from 'react-redux'
 
-const AddressBottomSheet = ({reference}) => {
+const AddressUpdateBottomSheet = ({reference,modifying_id}) => {
+    //console.log(modifying_id);
     const dispatch = useDispatch()
-    const currentState = useSelector(state => state.address)
-    let lastId;
-    if (currentState.addresses.length === 0) {
-       lastId = 0
-    } else {    
-        let index = currentState.addresses.length
-        index--
-        lastId = currentState.addresses[index].id
-    }
-    const [title, setTttle] = useState("")
-    const [recipent, setRecipent] = useState("")
-    const [address, setAddress] = useState("")
-    const [phoneInput, setPhoneInput] = useState("")
-    const [id ,setId] = useState(++lastId)
+    const state = useSelector(state => state.address)
+    const toModify = state.addresses.filter(item => item.id === modifying_id)
+    //console.log(toModify[0].title);
+    const [title, setTttle] = useState(toModify[0].title)
+    const [recipent, setRecipent] = useState(toModify[0].recipent)
+    const [address, setAddress] = useState(toModify[0].address)
+    const [phoneInput, setPhoneInput] = useState(toModify[0].phone.toString())
+    const [id ,setId] = useState(modifying_id)
+
 
     const handlePress = () => {
         reference.current.close();
@@ -31,7 +27,7 @@ const AddressBottomSheet = ({reference}) => {
             recipent,
             title,
         }
-        dispatch(addAddress(payload))
+        dispatch(updateAddress(payload))
     }
 
     return (
@@ -49,13 +45,13 @@ const AddressBottomSheet = ({reference}) => {
             <TextInput selectionColor='black' style={styles.inputStyle} keyboardType='numeric' onChangeText={setPhoneInput} value={phoneInput}/>
 
             <TouchableOpacity style={styles.btnStyle} onPress={handlePress}>
-                <Text style={styles.btnText}>Add Address</Text>
+                <Text style={styles.btnText}>Update Address</Text>
             </TouchableOpacity>
         </View>
     )
 }
 
-export default AddressBottomSheet
+export default AddressUpdateBottomSheet
 
 const styles = StyleSheet.create({
     main: {

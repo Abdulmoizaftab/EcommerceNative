@@ -13,11 +13,11 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import CategoryScreen from './screens/CategoryScreen';
 import AddressBook from './screens/AddressBook';
-import CheckOutScreen from './screens/CheckOutScreen';
 import SeeAllPopular from './screens/SeeAllPopular';
 import SearchScreen from './screens/SearchScreen';
 import AllVendorProducts from './screens/AllVendorProducts';
 import Subcategory from './screens/subcategory';
+import CheckOutScreenNew from './screens/CheckOutScreenNew';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -59,7 +59,7 @@ const App = () => {
               fontWeight: 'bold',
             },
             headerTitleAlign: "center"
-          }} name="CheckoutScreen" component={CheckOutScreen} />
+          }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen
