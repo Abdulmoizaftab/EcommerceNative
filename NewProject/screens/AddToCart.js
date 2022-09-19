@@ -7,10 +7,10 @@ import CheckoutBottomSheet from '../components/CheckoutBottomSheet';
 import AddToCart_Comp from '../components/addToCart_Comp'
 import { useSelector } from 'react-redux';
 
-const AddToCart = () => {
-  const products = useSelector(state => state.cart.products)
-  const quantity = useSelector(state => state.cart.quantity)
-  const total = useSelector(state => state.cart.total)
+const AddToCart = ({route,navigation}) => {
+  const products = useSelector(state => state.test.products)
+  const quantity = useSelector(state => state.test.quantity)
+  const total = useSelector(state => state.test.total)
 
   
   const refRBSheet = useRef();
@@ -28,15 +28,15 @@ const AddToCart = () => {
                   <Text style={Style.topHeader_inside_text1}>ITEMS ({quantity})</Text>
                   <Text style={Style.topHeader_inside_text2}>TOTAL: RS {total}.00</Text>
                 </>
-              ) : (
-                <>
-                </>
-              )
+              ) : 
+                null
+              
             }
 
-          </View>
+          </View> 
         </View>
-        <AddToCart_Comp />
+        
+        <AddToCart_Comp  Products = {products} />
         <TouchableOpacity activeOpacity={1} onPress={() => refRBSheet.current.open()} style={{ width: "100%", backgroundColor: "white", padding: 10, justifyContent: "center", alignItems: "center", position: "absolute", bottom: 0, borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
           <Text>
             <SimpleLineIcons name='arrow-up' style={{ fontWeight: "bold", color: "black", fontSize: 25 }} />
@@ -74,7 +74,7 @@ const AddToCart = () => {
     ) : (
       <View style={Style.main}>
 
-        <AddToCart_Comp />
+        <AddToCart_Comp  />
 
       </View>
     )
