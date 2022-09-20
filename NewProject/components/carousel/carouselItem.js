@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
     image: {
         flex:1,
         borderRadius: 10,
-        resizeMode:'stretch',
+        resizeMode:'contain',
+        width:'100%'
         
 
 
