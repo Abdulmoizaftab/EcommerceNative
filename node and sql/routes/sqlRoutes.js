@@ -227,6 +227,18 @@ router.get('/subCategoryProducts/:limit/:hierId',(req,res)=>{ //products of a ce
   })
 })
 
+router.get('/allDiscountProducts/:limit',(req,res)=>{ //ALL DISCOUNTED PRODUCTS
+  req.app.locals.db.query(`select top(${req.params.limit}) product.* , discount.discount_percent , discount.active
+  from product
+  inner join discount on product.discount_id = discount.discount_id`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
 
 
 
