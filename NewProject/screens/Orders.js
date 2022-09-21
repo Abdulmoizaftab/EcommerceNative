@@ -92,148 +92,168 @@ const Orders = () => {
     // </ScrollView>
 
     // <View style={{width:"100%",height:"100%",backgroundColor:"white"}}>
-    <View style={{ width: "100%", backgroundColor: "#F0F3F4", height: "100%", alignItems: 'center' }}>
 
-
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
-
-        <View style={{ flexDirection: 'row' }}>
+    <View>
 
 
 
-          <View style={{ width: '40%', alignItems: 'center' }}>
-            <Skeleton h="110" w='100' rounded='10' />
+
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View
+          style={{
+            width: '100%', flexDirection: 'row', padding: 7
+          }}>
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="amber.300" />
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="indigo.300" />
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="indigo.300" />
+          </TouchableOpacity>
+
+
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="indigo.300" />
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="indigo.300" />
+          </TouchableOpacity>
+
+
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="indigo.300" />
+          </TouchableOpacity>
+
+
+          <TouchableOpacity activeOpacity={0.9} style={styles.tabs}>
+            <Skeleton borderWidth={2} borderColor="coolGray.200" mb="3" w="63" h="9" rounded="10" startColor="indigo.300" />
+          </TouchableOpacity>
+
+
+        </View>
+      </ScrollView>
+
+
+
+
+      <ScrollView>
+
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginBottom: 18}} >
+
+          <View style={{ flexDirection: 'row', justifyContent:'center', paddingLeft:12}}>
+
+            <View style={{marginRight:12}}>
+              <Skeleton borderWidth={1} borderColor="coolGray.200" endColor="primary.40" size="20" rounded="full" />
+            </View>
+
+            <View style={{marginRight:12}}>
+              <Skeleton borderWidth={1} borderColor="coolGray.200" endColor="primary.40" size="20" rounded="full" />
+            </View>
+
+            <View style={{marginRight:12}}>
+              <Skeleton borderWidth={1} borderColor="coolGray.200" endColor="primary.40" size="20" rounded="full" />
+            </View>
+
+            <View style={{marginRight:12}}>
+              <Skeleton borderWidth={1} borderColor="coolGray.200" endColor="primary.40" size="20" rounded="full" />
+            </View>
+
+            <View style={{marginRight:12}}>
+              <Skeleton borderWidth={1} borderColor="coolGray.200" endColor="primary.40" size="20" rounded="full" />
+            </View>
+
           </View>
-
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
-
-            <View style={{ flexDirection: 'column' }}>
-              <Skeleton.Text lines={3} />
-            </View>
+        </ScrollView>
 
 
-            <View style={{ flexDirection: 'row' }}>
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-            </View>
 
-            <View style={{ width: '90%' }}>
-              <Skeleton h="3" rounded="full" startColor="indigo.300" />
-            </View>
+        <View>
+          <View style={{ width: "100%", backgroundColor: "#F0F3F4", height: 600, alignItems: 'center' }}>
+
+            <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%', justifyContent: 'center', borderRadius: 10, backgroundColor: 'white' }} >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: '40%', alignItems: 'center' }}>
+                  <Skeleton h="110" w='100' rounded='10' />
+                </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <Skeleton.Text lines={3} />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                  </View>
+                  <View style={{ width: '90%' }}>
+                    <Skeleton h="3" rounded="full" startColor="indigo.300" />
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%', justifyContent: 'center', borderRadius: 10, backgroundColor: 'white' }} >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: '40%', alignItems: 'center' }}>
+                  <Skeleton h="110" w='100' rounded='10' />
+                </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <Skeleton.Text lines={3} />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                  </View>
+                  <View style={{ width: '90%' }}>
+                    <Skeleton h="3" rounded="full" startColor="indigo.300" />
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%', justifyContent: 'center', borderRadius: 10, backgroundColor: 'white' }} >
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: '40%', alignItems: 'center' }}>
+                  <Skeleton h="110" w='100' rounded='10' />
+                </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <Skeleton.Text lines={3} />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                    <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
+                  </View>
+                  <View style={{ width: '90%' }}>
+                    <Skeleton h="3" rounded="full" startColor="indigo.300" />
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+
           </View>
-
 
 
 
         </View>
 
-      </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
+      </ScrollView>
 
-        <View style={{ flexDirection: 'row' }}>
-
-
-
-          <View style={{ width: '40%', alignItems: 'center' }}>
-            <Skeleton h="110" w='100' rounded='10' />
-          </View>
-
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
-
-            <View style={{ flexDirection: 'column' }}>
-              <Skeleton.Text lines={3} />
-            </View>
-
-
-            <View style={{ flexDirection: 'row' }}>
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-            </View>
-
-            <View style={{ width: '90%' }}>
-              <Skeleton h="3" rounded="full" startColor="indigo.300" />
-            </View>
-          </View>
-
-
-
-
-        </View>
-
-      </TouchableOpacity>
-
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
-
-        <View style={{ flexDirection: 'row' }}>
-
-
-
-          <View style={{ width: '40%', alignItems: 'center' }}>
-            <Skeleton h="110" w='100' rounded='10' />
-          </View>
-
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
-
-            <View style={{ flexDirection: 'column' }}>
-              <Skeleton.Text lines={3} />
-            </View>
-
-
-            <View style={{ flexDirection: 'row' }}>
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-            </View>
-
-            <View style={{ width: '90%' }}>
-              <Skeleton h="3" rounded="full" startColor="indigo.300" />
-            </View>
-          </View>
-
-
-
-
-        </View>
-
-      </TouchableOpacity>
-
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
-
-        <View style={{ flexDirection: 'row' }}>
-
-          <View style={{ width: '40%', alignItems: 'center' }}>
-            <Skeleton h="110" w='100' rounded='10' />
-          </View>
-
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between', width: '50%' }}>
-
-            <View style={{ flexDirection: 'column' }}>
-              <Skeleton.Text lines={3} />
-            </View>
-
-            <View style={{ flexDirection: 'row' }}>
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-              <Skeleton h="4" w="4" startColor="amber.300" rounded="20" marginRight='2' />
-            </View>
-
-            <View style={{ width: '90%' }}>
-              <Skeleton h="3" rounded="full" startColor="indigo.300" />
-            </View>
-          </View>
-
-        </View>
-
-      </TouchableOpacity>
 
     </View>
+
 
     // </View>
   )
@@ -242,5 +262,23 @@ const Orders = () => {
 export default Orders;
 
 const styles = StyleSheet.create({
+  tabs: {
+    // width:60,
+    padding: 8,
+    borderRadius: 15,
+    // backgroundColor: "#5A56E9",
+  },
+  tabs2: {
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 15,
+    backgroundColor: "lightgray",
+  },
+  text: {
+    color: "white"
+  },
+  text2: {
+    color: "black"
+  }
 
 })
