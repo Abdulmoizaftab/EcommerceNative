@@ -10,14 +10,15 @@ import { dummyData } from '../../data/Carousel_data'
 import Popuplar_slider from './popuplar_slider';
 import Categories from '../Categories';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IP_ADDRESS} from "@env"
+import { IP_ADDRESS } from "@env"
+console.log("🚀 ~ file: Home_inside.js ~ line 14 ~ IP_ADDRESS", IP_ADDRESS)
 
 
 
 
 
 const Home_inside = ({ navigate }) => {
-  
+
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(6);
   const [isLoading, setIsloading] = useState(true);

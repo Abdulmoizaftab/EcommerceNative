@@ -95,7 +95,7 @@ const Orders = () => {
     <View style={{ width: "100%", backgroundColor: "#F0F3F4", height: "100%", alignItems: 'center' }}>
 
 
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'#AED6F1' }} >
+      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
 
         <View style={{ flexDirection: 'row' }}>
 
@@ -131,7 +131,7 @@ const Orders = () => {
 
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'#AED6F1' }} >
+      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
 
         <View style={{ flexDirection: 'row' }}>
 
@@ -167,7 +167,7 @@ const Orders = () => {
 
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'#AED6F1' }} >
+      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
 
         <View style={{ flexDirection: 'row' }}>
 
@@ -203,7 +203,7 @@ const Orders = () => {
 
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'#AED6F1' }} >
+      <TouchableOpacity activeOpacity={0.9} style={{ marginVertical: "2%", width: "90%", height: '25%',  justifyContent: 'center', borderRadius: 4, backgroundColor:'white' }} >
 
         <View style={{ flexDirection: 'row' }}>
 
