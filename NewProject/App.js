@@ -19,6 +19,8 @@ import AllVendorProducts from './screens/AllVendorProducts';
 import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
+import AllDiscountedProducts from './screens/AllDiscountedProducts';
+
 
 const Stack=createNativeStackNavigator();
 const App = () => {
@@ -63,6 +65,7 @@ const App = () => {
             headerTitleAlign: "center"
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
+        <Stack.Screen name="AllDiscountedProducts" component={AllDiscountedProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen
           options={{headerShown:true,
