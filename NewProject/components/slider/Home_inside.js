@@ -198,16 +198,33 @@ const Home_inside = ({ navigate }) => {
       <FlatList
       ListHeaderComponent={
         <View style={{flex:1,width:"100%"}}>
+
+          {/* ///?Search Bar============================================== */}
           <SearchBar navigate={navigate} />
+
+          
+          {/* //?Slider Carosel============================================== */}
         <Carousel data={dummyData} />
+
+        
+          {/* //?Categories buttons============================================== */}
         <Categories navigate={navigate}/>
+
+        
+          {/* //?Vendor Slider============================================== */}
         <VendorSlider/>
         
+          {/* //?popular Slider============================================== */}
         <Popuplar_slider navigate={navigate}/>
+
         <View style={Style.middle2}>
+
+
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
         </View>
+
+
         <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6}>
           <Text style={Style.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
