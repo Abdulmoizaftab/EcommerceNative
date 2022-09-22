@@ -11,6 +11,7 @@ import SearchBar from '../components/SearchBar';
 
 const AllDiscountedProducts = () => {
   const navigate = useNavigation()
+  const [isAdded,setIsAdded]=useState(false)
 
   const [products, setProducts] = useState([]);
   // console.log("🚀 ~ file: AllDiscountedProducts.js ~ line 16 ~ AllDiscountedProducts ~ products", products)
@@ -75,7 +76,26 @@ const AllDiscountedProducts = () => {
     }
   }
 
+  const addToFav = async (productDetail) => {
+    try {
+      addToCart(productDetail);
+     
+      alert('added to fav');
+    } catch (error) {
+      alert(error);
+      // alert('add to fav failed');
+    }
+  }
+
   const renderItem = (element) => {
+
+
+    const productDetail = {
+      product_id: element.item.product_id,
+      name: element.item.name,
+      price: element.item.price,
+      image: element.item.imgs
+    }
 
     return (
       <View style={Style.all_item_main2}>
@@ -102,12 +122,14 @@ const AllDiscountedProducts = () => {
                 </Text>
                 
                 {/* add product to fav */}
-            <MaterialCommunityIcons name="cards-heart-outline" onPress={() => console.log("add to fav pressed")} style={Style.middle2_2_icon} />
+            <MaterialCommunityIcons name="cards-heart-outline" onPress={() => addToFav(productDetail)} style={Style.middle2_2_icon} />
               </View>
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => addToCart(productDetail)} style={Style.fav_icon_box}>
+          <TouchableOpacity 
+          // onPress={() => addToCart(productDetail)}
+           style={Style.fav_icon_box}>
           <Text style={Style.rating}>
                   4.5{' '}
                   <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
@@ -241,8 +263,9 @@ const Style = StyleSheet.create({
     //backgroundColor:'green'
   },
   all_item_main4_img: {
-    width: '80%',
-    height: 120
+    width: '90%',
+    height: 120,
+    marginLeft:10,
   },
   cardTitle: {
     margin: 1,
