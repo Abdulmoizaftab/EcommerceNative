@@ -11,6 +11,7 @@ const Orders = () => {
 
   const [asyncStorageData, setAsyncStorageData] = useState([])
   const [products, setProducts] = useState([]);
+  console.log("🚀 ~ file: Orders.js ~ line 14 ~ Orders ~ products", products)
 
   const [allObject, setAllObject] = useState([]);
 
