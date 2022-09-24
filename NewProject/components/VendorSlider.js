@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import {Skeleton,NativeBaseProvider} from 'native-base'
 const items = [
   {
     image: require("../assets/fonts/images/samsung.png"),
@@ -12,8 +13,9 @@ const items = [
 const VendorSlider = () => {
   const [apiData, setApiData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [skeleton,setSkeleton]=useState(false)
   useEffect(() => {
-    fetch('http://192.168.1.14:5000/sql/allVenders')
+    fetch('http://192.168.1.24:5000/sql/allVenders')
       .then((response) => response.json())
 
       .then((json) => setApiData(json))
@@ -22,18 +24,16 @@ const VendorSlider = () => {
   }, []);
   const navigation = useNavigation();
   return (
+    <NativeBaseProvider>
+
     <View style={{
-      marginTop: 5,
-      // backgroundColor:'',
-      padding: 10,
-      paddingLeft: 20,
-
+      width:"100%",
+      padding: "2.5%",
     }}>
-      <Text style={{fontSize:19,fontWeight:'bold', color:'black',marginBottom:9,marginLeft:-10}}>Popular Vendors</Text>
+      <Text style={{fontSize:19,fontWeight:'bold', color:'black'}}>Popular Vendors</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-
-        {apiData.map((item, index) => (
-          <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 20 }} onPress={() => {
+        {skeleton===true? apiData.map((item, index) => (
+          <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 20,marginTop:5 }} onPress={() => {
             navigation.navigate('AllVendorProducts', {vendorId:item.vendorsId,
                vendorName: item.vendorName})
             // console.log(item.vendorsId)
@@ -55,9 +55,30 @@ const VendorSlider = () => {
           </TouchableOpacity>
 
 
-        ))}
+        )):
+        <View style={{display:"flex",flexDirection:"row",borderWidth:1,width:"100%"}}>
+
+    <View activeOpacity={0.9} >
+      <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
+    </View>
+    <View activeOpacity={0.9} >
+      <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
+    </View>
+    <View activeOpacity={0.9} >
+      <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
+    </View>
+    <View activeOpacity={0.9} >
+      <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
+    </View>
+    <View activeOpacity={0.9} >
+      <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
+    </View>
+    
+    </View>
+        }
       </ScrollView>
     </View>
+    </NativeBaseProvider>
   )
 }
 

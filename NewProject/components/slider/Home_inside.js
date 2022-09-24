@@ -25,7 +25,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.14:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.24:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -192,7 +192,7 @@ const Home_inside = ({ navigate }) => {
     setlimit(6);
     setIsRefreshing(false)
   }
-
+  
   return (
     <View style={Style.all_item_main}>
       <FlatList
@@ -268,7 +268,10 @@ const Style = StyleSheet.create({
   all_item_main2: {
     width: '50%',
     padding: 4,
-    justifyContent: "center"
+    justifyContent: "center",
+    zIndex:-997,
+    elevation:-998
+    
   },
   all_item_main3: {
     padding: 5,
@@ -276,6 +279,8 @@ const Style = StyleSheet.create({
     borderRadius: 10,
     elevation: 3.5,
     shadowColor: '#52006A',
+    zIndex:-997,
+    elevation:-998
   },
   all_item_main4: {
     borderBottomWidth: 1,
@@ -283,15 +288,21 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: "#ACACAC",
     paddingBottom: 8,
+    zIndex:-997,
+    elevation:-998
   },
   all_item_main4_img: {
     width: '80%',
-    height: 120
+    height: 120,
+    zIndex:-997,
+    elevation:-998
   },
   cardTitle: {
     margin: 2,
     color: 'black',
-    fontSize: 13
+    fontSize: 13,
+    zIndex:-997,
+    elevation:-998
   },
   cardPrice: {
     fontSize: 17,

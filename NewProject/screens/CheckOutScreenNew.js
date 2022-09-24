@@ -66,7 +66,7 @@ const CheckOutScreenNew = ({ route }) => {
           <View style={[styles.informationView, { marginTop: '4%' }]}>
             <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Payment Information</Text>
             <TouchableOpacity activeOpacity={1}>
-              <Text style={[styles.buttonAdd, { color: 'transparent' }]}>
+              <Text style={[styles.buttonAdd, { color: 'white' }]}>
                 Add
               </Text>
             </TouchableOpacity>
@@ -113,10 +113,15 @@ const styles = StyleSheet.create({
     marginVertical: '5%',
   },
   buttonAdd: {
-    color: '#5D59EE',
+    color: 'white',
     fontSize: 18,
     fontWeight: '500',
     opacity: 1,
+    backgroundColor:"#5D59EE",
+    padding:5,
+    borderRadius:10,
+    width:60,
+    textAlign:'center'
   },
   addAddressBtnView: {
     alignSelf: 'center',
@@ -162,16 +167,16 @@ const styles = StyleSheet.create({
   finalCheckout: {
     alignSelf: 'center',
     position: 'absolute',
-    bottom: '2%',
+    bottom: '0%',
     justifyContent: 'center',
-    zIndex: 999
+    zIndex: 999,
+    width:"100%"
   },
   checkoutBtn: {
     backgroundColor: '#5D59EE',
-    padding: '7%',
+    padding: '3%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
     elevation: 10,
     shadowColor: '#333'
   },

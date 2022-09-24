@@ -20,6 +20,7 @@ const SearchBar = () => {
     //const [isSearching , setIsSearching] = useState(false)
     const [searchText , setSearchText] = useState("");
     const [filterData,setFilterData]=useState([]);
+    //const [empty,setEmpty] =useState("")
     const navigate = useNavigation()
     
     useEffect(() => {
@@ -44,7 +45,7 @@ const SearchBar = () => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.14:5000/sql/suggest/${searchText}/10`);
+            const result= await axios.get(`http://192.168.1.24:5000/sql/suggest/${searchText}/5`);
           if (result.data) {
             result.data.map(item => {
               return arr.push(item);
@@ -67,29 +68,37 @@ const SearchBar = () => {
     
   
   const onSearch = () => {
-    navigate.navigate('SearchScreen',searchText)
+      navigate.navigate('SearchScreen',searchText)
+    
   }
 
 
     const onChange = (text)=> {
+      //console.log("value==>",text);
+      // if(text){
+      //   setSearchText(text)
+      //   // const temp = text.toLowerCase()
+      //   // dataSource && dataSource.map(item => {
+      //   //   filterData.push(item)
+      //   // })
+      //   // const tempList = dataSource && dataSource.filter(item => {
+      //   //   if(item.name.match(temp)){
+      //   //     return item.name
+      //   //   }
+      //   // })
+      //   // setFiltered(tempList)
+  
+      //   // console.log(tempList);
+      //   // console.log(filterData)
+      // }
+      // else{
+      //   //setIsSearching(false)
+      //   setFilterData([])
+      // }
       if(text){
         setSearchText(text)
-        // const temp = text.toLowerCase()
-        // dataSource && dataSource.map(item => {
-        //   filterData.push(item)
-        // })
-        // const tempList = dataSource && dataSource.filter(item => {
-        //   if(item.name.match(temp)){
-        //     return item.name
-        //   }
-        // })
-        // setFiltered(tempList)
-  
-        // console.log(tempList);
-        // console.log(filterData)
       }
       else{
-        //setIsSearching(false)
         setFilterData([])
       }
     }
@@ -111,7 +120,10 @@ const SearchBar = () => {
                 </View>
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
-            <SearchDropdown dataSource={filterData} navigate={navigate}/> 
+            {searchText ?
+              <SearchDropdown dataSource={filterData} navigate={navigate}/> :
+              null
+            }
         </>
     );
   };
@@ -123,7 +135,8 @@ const SearchBar = () => {
       backgroundColor:'#5A56E9',
       flexDirection:'row',
       justifyContent:'space-around',
-      height:65
+      height:65,
+      zIndex:9999
     },
     searchView:{
         flexDirection:'row',

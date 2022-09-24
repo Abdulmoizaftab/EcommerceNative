@@ -46,18 +46,14 @@ const styles = StyleSheet.create({
     image: {
         flex:1,
         borderRadius: 10,
-        resizeMode:'stretch',
-        
-
-
+        resizeMode:'contain',
+        width:'100%'
     },
     itemTitle: {
         color: 'white',
         fontSize: 18,
         marginBottom: 5,
         fontWeight: "bold",
-        
-        
     },
     itemDescription: {
         color: 'white',
