@@ -208,7 +208,7 @@ const Home_inside = ({ navigate }) => {
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
         </View>
-        <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6}>
+        <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6} onPress={()=>navigate.navigate("SeeAllProducts")}>
           <Text style={Style.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
         </TouchableOpacity>
@@ -258,7 +258,7 @@ const Style = StyleSheet.create({
   middle2_2_icon: {
     fontSize: 15,
     marginRight: 10,
-    color: "#C92252"
+    color: "gray"
   },
   all_item_main: {
     flex: 1,

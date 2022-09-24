@@ -98,8 +98,8 @@ const AddressBook = () => {
         ref={refRBSheet}
         closeOnDragDown={true}
         height={450}
-        openDuration={450}
-        closeDuration={450}
+        openDuration={400}
+        closeDuration={400}
         closeOnPressMask={true}
         closeOnPressBack={false}
         dragFromTopOnly={true}
@@ -132,8 +132,8 @@ const AddressBook = () => {
         ref={refUpdateRBSheet}
         closeOnDragDown={true}
         height={450}
-        openDuration={450}
-        closeDuration={450}
+        openDuration={400}
+        closeDuration={400}
         closeOnPressMask={true}
         closeOnPressBack={false}
         dragFromTopOnly={true}

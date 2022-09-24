@@ -102,8 +102,8 @@ const Product_detail = ({route}) => {
         ref={refRBSheet}
         closeOnDragDown={true}
         height={250}
-        openDuration={600}
-        closeDuration={600}
+        openDuration={400}
+        closeDuration={400}
         closeOnPressMask={true}
         closeOnPressBack={false}
         dragFromTopOnly={true}

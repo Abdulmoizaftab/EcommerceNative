@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'rea
 import React,{useState,useEffect} from 'react'
 import SearchBar from '../components/SearchBar'
 import LinearGradient from 'react-native-linear-gradient';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 
 const CategoryScreen = ({navigation}) => {
@@ -21,6 +23,7 @@ const CategoryScreen = ({navigation}) => {
   return (
     <View style={{width:"100%",height:"100%",backgroundColor:"white"}}>
       <SearchBar/>
+      
     <ScrollView>
         <View style={{alignItems:'center', justifyContent:'center',width:"100%",backgroundColor:"white",height:"100%"}}>
             
@@ -72,6 +75,29 @@ const styles = StyleSheet.create({
         // width: 150,
         // height:100,
         resizeMode:'cover',
+    },filter: {
+      // borderWidth: 1,
+      paddingTop: 10,
+      paddingBottom: 10,
+      marginTop: 5,
+      flexDirection:'row',
+      justifyContent:'flex-end',
+      paddingRight:10
+  
+    },
+    iconStyle: {
+  
+      color: "gray",
+      fontSize: 25,
+     
+    },
+    parentIcon:{
+      flexDirection:'row',
+      // borderWidth:1,
+      width: 100,
+      justifyContent:'space-between',
+      
+  
     }
 
 });

@@ -46,8 +46,8 @@ const AddToCart = ({route,navigation}) => {
           ref={refRBSheet}
           closeOnDragDown={true}
           height={310}
-          openDuration={450}
-          closeDuration={450}
+          openDuration={400}
+          closeDuration={400}
           closeOnPressMask={true}
           closeOnPressBack={false}
           dragFromTopOnly={true}

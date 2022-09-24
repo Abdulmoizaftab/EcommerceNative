@@ -14,7 +14,7 @@ import SortBottomSheet from '../components/SortBottomSheet';
 
 
 
-const SeeAllPopular = () => {
+const SeeAllProducts = () => {
   const navigate = useNavigation()
 
   const [products, setProducts] = useState([]);
@@ -32,7 +32,7 @@ const SeeAllPopular = () => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.14:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.14:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -42,7 +42,7 @@ const SeeAllPopular = () => {
   const handleFilterPrice = async (asc_desc)=>{
     setIsloading(true)
     setIsRefreshing(true)
-    await fetch(`http://192.168.1.14:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
+    await fetch(`http://192.168.1.14:5000/sql/filterAllByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .catch((error) => console.error(error))
@@ -64,7 +64,7 @@ const SeeAllPopular = () => {
   const handleFilterRating = async (asc_desc)=>{
     setIsloading(true)
     setIsRefreshing(true)
-    await fetch(`http://192.168.1.14:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
+    await fetch(`http://192.168.1.14:5000/sql/filterAllByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .catch((error) => console.error(error))
@@ -215,7 +215,7 @@ const SeeAllPopular = () => {
           <View>
             <SearchBar navigate={navigate} />
             <View style={Style.headView}>
-              <Text style={Style.mainHead}>Popular Items</Text>
+              <Text style={Style.mainHead}>All Items</Text>
               <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                 <AntDesign name='filter' color="#484848" size={26} />
               </TouchableOpacity>
@@ -287,7 +287,7 @@ const SeeAllPopular = () => {
   )
 }
 
-export default SeeAllPopular
+export default SeeAllProducts
 
 const Style = StyleSheet.create({
   middle2: {

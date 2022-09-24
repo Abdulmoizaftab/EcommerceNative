@@ -240,6 +240,57 @@ router.get('/allDiscountProducts/:limit',(req,res)=>{ //ALL DISCOUNTED PRODUCTS
   })
 })
 
+router.get("/filterAllByPrice/:ascDesc/:limit", (req,res) =>{
+  req.app.locals.db.query(`select top(${req.params.limit}) * from product order by price ${req.params.ascDesc}`, function(err, recordset) {
+      if (err) {
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      res.status(200).json(recordset.recordset)
+    })
+})
+
+router.get("/filterAllByRating/:ascDesc/:limit", (req,res) =>{
+  req.app.locals.db.query(`select top(${req.params.limit}) * from product order by rating ${req.params.ascDesc}`, function(err, recordset) {
+      if (err) {
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      res.status(200).json(recordset.recordset)
+    })
+})
+
+router.get("/filterPopularByPrice/:ascDesc/:limit", (req,res) =>{
+  req.app.locals.db.query(`SELECT top(${req.params.limit}) SUM(order_items.quantity) as total_Orders, order_items.product_id,product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
+  FROM order_items
+  INNER JOIN product ON order_items.product_id = product.product_id
+  GROUP BY order_items.product_id, product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
+  ORDER BY price ${req.params.ascDesc}, total_Orders desc`, function(err, recordset) {
+      if (err) {
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      res.status(200).json(recordset.recordset)
+    })
+})
+
+router.get("/filterPopularByRating/:ascDesc/:limit", (req,res) =>{
+  req.app.locals.db.query(`SELECT top(${req.params.limit}) SUM(order_items.quantity) as total_Orders, order_items.product_id,product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
+  FROM order_items
+  INNER JOIN product ON order_items.product_id = product.product_id
+  GROUP BY order_items.product_id, product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
+  ORDER BY rating ${req.params.ascDesc}, total_Orders desc`, function(err, recordset) {
+      if (err) {
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      res.status(200).json(recordset.recordset)
+    })
+})
 
 
 

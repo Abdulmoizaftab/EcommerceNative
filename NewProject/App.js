@@ -19,7 +19,8 @@ import AllVendorProducts from './screens/AllVendorProducts';
 import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
-
+import SeeAllProducts from './screens/SeeAllProducts';
+import { View,Text } from 'react-native';
 const Stack=createNativeStackNavigator();
 const App = () => {
   useEffect(() => {
@@ -63,6 +64,7 @@ const App = () => {
             headerTitleAlign: "center"
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
+        <Stack.Screen name="SeeAllProducts" component={SeeAllProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen
           options={{headerShown:true,
