@@ -1,4 +1,4 @@
-import { View, Text,TouchableOpacity } from 'react-native'
+import { View, Text,TouchableOpacity,StyleSheet } from 'react-native'
 import React from 'react'
 
 const SearchDropdown = (props) => {
@@ -6,16 +6,23 @@ const SearchDropdown = (props) => {
   return (
     <View>
       {
-
         dataSource.map((item, key) => {
-          return (<TouchableOpacity key={key} onPress={()=>navigate.navigate('Product_detail',item)}>
-            <Text style={{ borderBottomWidth: 1, borderColor: "grey", marginVertical: 10 }}>{item.name}</Text>
+          return (<TouchableOpacity key={key} style={{width:"100%",borderBottomWidth:1,borderColor: "black"}} onPress={()=>{
+              navigate.navigate('Product_detail',item);
+            }}>
+            <Text>{item.name}</Text>
           </TouchableOpacity>
           )
         })
       }
+      
     </View>
+   
+    
   )
 }
+const Style=StyleSheet.create({
+  
+})
 
 export default SearchDropdown

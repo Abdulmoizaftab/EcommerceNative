@@ -6,16 +6,26 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, { useState,useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-const Summary = () => {
+const Summary = ({route}) => {
+  const [products,setProducts]=useState([]);
+  const address = useSelector(state => state.address)
+  const test = useSelector(state => state.test)
+  useEffect(() => {
+    setProducts(test.products)
+  }, [])
+
+  
+  console.log("data==>",products);
   return (
     <View style={Style.main}>
       <View style={Style.topHeader}>
         <View style={Style.topHeader_inside}>
           <>
-            <Text style={Style.topHeader_inside_text1}>ITEMS (3)</Text>
-            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. 1347.00</Text>
+            <Text style={Style.topHeader_inside_text1}>ITEMS ({test.quantity})</Text>
+            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. {test.total}.00</Text>
           </>
         </View>
       </View>
@@ -24,65 +34,29 @@ const Summary = () => {
         <View style={{padding: '3%', marginBottom: '20%'}}>
           <View style={Style.items}>
             <View style={Style.items_head}>
-              <Text style={Style.items_head_text}>3 Items</Text>
+              <Text style={Style.items_head_text}>{test.quantity} Items</Text>
             </View>
-            <View style={Style.items_list}>
+            {products.map((v,i)=>{
+              return <View style={Style.items_list} key={i}>
               <View>
                 <Image
                   source={{
-                    uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
+                    uri: v.product.imgs,
                   }}
                   style={Style.img}
                 />
               </View>
               <View>
                 <Text style={Style.items_list_text_desc}>
-                  Polo republica shirt brand new...
+                  {v.product.name.substring(0,27)}...
                 </Text>
-                <Text style={Style.items_list_text_same}>Size: Medium</Text>
-                <Text style={Style.items_list_text_same}>Color: Purple</Text>
-                <Text style={Style.items_list_text_same}>Qty: 2</Text>
-                <Text style={Style.items_list_text_price}>Rs. 200.00</Text>
+                <Text style={Style.items_list_text_same}>Size: NA</Text>
+                <Text style={Style.items_list_text_same}>Color: NA</Text>
+                <Text style={Style.items_list_text_same}>Qty: {v.qty}</Text>
+                <Text style={Style.items_list_text_price}>Rs. {v.product.price}.00</Text>
               </View>
             </View>
-            <View style={Style.items_list}>
-              <View>
-                <Image
-                  source={{
-                    uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
-                  }}
-                  style={Style.img}
-                />
-              </View>
-              <View>
-                <Text style={Style.items_list_text_desc}>
-                  Polo republica shirt brand new...
-                </Text>
-                <Text style={Style.items_list_text_same}>Size: Medium</Text>
-                <Text style={Style.items_list_text_same}>Color: Purple</Text>
-                <Text style={Style.items_list_text_same}>Qty: 2</Text>
-                <Text style={Style.items_list_text_price}>Rs. 200.00</Text>
-              </View>
-            </View>
-            <View style={Style.items_list}>
-              <View>
-                <Image
-                  source={{
-                    uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
-                  }}
-                  style={Style.img}
-                />
-              </View>
-              <View>
-                <Text style={Style.items_list_text_desc}>
-                  Polo republica shirt brand new...
-                </Text>
-                <Text style={Style.items_list_text_same}>Size: Medium</Text>
-                <Text style={Style.items_list_text_same}>Color: Purple</Text>
-                <Text style={Style.items_list_text_same}>Qty: 2</Text>
-                <Text style={Style.items_list_text_price}>Rs. 200.00</Text>
-              </View>
-            </View>
+            })}
           </View>
 
           {/* Address */}
@@ -93,13 +67,10 @@ const Summary = () => {
             </View>
             <View style={Style.address_list}>
               <Text style={Style.address_list_text_same}>
-                House no: 55/6 Malir Extension colony.
+                {address.addresses[0].address}, Pakistan.
               </Text>
-              <Text style={Style.address_list_text_same}>Karachi</Text>
-              <Text style={Style.address_list_text_same}>75080</Text>
-              <Text style={Style.address_list_text_same}>Pakistan</Text>
-              <Text style={Style.address_list_text_same}>02134428946</Text>
-              <Text style={Style.address_list_text_same}>03162539564</Text>
+              <Text style={Style.address_list_text_same}>{address.addresses[0].title}.</Text>
+              <Text style={Style.address_list_text_same}>Receiving by {address.addresses[0].recipent}.</Text>
             </View>
           </View>
 
@@ -110,8 +81,18 @@ const Summary = () => {
               <Text style={Style.items_head_text}>Contacts</Text>
             </View>
             <View style={Style.address_list}>
-              <Text style={Style.address_list_text_same}>02134428946</Text>
-              <Text style={Style.address_list_text_same}>03162539564</Text>
+              <Text style={Style.address_list_text_same}>0{address.addresses[0].phone}.</Text>
+            </View>
+          </View>
+
+          {/* payment */}
+          <View style={{marginVertical: '3%'}}></View>
+          <View style={Style.items}>
+            <View style={Style.items_head}>
+              <Text style={Style.items_head_text}>Payment Method</Text>
+            </View>
+            <View style={Style.address_list}>
+              <Text style={Style.address_list_text_same}>Cash on delivery.</Text>
             </View>
           </View>
 
@@ -124,7 +105,7 @@ const Summary = () => {
             <View style={Style.address_list}>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>Order Total:</Text>
-                <Text style={Style.order_list_text_same}>Rs. 1147.00</Text>
+                <Text style={Style.order_list_text_same}>Rs. {test.total}.00</Text>
               </View>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>
@@ -142,7 +123,7 @@ const Summary = () => {
                 <Text style={Style.order_list_text_same_end}>
                   Total Payable:
                 </Text>
-                <Text style={Style.order_list_text_same_end}>Rs. 1347.00</Text>
+                <Text style={Style.order_list_text_same_end}>Rs. {test.total+200-10}.00</Text>
               </View>
             </View>
           </View>
