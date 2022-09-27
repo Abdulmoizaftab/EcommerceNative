@@ -66,7 +66,7 @@ const Search = () => {
                         )
                     })
                         :
-                        <Text>nahi hai data</Text>
+                        <Text>No Search Data</Text>
                 }
 
             </View>
