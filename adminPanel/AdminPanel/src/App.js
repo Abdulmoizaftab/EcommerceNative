@@ -8,9 +8,14 @@ import { productInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
+import { useDispatch, useSelector} from 'react-redux'
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
+
+  const order = useSelector(state=>state.order)
+  const dispatch = useDispatch();
+  console.log("🚀 ~ file: App.js ~ line 17 ~ App ~ order", order)
 
   return (
     <div className={darkMode ? "app dark" : "app"}>
