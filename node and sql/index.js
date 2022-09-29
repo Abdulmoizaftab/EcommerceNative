@@ -33,7 +33,8 @@
 //   });
 const express = require('express')
 const dotenv = require('dotenv');
-const sql = require('mssql')
+const sql = require('mssql');
+const session= require('express-session');
 var config = {
     user: "sa", //default is sa
     password: "DE@2022",
@@ -55,6 +56,13 @@ const sqlRoutes = require('./routes/sqlRoutes')
 dotenv.config();
 const app = express()
 app.use(express.json())
+app.use(session({
+    secret:'I am a boy',
+    cookie: {
+    // Session expires after 1 min of inactivity.
+    expires: 60000
+    },
+}))
 app.set("view engine","hbs")
 app.use('/sql', sqlRoutes)
 
