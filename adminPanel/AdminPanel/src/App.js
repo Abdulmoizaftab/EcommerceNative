@@ -8,14 +8,29 @@ import { productInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
-import { useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import React,{useEffect} from "react";
+import axios from "axios";
+
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
-  const order = useSelector(state=>state.order)
   const dispatch = useDispatch();
-  console.log("🚀 ~ file: App.js ~ line 17 ~ App ~ order", order)
+
+  const data  = useSelector(state => state.allUser)
+
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/sql/allUsers"
+        );
+        console.log("===>", res.data)
+      } catch (err) { }
+    };
+    getProducts();
+  }, []);
 
   return (
     <div className={darkMode ? "app dark" : "app"}>

@@ -34,6 +34,7 @@
 const express = require('express')
 const dotenv = require('dotenv');
 const sql = require('mssql')
+const cors = require('cors')
 var config = {
     user: "sa", //default is sa
     password: "DE@2022",
@@ -54,6 +55,7 @@ const appPool = new sql.ConnectionPool(config)
 const sqlRoutes = require('./routes/sqlRoutes')
 dotenv.config();
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use('/sql', sqlRoutes)
 
