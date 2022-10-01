@@ -201,19 +201,16 @@ const AllDiscountedProducts = () => {
               />
             )} */}
 
-            {isFavourate(element.item.product_id) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
                 onPress={() => {removeFav(productDetail);}}
                 style={Style.middle2_2_icon}
               />
-            ) : (
               <MaterialCommunityIcons
                 name="cards-heart-outline"
                 onPress={() => {addToFav(productDetail);}}
                 style={Style.middle2_2_icon}
               />
-            )}
 
             <Image
               style={Style.all_item_main4_img}
