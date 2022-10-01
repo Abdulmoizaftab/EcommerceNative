@@ -9,28 +9,27 @@ import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { useDispatch, useSelector } from 'react-redux'
-import React,{useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { keys } from "@mui/system";
 
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
-  const dispatch = useDispatch();
-
-  const data  = useSelector(state => state.allUser)
-
+  const [order, SetOrder] = useState([])
 
   useEffect(() => {
-    const getProducts = async () => {
+    const getOrder = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/sql/allUsers"
-        );
-        console.log("===>", res.data)
+        const res = await axios.get("http://localhost:5000/sql/getOrders");
+        SetOrder(res.data)
       } catch (err) { }
     };
-    getProducts();
+    getOrder();
   }, []);
+
+
 
   return (
     <div className={darkMode ? "app dark" : "app"}>

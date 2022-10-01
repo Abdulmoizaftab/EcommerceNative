@@ -85,14 +85,13 @@ router.get('/category', (req, res) => {
 })
 
 router.get('/getOrders', (req, res) => {
-  req.app.locals.db.query(`select top(50) order_items.* , order_details.user_id , order_details.total, order_details.payment_id , order_details.orderStatus, 
-  product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
+  req.app.locals.db.query(`select order_items.* , order_details.user_id , order_details.total, order_details.payment_id , order_details.orderStatus, 
+  product.vendor_id,product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
   users.username,users.address,users.email,users.telephone
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
-  inner join product on product.product_id = order_items.order_id
-  inner join users on users.user_id = order_details.user_id 
-  order by order_id`, function (err, recordset) {
+  inner join product on product.product_id = order_items.product_id
+  inner join users on users.user_id = order_details.user_id `, function (err, recordset) {
     if (err) {
       console.error(err)
       res.status(500).send('SERVER ERROR')
