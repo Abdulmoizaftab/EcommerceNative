@@ -133,22 +133,6 @@ const Favorites = ({navigation}) => {
         </View>
       </View>
       {
-        favRedux && favRedux.length > 0 ?
-        <FlatList
-        ListHeaderComponent={
-          <View></View>
-        }
-        data={favRedux} keyExtractor={item => item.product_id} numColumns={2}
-        renderItem={renderItem}
-        onEndReached={onEndReached}
-        ListFooterComponent={flatListEnd} 
-        />:
-        <View style={Style.main_img}>
-        <Image style={{width:"70%",height:"35%"}} source={empty_cart}/>
-        <Text style={{ color: 'gray', fontWeight: '400' }}>No Favourites Items</Text>
-      </View>
-      }
-      {/* {
         FavProducts && FavProducts.length > 0 ?
         <FlatList
         ListHeaderComponent={
@@ -163,7 +147,7 @@ const Favorites = ({navigation}) => {
         <Image style={{width:"70%",height:"35%"}} source={empty_cart}/>
         <Text style={{ color: 'gray', fontWeight: '400' }}>No Favourites Items</Text>
       </View>
-      } */}
+      }
 
     </View>
   )

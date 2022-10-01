@@ -15,13 +15,13 @@ import SkeletonJs from '../components/Skeleton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeBaseProvider} from 'native-base';
 import SearchBar from '../components/SearchBar';
-
+import { useDispatch } from 'react-redux';
+import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
 const AllDiscountedProducts = () => {
-  const navigate = useNavigation();
-  const [isAdded, setIsAdded] = useState(false);
 
+
+  const navigate = useNavigation();
   const [asynData, setAsynData] = useState([]);
-  console.log("🚀 ~ file: AllDiscountedProducts.js ~ line 24 ~ AllDiscountedProducts ~ asynData", asynData)
   const [FavProducts, setFavProducts] = useState([]);
 
   const [products, setProducts] = useState([]);
@@ -29,6 +29,10 @@ const AllDiscountedProducts = () => {
   const [limit, setlimit] = useState(20);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
+
+
+
+  const dispatch =useDispatch();
 
   const getDisdata = async () => {
 
@@ -95,48 +99,49 @@ const AllDiscountedProducts = () => {
 
 
 
-  const addToCart = async productData => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      } else {
-        let cartItem = [];
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-    } catch (error) {
-      alert('Something went wrongXXXXXXXXXXXX');
-    }
-  };
+  // const addToCart = async productData => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     } else {
+  //       let cartItem = [];
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrongXXXXXXXXXXXX');
+  //   }
+  // };
 
-  const removeSpecificProduct = async productData => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        const removedData = cartItem.filter(
-          object => object.product_id != productData.product_id,
-        );
-        const removeData = FavProducts.filter(
-          object => object.product_id != productData.product_id,
-        );
-        setFavProducts(removeData);
-        await AsyncStorage.removeItem('@cartItems');
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
-      }
-    } catch (error) {
-      alert('Something went wrong=========>');
-    }
-  };
+  // const removeSpecificProduct = async productData => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       const removedData = cartItem.filter(
+  //         object => object.product_id != productData.product_id,
+  //       );
+  //       const removeData = FavProducts.filter(
+  //         object => object.product_id != productData.product_id,
+  //       );
+  //       setFavProducts(removeData);
+  //       await AsyncStorage.removeItem('@cartItems');
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong=========>');
+  //   }
+  // };
 
   const addToFav = async productDetail => {
     try {
-      addToCart(productDetail);
+      dispatch(addFavourite(productDetail));
+      // addToCart(productDetail);
       // setIsAdded(!isAdded);
       alert('added to fav');//======================
       // getData();
@@ -149,7 +154,9 @@ const AllDiscountedProducts = () => {
 
   const removeFav = async productDetail => {
     try {
-      removeSpecificProduct(productDetail);
+      
+      dispatch(removeFavourite(productDetail.product_id));
+      // removeSpecificProduct(productDetail);
       // setIsAdded(!isAdded);
       alert('remove from Fav');//======================
       // getData();
