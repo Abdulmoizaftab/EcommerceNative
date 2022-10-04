@@ -71,7 +71,7 @@ const Popuplar_slider = ({ navigate }) => {
                 </Text>
                 <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                 <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
+                  <Icon style={Styles.favIcon} onPress={()=>{alert("hello g")}} name="md-heart-outline" />
                   <Text style={Styles.rating}>
                     4.5{' '}
                     <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
@@ -182,7 +182,7 @@ const Styles = StyleSheet.create({
   },
   favIcon: {
     color: '#FB2F53',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: '800',
     marginTop: 1.5,
   },

@@ -20,6 +20,7 @@ import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
+import ProfileScreen from './screens/profileScreen';
 
 
 const Stack=createNativeStackNavigator();
@@ -53,6 +54,7 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen
           options={{
             headerShown: true,
