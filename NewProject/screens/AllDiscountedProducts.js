@@ -15,24 +15,24 @@ import SkeletonJs from '../components/Skeleton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeBaseProvider} from 'native-base';
 import SearchBar from '../components/SearchBar';
-import { useDispatch } from 'react-redux';
 import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+
+import { useDispatch,useSelector } from 'react-redux';
+
+
 const AllDiscountedProducts = () => {
 
-
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;
   const navigate = useNavigation();
-  const [asynData, setAsynData] = useState([]);
-  const [FavProducts, setFavProducts] = useState([]);
-
   const [products, setProducts] = useState([]);
-  // console.log("🚀 ~ file: AllDiscountedProducts.js ~ line 16 ~ AllDiscountedProducts ~ products", products)
   const [limit, setlimit] = useState(20);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
-
-
-
   const dispatch =useDispatch();
+
+
+
 
   const getDisdata = async () => {
 
@@ -80,90 +80,38 @@ const AllDiscountedProducts = () => {
 
   
 
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@cartItems');
-      const result = JSON.parse(jsonValue);
-      setAsynData(result);
-
-      // return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      alert('Something went wrong[[[[[[[[[[[[[[[');
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-
-
-
-  // const addToCart = async productData => {
+  // const getData = async () => {
   //   try {
-  //     let asyncData = await AsyncStorage.getItem('@cartItems');
-  //     asyncData = JSON.parse(asyncData);
-  //     if (asyncData) {
-  //       let cartItem = asyncData;
-  //       cartItem.push(productData);
-  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-  //     } else {
-  //       let cartItem = [];
-  //       cartItem.push(productData);
-  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-  //     }
+  //     const jsonValue = await AsyncStorage.getItem('@cartItems');
+  //     const result = JSON.parse(jsonValue);
+  //     setAsynData(result);
+
   //   } catch (error) {
-  //     alert('Something went wrongXXXXXXXXXXXX');
+  //     alert('Something went wrong[[[[[[[[[[[[[[[');
   //   }
   // };
 
-  // const removeSpecificProduct = async productData => {
-  //   try {
-  //     let asyncData = await AsyncStorage.getItem('@cartItems');
-  //     asyncData = JSON.parse(asyncData);
-  //     if (asyncData) {
-  //       let cartItem = asyncData;
-  //       const removedData = cartItem.filter(
-  //         object => object.product_id != productData.product_id,
-  //       );
-  //       const removeData = FavProducts.filter(
-  //         object => object.product_id != productData.product_id,
-  //       );
-  //       setFavProducts(removeData);
-  //       await AsyncStorage.removeItem('@cartItems');
-  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
-  //     }
-  //   } catch (error) {
-  //     alert('Something went wrong=========>');
-  //   }
-  // };
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+
+
 
   const addToFav = async productDetail => {
     try {
       dispatch(addFavourite(productDetail));
-      // addToCart(productDetail);
-      // setIsAdded(!isAdded);
-      alert('added to fav');//======================
-      // getData();
-      // getDisdata();
     } catch (error) {
       alert(error);
-      // alert('add to fav failed');
     }
   };
 
   const removeFav = async productDetail => {
     try {
       
-      dispatch(removeFavourite(productDetail.product_id));
-      // removeSpecificProduct(productDetail);
-      // setIsAdded(!isAdded);
-      alert('remove from Fav');//======================
-      // getData();
-      // getDisdata();
+      dispatch(removeFavourite(productDetail));
     } catch (error) {
       alert(error);
-      // alert('add to fav failed');
     }
   };
 
@@ -177,10 +125,11 @@ const AllDiscountedProducts = () => {
       name: element.item.name,
       price: element.item.price,
       image: element.item.imgs,
+      discount: element.item.discount_percent,
     };
 
     const isFavourate = id =>
-      Boolean(asynData.find(item => item.product_id === id));
+      Boolean(favArray.find(item => item.product_id === id));
 
     return (
       <View style={Style.all_item_main2}>
@@ -194,7 +143,7 @@ const AllDiscountedProducts = () => {
               </Text>
             </View>
 
-            {/* {isFavourate(element.item.product_id) ? (
+            {isFavourate(element.item.product_id) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
                 onPress={() => {removeFav(productDetail);}}
@@ -206,18 +155,7 @@ const AllDiscountedProducts = () => {
                 onPress={() => {addToFav(productDetail);}}
                 style={Style.middle2_2_icon}
               />
-            )} */}
-
-              <MaterialCommunityIcons
-                name="cards-heart"
-                onPress={() => {removeFav(productDetail);}}
-                style={Style.middle2_2_icon}
-              />
-              <MaterialCommunityIcons
-                name="cards-heart-outline"
-                onPress={() => {addToFav(productDetail);}}
-                style={Style.middle2_2_icon}
-              />
+            )}
 
             <Image
               style={Style.all_item_main4_img}
@@ -231,41 +169,19 @@ const AllDiscountedProducts = () => {
               <View style={Style.cardBotm}>
                 <Text style={Style.cardPrice}>RS. {element.item.price}</Text>
 
-                {/* add product to fav          */}
-                {/* {
-                  isAdded?
-                  <MaterialCommunityIcons name="cards-heart"   onPress={() => removeFav(productDetail)} style={Style.middle2_2_icon} />
-                  :
-                  <MaterialCommunityIcons name="cards-heart-outline" onPress={() => addToFav(productDetail)} style={Style.middle2_2_icon} />
-                } */}
+              
               </View>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
-            // onPress={() => addToCart(productDetail)}
             style={Style.fav_icon_box}>
             <Text style={Style.rating}>
               4.5 <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
             </Text>
-            {/* <MaterialCommunityIcons name="cards-heart-outline" style={Style.middle2_2_icon} /> */}
           </TouchableOpacity>
 
-          {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={removeValue} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <Feather name="delete" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => removeSpecificProduct(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <Feather name="home" style={Style.middle2_2_icon} />
-          </TouchableOpacity> */}
-
-          {/*<TouchableOpacity onPress={() => storeMergeData(product)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-          <Feather name="flower" style={Style.middle2_2_icon} />
-        </TouchableOpacity> */}
+        
         </View>
       </View>
     );

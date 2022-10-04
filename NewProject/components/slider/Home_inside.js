@@ -13,8 +13,17 @@ import VendorSlider from '../VendorSlider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider } from 'native-base';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch,useSelector } from 'react-redux';
+import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
 
 const Home_inside = ({ navigate }) => {
+
+
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;
+  
+  const dispatch =useDispatch();
 
   const [products, setProducts] = useState([]);
   // console.log(products)
@@ -103,6 +112,27 @@ const Home_inside = ({ navigate }) => {
     }
     console.log('Done.')
   }
+///==============================================
+  const addToFav = (productDetail) => {
+    try {
+      
+      // alert("added")
+      dispatch(addFavourite(productDetail));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const removeFav = (productDetail) => {
+    try {
+      // alert("remove")
+      dispatch(removeFavourite(productDetail));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+
 
 
   const renderItem = (element) => {
@@ -132,6 +162,9 @@ const Home_inside = ({ navigate }) => {
       image: element.item.imgs
     }
 
+    const isFavourate = id =>
+    Boolean(favArray.find(item => item.product_id === id));
+
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
@@ -157,9 +190,33 @@ const Home_inside = ({ navigate }) => {
             </View>
           </View>
 
-          <TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+
+          {isFavourate(element.item.product_id) ? (
+              <MaterialCommunityIcons
+                name="cards-heart"
+                onPress={() => {removeFav(productDetail)}}
+                style={Style.middle2_2_icon}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="cards-heart-outline"
+                onPress={() => {addToFav(productDetail)}}
+                style={Style.middle2_2_icon}
+              />
+            )}
+
+
+
+
+          {/* {
+            favArray.includes(element.item.product_id)?(<TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            <FontAwesome name="heart" style={Style.middle2_2_icon} />
+          </TouchableOpacity>)
+          :(<TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
+          </TouchableOpacity>)
+          } */}
+          
 
           {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
@@ -273,9 +330,9 @@ const Style = StyleSheet.create({
     marginRight: 4,
   },
   middle2_2_icon: {
-    fontSize: 15,
+    fontSize: 25,
     marginRight: 10,
-    color: "#C92252"
+    color: '#5A56E9'
   },
   all_item_main: {
     flex: 1,

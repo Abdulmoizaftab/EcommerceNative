@@ -7,10 +7,21 @@ import SkeletonJs from '../components/Skeleton';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import empty_cart from '../image/empty_cart.png'
-
 import { NativeBaseProvider } from 'native-base';
 
+
+import { useDispatch,useSelector } from 'react-redux';
+import { removeFavourite } from '../redux/FavouritesRedux';
+
+
+
 const Favorites = ({navigation}) => {
+
+  
+  const dispatch =useDispatch();
+
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;
 
   const [favRedux, setFavRedux] = useState([]);
   const [FavProducts, setFavProducts] = useState([]);
@@ -22,7 +33,6 @@ const Favorites = ({navigation}) => {
       const result = JSON.parse(jsonValue)
       setFavProducts(result)
 
-      // return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
       alert('Something went wrong');
     }
@@ -34,30 +44,20 @@ const Favorites = ({navigation}) => {
   }, [])
 
   const onEndReached = ()=>{
-    // if(FavProducts.length <1 ){
-    //   console.log("🚀 ~ file: Favourites.js ~ line 33 ~ limited ~ FavProducts", FavProducts.length)
-    //   setLoading(false)
-    // }
     setLoading(false)
   }
 
-  
-  const removeSpecificProduct = async (productData) => {
+  const removeFav = async productDetail => {
     try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        const removedData = cartItem.filter(object => object.product_id != productData.product_id)
-        const removeData = FavProducts.filter(object=>object.product_id != productData.product_id)
-        setFavProducts(removeData)
-        await AsyncStorage.removeItem('@cartItems')
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
-      }
+      
+      dispatch(removeFavourite(productDetail));
     } catch (error) {
-      alert('Something went wrong');
+      alert(error);
     }
-  }
+  };
+
+
+  
 
   const flatListEnd = () => {
     return (
@@ -85,6 +85,13 @@ const Favorites = ({navigation}) => {
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
           <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail')}>
+            {item.discount>0?
+          <View>
+              <Text style={Style.discount}>
+                {item.discount}%
+              </Text>
+            </View>
+            :null}
           <Image style={Style.all_item_main4_img}
             resizeMode="cover"
             source={{ uri: item.image }}
@@ -111,7 +118,7 @@ const Favorites = ({navigation}) => {
             <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => removeSpecificProduct(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+          <TouchableOpacity onPress={() => removeFav(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <Feather name="home" style={Style.middle2_2_icon} />
           </TouchableOpacity>
 
@@ -133,12 +140,12 @@ const Favorites = ({navigation}) => {
         </View>
       </View>
       {
-        favRedux && favRedux.length > 0 ?
+        favArray && favArray.length > 0 ?
         <FlatList
         ListHeaderComponent={
           <View></View>
         }
-        data={favRedux} keyExtractor={item => item.product_id} numColumns={2}
+        data={favArray} keyExtractor={item => item.product_id} numColumns={2}
         renderItem={renderItem}
         onEndReached={onEndReached}
         ListFooterComponent={flatListEnd} 
@@ -148,28 +155,29 @@ const Favorites = ({navigation}) => {
         <Text style={{ color: 'gray', fontWeight: '400' }}>No Favourites Items</Text>
       </View>
       }
-      {/* {
-        FavProducts && FavProducts.length > 0 ?
-        <FlatList
-        ListHeaderComponent={
-          <View></View>
-        }
-        data={FavProducts} keyExtractor={item => item.product_id} numColumns={2}
-        renderItem={renderItem}
-        onEndReached={onEndReached}
-        ListFooterComponent={flatListEnd} 
-        />:
-        <View style={Style.main_img}>
-        <Image style={{width:"70%",height:"35%"}} source={empty_cart}/>
-        <Text style={{ color: 'gray', fontWeight: '400' }}>No Favourites Items</Text>
-      </View>
-      } */}
+      
 
     </View>
   )
 }
 
 const Style = StyleSheet.create({
+  discount: {
+    padding: 2,
+    marginLeft: -5,
+    marginTop: -5,
+    textAlign: 'center',
+    backgroundColor: 'red',
+    color: '#fff',
+    position: 'relative',
+    left: -60,
+    top: 5,
+    zIndex: 5,
+    borderRadius: 6,
+    fontWeight: 'bold',
+    fontSize: 15,
+    width: 50,
+  },
   middle2: {
     flexDirection: 'row',
     alignItems: 'center',

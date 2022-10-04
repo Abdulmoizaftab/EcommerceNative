@@ -9,23 +9,20 @@ const favouriteSlice = createSlice({
     reducers:{
         addFavourite:(state,action)=>{
 
-           const favIndex =  state.favourites.findIndex(item=>item.id===action.payload.id)
-            //check item already in favourites
-           if(favIndex>=0){
-            state.favourites[favIndex].favQuantity+=1
-           }
-           //add item first time
-           else
-           {
-               const tempFav = {...action.payload,favQuantity:1};
+           
+            //    const tempFav = {...action.payload,favQuantity:1};
                state.totalQuantity+=1;
-               state.favourites.push(tempFav);
-           }
+            //    console.log(state.favourites.includes(action.payload.product_id))
+               state.favourites.push(action.payload);
+            //    alert('added to fav');
+           
         },
         removeFavourite:(state,action)=>{
             state.totalQuantity-=1
-            const modifiedFavourites = state.favourites.filter(item => item.id !== action.payload)
+            // console.log(action.payload.product_id)
+            const modifiedFavourites = state.favourites.filter(item => item.product_id !== action.payload.product_id)
             state.favourites = modifiedFavourites;
+            // alert('remove from Fav');
         },
 
        
