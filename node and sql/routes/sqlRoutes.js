@@ -134,11 +134,31 @@ router.post("/login" ,(req,res) =>{
         if(matchedPassword && recordset.recordset[0].isVerified === true){
           const token=jwt.sign({user_id:recordset.recordset[0].user_id,user_name:recordset.recordset[0].username},process.env.SECRET_KEY)
           req.session.user_id=recordset.recordset[0].user_id;
-          req.app.locals.db.query(`insert into shopping_session (user_id,status) values (${req.session.user_id},'active')`, function(err, recordset){
+          req.app.locals.db.query(`select * from shopping_session where user_id=${req.session.user_id}`, function(err, recordset){
             if(err){
               console.error(err)
               res.status(500).send('SERVER ERROR')
               return
+            }
+            else{
+              if(Object.keys(recordset.recordset).length !== 0){
+                req.app.locals.db.query(`update shopping_session set status='active' where user_id=${req.session.user_id}`, function(err, recordset){
+                  if(err){
+                    console.error(err)
+                    res.status(500).send('SERVER ERROR')
+                    return
+                  }
+                })
+              }
+              else{
+                req.app.locals.db.query(`insert into shopping_session (user_id,status) values (${req.session.user_id},'active')`, function(err, recordset){
+                  if(err){
+                    console.error(err)
+                    res.status(500).send('SERVER ERROR')
+                    return
+                  }
+                })
+              }
             }
           })
           res.status(201).json({user:recordset.recordset,token:token});
@@ -308,7 +328,7 @@ router.post('/addCartItem',auth.isLogin,(req,res)=>{
         })
       }
       else{
-        req.app.locals.db.query(`insert into cart_item (product_id,quantity,user_id) values (${product_id},${quantity},${req.user_id.user_id})`, function(err, recordset){
+        req.app.locals.db.query(`insert into cart_item (product_id,quantity,user_id,is_deleted) values (${product_id},${quantity},${req.user_id.user_id},0)`, function(err, recordset){
           if(err){
             console.error(err)
             res.status(500).send('SERVER ERROR')
@@ -332,14 +352,20 @@ router.post('/delCartItem',auth.isLogin,(req,res)=>{
     }
     else{
       if(Object.keys(recordset.recordset).length !== 0){
-        req.app.locals.db.query(`update cart_item set quantity=${recordset.recordset[0].quantity} - ${quantity} where product_id=${product_id} and user_id=${req.user_id.user_id}`, function(err, recordset){
-          if(err){
-            console.error(err)
-            res.status(500).send('SERVER ERROR')
-            return
-          }
-          res.status(201).send("Data updated successfully")
-        })
+        if(recordset.recordset[0].quantity > 1 ){
+
+          req.app.locals.db.query(`update cart_item set quantity=${recordset.recordset[0].quantity} - 1 where product_id=${product_id} and user_id=${req.user_id.user_id}`, function(err, recordset){
+            if(err){
+              console.error(err)
+              res.status(500).send('SERVER ERROR')
+              return
+            }
+            res.status(201).send("Data updated successfully")
+          })
+        }
+        else{
+          res.status(200).send("No more quantity to delete")
+        }
       }
       else{
         res.send("No data to delete")
@@ -352,7 +378,7 @@ router.get('/getCartItem',auth.isLogin,(req,res)=>{
   req.app.locals.db.query(`select product.* , cart_item.user_id , cart_item.quantity
   from product
   inner join cart_item on product.product_id = cart_item.product_id
-  where user_id=${req.user_id.user_id}`, function(err, recordset){
+  where user_id=${req.user_id.user_id} and is_deleted=0`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')
@@ -371,21 +397,77 @@ router.get('/getCartItem',auth.isLogin,(req,res)=>{
 
 
 router.post('/setOrderDetails',(req,res)=>{
-  req.app.locals.db.query(``, function(err, recordset){
+  const {amount,prodArr}=req.body
+  req.app.locals.db.query(`insert into payment_details (amount,provider,status,user_id) values (${amount},'Cash On Delivery',0,2010)`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')
       return
     }
     else{
-      if(Object.keys(recordset.recordset).length !== 0){
-        res.status(201).json(recordset.recordset)
-      }
-      else{
-        res.status(201).send("No data")
-      }
+      req.app.locals.db.query(`select top(1) * from payment_details where USER_ID=2010 order by created_at desc`, function(err, recordset){
+        if(err){
+          console.error(err)
+          res.status(500).send('SERVER ERROR')
+          return
+        }
+        else{
+          req.app.locals.db.query(`insert into order_details (user_id,total,payment_id,orderStatus) values (${recordset.recordset[0].user_id},${recordset.recordset[0].amount},${recordset.recordset[0].payment_id},'pending')`, function(err, recordset){
+            if(err){
+              console.error(err)
+              res.status(500).send('SERVER ERROR')
+              return
+            }
+            else{
+              req.app.locals.db.query(`select top(1) * from order_details where USER_ID=2010 order by created_at desc`, function(err, recordset){
+                if(err){
+                  console.error(err)
+                  res.status(500).send('SERVER ERROR')
+                  return
+                }
+                else{
+                  for (let index = 0; index < 3; index++) {
+                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},8,1,2010);`, function(err, recordset){
+                      if(err){
+                        console.error(err)
+                        res.status(500).send('SERVER ERROR')
+                        return
+                      }
+                    })
+                  }
+                  res.status(201).send("Loop completed successfully..!!!")
+                }
+              })
+
+            }
+          })
+        }
+      })
     }
   })
 })
+
+router.get('/getOrderDetails',(req,res)=>{
+  req.app.locals.db.query(`select order_items.item_id,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
+  from order_items
+  inner join order_details on order_items.order_id = order_details.order_id
+  inner join product on order_items.product_id = product.product_id
+  inner join payment_details on order_details.payment_id = payment_details.payment_id
+  where order_items.user_id=2010`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    else{
+      res.status(201).json(recordset.recordset)
+    }
+  })
+})
+
+
+
+
+
 
 module.exports = router;
