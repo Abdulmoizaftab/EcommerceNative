@@ -15,7 +15,7 @@ const VendorSlider = () => {
   const [isLoading, setLoading] = useState(true);
   const [skeleton,setSkeleton]=useState(false)
   useEffect(() => {
-    fetch('http://192.168.1.24:5000/sql/allVenders')
+    fetch('http://192.168.1.14:5000/sql/allVenders')
       .then((response) => response.json())
 
       .then((json) => setApiData(json))

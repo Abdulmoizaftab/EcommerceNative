@@ -1,37 +1,29 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { addAddress } from '../redux/AddressRedux'
+import { addressAdd } from '../redux/apiCalls'
 import { useDispatch,useSelector } from 'react-redux'
 
-const AddressBottomSheet = ({reference}) => {
+const AddressBottomSheet = ({reference,trigger,setTrigger}) => {
     const dispatch = useDispatch()
-    const currentState = useSelector(state => state.address)
-    let lastId;
-    if (currentState.addresses.length === 0) {
-       lastId = 0
-    } else {    
-        let index = currentState.addresses.length
-        index--
-        lastId = currentState.addresses[index].id
-    }
     const [title, setTttle] = useState("")
     const [recipent, setRecipent] = useState("")
     const [address, setAddress] = useState("")
     const [phoneInput, setPhoneInput] = useState("")
-    const [id ,setId] = useState(++lastId)
 
     const handlePress = () => {
         reference.current.close();
-        const phone = parseInt(phoneInput)
-        const payload = {
-            id,
+        // const phone = parseInt(phoneInput)
+        const phone = phoneInput
+        const addressPayload = {
             address,
             phone,
             recipent,
             title,
         }
-        dispatch(addAddress(payload))
+        //console.log('btmSheet ==> ',addressPayload);
+        addressAdd(dispatch,addressPayload)
+        setTrigger(!trigger)
     }
 
     return (

@@ -33,6 +33,7 @@
 //   });
 const express = require('express')
 const dotenv = require('dotenv');
+const cors = require('cors')
 const sql = require('mssql')
 var config = {
     user: "sa", //default is sa
@@ -55,6 +56,7 @@ const sqlRoutes = require('./routes/sqlRoutes')
 dotenv.config();
 const app = express()
 app.use(express.json())
+app.use(cors())
 app.set("view engine","hbs")
 app.use('/sql', sqlRoutes)
 

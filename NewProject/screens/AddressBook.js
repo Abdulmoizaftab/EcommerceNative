@@ -7,37 +7,50 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import AddressBottomSheet from '../components/AddressBottomSheet';
 import addressImg from '../image/address1.png'
 import { useDispatch,useSelector } from 'react-redux';
-import { deleteAddress } from '../redux/AddressRedux'
+import { addressDelete } from '../redux/apiCalls'
 import { NativeBaseProvider, Radio } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AddressUpdateBottomSheet from '../components/AddressUpdateBottomSheet';
+import axios from 'axios'
+
 
 
 
 const AddressBook = () => {
+  
+  let bgcolor = '#fff'
     const navigate = useNavigation()
     const dispatch = useDispatch()
-    const address = useSelector(state => state.address)
     const refRBSheet = useRef();
     const refUpdateRBSheet = useRef();
-    const [modifyKey,setModifyKey] = useState();
-    const [selectedValue,setSelectedValue] = useState(address.addresses[0]);
+    const [addressToUpdate,setAddressToUpdate] = useState({});
+    const [dbAddress,setDbAddress] = useState([]);
+    const [check,setCheck] = useState(false);
+    const [trigger,setTrigger] = useState(false);
+    const [selectedValue,setSelectedValue] = useState(dbAddress && dbAddress[0]);
+    const user_id = 2010
 
 
-    const modifyAddress = (id) =>{
-      setModifyKey(id)
+    const modifyAddress = (element) =>{
+
+      setAddressToUpdate(element)
       refUpdateRBSheet.current.open()
     }
 
-    // const onSheetOpen = () =>{
-    //   const toModify = useSelector(state => state.address)
-    //   const modifyingAddress = address.addresses[modifyKey]
-    //   console.log(modifyingAddress);
-    // }
+    
 
-  // useEffect(() => {
-  //   console.log(address)
-  // }, [address])
+    
+
+  useEffect(() => {
+     axios.get(`http://192.168.1.14:5000/sql/getAddress/${user_id}`)
+      .then(function (response) {
+        setDbAddress(response.data)
+        // setSelectedValue[dbAddress[0]]
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+  },[trigger])
   
   
 
@@ -46,35 +59,40 @@ const AddressBook = () => {
     <View style={styles.main}>
 
       {
-        address.addresses.length !== 0 ? (
+        dbAddress.length !== 0 ? (
           <NativeBaseProvider>
           <Radio.Group
             name="addressRadioGroup"
             value={selectedValue}
             onChange={(nextValue) => {
               setSelectedValue(nextValue);
-              console.log(selectedValue);
+              setCheck(true)
             }}>
           <ScrollView>
-            {address.addresses.map((element, index) => (
-              <Radio style={{width:"93%" , alignSelf:'center'}} value={element} my="10">
-                <View key={index} style={styles.elevate}>
+            {dbAddress.map((element, index) => (
+              <Radio style={{width:"93%" , alignSelf:'center'}} key={element.address_id} value={element} my="10">
+                <View style={styles.elevate}>
                   <View style={styles.addressCard}>
                     <View style={styles.addressDetails}>
-                      <Text style={{color:'#5A56E9', fontSize:22,fontWeight:'bold',marginVertical:'1%'}}>{element.title}</Text>
-                      <Text style={{marginVertical:'0.5%', fontWeight:'500'}}>{element.address}</Text>
+                      <Text style={{color:'#5A56E9', fontSize:22,fontWeight:'bold',marginVertical:'1%'}}>{element.address_title}</Text>
+                      <Text style={{marginVertical:'0.5%', fontWeight:'500'}}>{element.address_line}</Text>
                       <Text style={{marginVertical:'0.5%', fontWeight:'500'}}>Recipent: {element.recipent}</Text>
-                      <Text style={{marginVertical:'0.5%', fontWeight:'500'}}>{element.phone}</Text>
+                      <Text style={{marginVertical:'0.5%', fontWeight:'500'}}>{element.mobile}</Text>
                       {/* <TouchableOpacity>
                         <Text style={{marginVertical:'1%', fontWeight:'500',color:'#5A56E9' , fontSize}}>Edit</Text>
                       </TouchableOpacity> */}
                   </View>
 
                   <View style={styles.addressDelete}>
-                    <TouchableOpacity onPress={() => dispatch(deleteAddress(element.id))}>
+                    <TouchableOpacity onPress={() => {
+                      addressDelete(dispatch,element.address_id)
+                      setTrigger(!trigger)
+                      //setSelectedValue(dbAddress[dbAddress.length-1])
+                      navigate.navigate('AddressBook')
+                      }}>
                       <AntDesign name="delete" size={30} color='#5A56E9' />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>modifyAddress(element.id)}>
+                    <TouchableOpacity onPress={()=>modifyAddress(element)}>
                       <AntDesign name="edit" size={30} color='#5A56E9' />
                     </TouchableOpacity>
                   </View>
@@ -125,7 +143,7 @@ const AddressBook = () => {
           
         }}
         >
-        <AddressBottomSheet reference={refRBSheet} />
+        <AddressBottomSheet reference={refRBSheet} trigger={trigger} setTrigger={setTrigger} />
       </RBSheet>
 
       <RBSheet
@@ -159,12 +177,12 @@ const AddressBook = () => {
 
         }}
       >
-        <AddressUpdateBottomSheet reference={refUpdateRBSheet} modifying_id={modifyKey}/>
+        <AddressUpdateBottomSheet reference={refUpdateRBSheet} addressToUpdate={addressToUpdate} trigger={trigger} setTrigger={setTrigger}/>
       </RBSheet>
     </View>
 
     {
-        address.addresses.length === 0 ? (
+       dbAddress.length === 0 ? (
           <View style={styles.bottomFlexSingle}>
           <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={() => refRBSheet.current.open()}>
             <MaterialIcons name='add-location-alt' color='#E9ECFF' size={40} />

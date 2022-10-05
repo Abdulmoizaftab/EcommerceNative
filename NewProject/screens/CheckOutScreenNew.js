@@ -1,18 +1,32 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React , {useEffect,useState} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Octicons from 'react-native-vector-icons/Octicons'
 import Feather from 'react-native-vector-icons/Feather'
 import { Radio, NativeBaseProvider } from 'native-base'
-
+import axios from 'axios'
 import { useSelector } from 'react-redux';
 
 const CheckOutScreenNew = ({ route }) => {
   const navigate = useNavigation()
   const address = useSelector(state => state.address)
   const selectedValue = route.params
+  const [dbAddress,setDbAddress] = useState([]);
+  const user_id =2010;
+
+  useEffect(() => {
+    console.log('hello');
+    axios.get(`http://192.168.1.14:5000/sql/getAddress/${user_id}`)
+     .then(function (response) {
+       setDbAddress(response.data)
+     })
+     .catch(function (err) {
+       console.log(err);
+     })
+ }, [])
+
   return (
     <>
       <ScrollView>
@@ -27,29 +41,29 @@ const CheckOutScreenNew = ({ route }) => {
           </View>
           <View style={styles.addAddressBtnView}>
             {
-              address.addresses.length !== 0 ? (
+              dbAddress.length !== 0 ? (
                 selectedValue !== undefined ? (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
                       <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.recipent}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address}</Text>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address_line}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {selectedValue.phone}</Text>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.mobile}</Text>
                     </View>
                   </View>
                 ) : (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{address.addresses[0].recipent}</Text>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].recipent}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{address.addresses[0].address}</Text>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].address_line}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {address.addresses[0].phone}</Text>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress[0].mobile}</Text>
                     </View>
                   </View>
                 )
@@ -89,7 +103,7 @@ const CheckOutScreenNew = ({ route }) => {
         </View>
       </ScrollView>
       {
-        address.addresses.length !==0 ? (
+        dbAddress.length !==0 ? (
         <View style={styles.finalCheckout}>
           <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary')}>
             <Text style={styles.checkoutBtnText}>Checkout</Text>
