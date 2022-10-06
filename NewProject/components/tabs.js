@@ -12,7 +12,7 @@ const Tabs = ({cat_id,setHeading,setId}) => {
   }
 
   const getsubCategories=async()=>{
-    const datas=await fetch(`http://192.168.1.6:5000/sql/getSubCategories/${cat_id}`)
+    const datas=await fetch(`http://192.168.1.15:5000/sql/getSubCategories/${cat_id}`)
     const res=await datas.json()
     for (let i = 0; i < res.length; i++) {
       setData((data)=>[...data,res[i]])

@@ -34,7 +34,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.6:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.15:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -282,10 +282,10 @@ const Home_inside = ({ navigate }) => {
         </View>
 
 
-        <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6}>
+        {/* <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6}>
           <Text style={Style.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         </View>
         </View>
       }

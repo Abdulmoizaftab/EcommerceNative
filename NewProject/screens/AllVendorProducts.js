@@ -16,7 +16,7 @@ const AllVendorProducts = ({ route }) => {
     const [isLoading, setIsloading] = useState(true);
 
     useEffect(() => {
-        fetch(`http://192.168.1.6:5000/sql/venderProduct/${vendorObj.vendorId}`)
+        fetch(`http://192.168.1.15:5000/sql/venderProduct/${vendorObj.vendorId}`)
             .then((response) => response.json())
             .then((json) => setVendorId(json))
             .catch((error) => console.error(error))
