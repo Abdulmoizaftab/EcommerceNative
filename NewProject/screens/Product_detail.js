@@ -10,14 +10,28 @@ import FlatButton from '../components/Button';
 
 
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch,useSelector } from 'react-redux';
+import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+
+
+
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 const Product_detail = ({route}) => {
+
+
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;  
+  const dispatch =useDispatch();
+
+
   const paramData = route.params
   const [imgArr, setImgArr] = useState(["https://kimerahome.b-cdn.net/wp-content/uploads/2022/01/CADBURY-SILK-HEART-BLUSH-150-GM.jpg", "https://cdn.shopify.com/s/files/1/0474/6828/2012/products/FOPBarsPO6_2pcEach.jpg?v=1642502710", "https://cdn0.woolworths.media/content/wowproductimages/large/194423.jpg"])
   const [prdSize, setPrdSize] = useState(['Small', 'Medium', 'Large'])
   const [prdColor, setPrdColor] = useState(['Green', 'Blue', 'Red'])
   const [isFav, setIsFav] = useState(false)
   const [price, setPrice] = useState(0)
+  const [proId, setProId] = useState()
   const [prdName, setPrdName] = useState("")
   const refRBSheet = useRef();
 
@@ -36,10 +50,37 @@ const Product_detail = ({route}) => {
     
     useEffect(() => {
       setImgArr([paramData.imgs,paramData.imgs])
-      setPrice(paramData.price)
       setPrdName(paramData.name)
+      setPrice(paramData.price)
+      setProId(paramData.product_id)
     },[paramData])
     
+
+
+    const addToFav = (productDetail) => {
+      try {
+        
+        // alert("added")
+        dispatch(addFavourite(productDetail));
+      } catch (error) {
+        alert(error);
+      }
+    };
+  
+    const removeFav = (productDetail) => {
+      try {
+        // alert("remove")
+        dispatch(removeFavourite(productDetail));
+      } catch (error) {
+        alert(error);
+      }
+    };
+
+
+    const isFavourate = id =>
+    Boolean(favArray.find(item => item.product_id === id));
+
+
 
   return (
     <ScrollView scrollEnabled={true}>
@@ -47,8 +88,34 @@ const Product_detail = ({route}) => {
       <View style={{flexDirection:'row',justifyContent:'center'}} >
         
         <Icon style={Style.backBtn} name='arrow-back-circle' onPress={()=>navigate.goBack()}/>
-        {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={()=>setIsFav(!isFav)}/> : <Icon style={Style.heartBtn} name='heart-outline' onPress={()=>setIsFav(!isFav)}/>}
-        
+        {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={()=>setIsFav(!isFav)}/> : <Icon style={Style.heartBtn} name='heart-outline' onPress={()=>setIsFav(!isFav)}/>} */}
+        {isFavourate(proId) ? (
+              <MaterialCommunityIcons
+                name="cards-heart"
+                onPress={() => {
+                  const productDetail = {
+                  product_id: proId,
+                  name: prdName,
+                  price: price,
+                  image: paramData.imgs
+                };
+                  removeFav(productDetail)}}
+                style={Style.heartBtn}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="cards-heart-outline"
+                onPress={() => {
+                  const productDetail = {
+                  product_id: proId,
+                  name: prdName,
+                  price: price,
+                  image: paramData.imgs
+                };
+                addToFav(productDetail)}}
+                style={Style.heartBtn}
+              />
+            )}
         
 
         <SliderBox
@@ -213,7 +280,7 @@ const Style = StyleSheet.create({
   },
   heartBtn:{
     fontSize:30,
-    color:'red',
+    color:'#5A56E9',
     position:'absolute',
     zIndex:999,
     top:6,
