@@ -5,6 +5,8 @@ const favouriteSlice = createSlice({
     initialState:{
         favourites:[],
         totalQuantity:0,
+        isFetching:false,
+        error:false
     },
     reducers:{
         addFavourite:(state,action)=>{
@@ -13,8 +15,11 @@ const favouriteSlice = createSlice({
             //    const tempFav = {...action.payload,favQuantity:1};
                state.totalQuantity+=1;
             //    console.log(state.favourites.includes(action.payload.product_id))
-               state.favourites.push(action.payload);
+            //    state.favourites.push(action.payload);
             //    alert('added to fav');
+            // state.isFetching=false;
+            state.favourites=action.payload
+            alert("data added to fav")
            
         },
         removeFavourite:(state,action)=>{
@@ -24,6 +29,10 @@ const favouriteSlice = createSlice({
             state.favourites = modifiedFavourites;
             // alert('remove from Fav');
         },
+        addFavFailure:(state)=>{
+            state.isFetching=false;
+            state.error=true;
+        }
 
        
     },

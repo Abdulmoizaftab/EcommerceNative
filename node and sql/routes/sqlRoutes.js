@@ -46,7 +46,7 @@ const sendMail=(email,name,user_id)=>{
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.15:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.4:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
     transporter.sendMail(mailOptions,function(error,info){
@@ -240,7 +240,28 @@ router.get('/allDiscountProducts/:limit',(req,res)=>{ //ALL DISCOUNTED PRODUCTS
   })
 })
 
-
+router.post('/setFavourites',(req,res)=>{
+  const {favouritedProd}=req.body
+  req.app.locals.db.query(`insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},2010,0)`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    else{
+      req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010`, function(err, recordset){
+        if(err){
+          console.error(err)
+          res.status(500).send('SERVER ERROR')
+          return
+        }
+        else{
+          res.status(201).json(recordset.recordset)
+        }
+      })
+    }
+  })
+})
 
 
 

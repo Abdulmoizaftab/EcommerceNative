@@ -13,6 +13,7 @@ import FlatButton from '../components/Button';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+import { addFavouriteDB } from '../redux/apiCalls';
 
 
 
@@ -32,6 +33,7 @@ const Product_detail = ({route}) => {
   const [isFav, setIsFav] = useState(false)
   const [price, setPrice] = useState(0)
   const [proId, setProId] = useState()
+  const [isDeleted, setIsDeleted] = useState()
   const [prdName, setPrdName] = useState("")
   const refRBSheet = useRef();
 
@@ -53,6 +55,7 @@ const Product_detail = ({route}) => {
       setPrdName(paramData.name)
       setPrice(paramData.price)
       setProId(paramData.product_id)
+      setIsDeleted(paramData.is_deleted)
     },[paramData])
     
 
@@ -89,6 +92,36 @@ const Product_detail = ({route}) => {
         
         <Icon style={Style.backBtn} name='arrow-back-circle' onPress={()=>navigate.goBack()}/>
         {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={()=>setIsFav(!isFav)}/> : <Icon style={Style.heartBtn} name='heart-outline' onPress={()=>setIsFav(!isFav)}/>} */}
+        
+              {/* <MaterialCommunityIcons
+                name="cards-heart"
+                onPress={() => {
+                  const productDetail = {
+                  product_id: proId,
+                  name: prdName,
+                  price: price,
+                  image: paramData.imgs
+                };
+                  removeFav(productDetail)}}
+                style={Style.heartBtn}
+              />
+            
+              <MaterialCommunityIcons
+                name="cards-heart-outline"
+                onPress={() => {
+                  const productDetail = {
+                  product_id: proId,
+                  name: prdName,
+                  price: price,
+                  image: paramData.imgs
+                };
+                // addToFav(productDetail)
+                addFavouriteDB(dispatch,productDetail)
+              
+              }}
+                style={Style.heartBtn2}
+              /> */}
+            
         {isFavourate(proId) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
@@ -284,6 +317,14 @@ const Style = StyleSheet.create({
     position:'absolute',
     zIndex:999,
     top:6,
+    right:15,
+  },
+   heartBtn2:{
+    fontSize:30,
+    color:'#5A56E9',
+    position:'absolute',
+    zIndex:999,
+    top:40,
     right:15,
   },
   bottomSheetDrag:{

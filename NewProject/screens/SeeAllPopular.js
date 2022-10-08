@@ -32,7 +32,7 @@ const SeeAllPopular = () => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.15:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.4:5000/sql/popular/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))

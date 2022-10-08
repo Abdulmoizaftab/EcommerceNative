@@ -107,8 +107,12 @@ const Favorites = ({navigation}) => {
       image: item.imgs,
     };
 
-    return (
-      <View style={Style.all_item_main2}>
+    return (<>
+
+      {item.is_deleted!==0?
+      
+      
+      (<View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
           <TouchableOpacity
             style={Style.all_item_main4}
@@ -136,37 +140,11 @@ const Favorites = ({navigation}) => {
             </View>
           </View>
 
-          {/* <TouchableOpacity
-            onPress={getData}
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: 'white',
-              borderWidth: 1,
-              elevation: 2,
-              height: 35,
-              borderRadius: 22,
-              marginBottom: 4,
-            }}>
-            <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
-          </TouchableOpacity> */}
+        
 
           <TouchableOpacity
             onPress={() =>{ removeFav(productDetail)}}
-            // onPress={() =>{ alert('removeFav(productDetail')}}
-            // onPress={showAlert(productDetail)}
-            // style={{
-            //   flexDirection: 'column',
-            //   justifyContent: 'center',
-            //   alignItems: 'center',
-            //   backgroundColor: 'white',
-            //   borderWidth: 1,
-            //   elevation: 2,
-            //   height: 35,
-            //   borderRadius: 22,
-            //   marginBottom: 4,
-            // }}
+            
             >
             {/* <Feather name="home" style={Style.middle2_2_icon} /> */}
             <MaterialCommunityIcons
@@ -175,7 +153,16 @@ const Favorites = ({navigation}) => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View>):(
+        null
+        //  <View style={Style.main_imgIs}>
+        //   <Image style={Style.all_item_main4_imgIs} source={empty_cart} />
+        // <Text style={{color: 'gray', fontWeight: '400',top:50,}}>
+        //   No Favourites Items
+        //   </Text>
+        // </View>
+        
+      )}</>
     );
   };
 
@@ -298,6 +285,11 @@ const Style = StyleSheet.create({
     width: '80%',
     height: 120,
   },
+   all_item_main4_imgIs: {
+    top:50,
+    width: '90%',
+    height: 300,
+  },
   cardTitle: {
     margin: 2,
     color: 'black',
@@ -328,6 +320,13 @@ const Style = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+   main_imgIs: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:700
   },
   head_main: {
     display: 'flex',
