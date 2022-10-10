@@ -46,7 +46,7 @@ const sendMail=(email,name,user_id)=>{
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.14:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.17:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
     transporter.sendMail(mailOptions,function(error,info){
@@ -587,6 +587,51 @@ router.get("/getSingleAddress/:address_id", (req,res) =>{
     })
 })
 
+router.post("/giveRating", (req, res) => {
+  const ratingColumnNames = ['one_star_ratings', 'two_star_ratings', 'three_star_ratings', 'four_star_ratings', 'five_star_ratings']
+  const bodyData = req.body
+  req.app.locals.db.query(`insert into user_reviews values(${bodyData.user_id},${bodyData.product_id},'${bodyData.userReview}' , ${bodyData.userRating})
+  update product set ${ratingColumnNames[bodyData.userRating-1]} = (${ratingColumnNames[bodyData.userRating-1]} + 1) , numberOfRatings=(numberOfRatings+1) where product_id = 8
+  DECLARE @isRatingNull float
+  select @isRatingNull =  rating from product where product_id = 8
+  if @isRatingNull is not null
+  BEGIN
+    update product set rating = ( ((1*one_star_ratings)+(2*two_star_ratings)+(3*three_star_ratings)+(4*four_star_ratings)+(5*five_star_ratings))/(numberOfRatings) ) where product_id=8
+  END
+  
+  ELSE
+  BEGIN
+    update product set rating = ${bodyData.userRating} where product_id=8 
+  END`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get("/hasUserRated", (req, res) => {
+  const checkRated = req.body
+  req.app.locals.db.query(`select * from user_reviews where user_id = ${checkRated.user_id} and product_id =${checkRated.product_id}`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    if (Object.keys(recordset.recordset).length !== 0) {
+      res.status(200).json(true)
+    }else{
+      res.status(200).json(false)
+    }
+
+  })
+})
+
+/*========================================================================================================*/
+
+//VENDOR PORTAL//
 router.post("/registerVendor",  (req,res) =>{
   const {username,email,password,first_name,last_name,vendorId} = req.body
   req.app.locals.db.query(`select * from users where email='${email}'`, async function(err, recordset) {
@@ -653,7 +698,9 @@ router.post("/loginVendor",  (req,res) =>{
   })
 })
 
+//VENDOR PORTAL
 
+/*========================================================================================================*/
 
 
 

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import {Skeleton,NativeBaseProvider} from 'native-base'
+import {Skeleton,NativeBaseProvider,Center} from 'native-base'
 const items = [
   {
     image: require("../assets/fonts/images/samsung.png"),
@@ -15,12 +15,13 @@ const VendorSlider = () => {
   const [isLoading, setLoading] = useState(true);
   const [skeleton,setSkeleton]=useState(false)
   useEffect(() => {
-    fetch('http://192.168.1.14:5000/sql/allVenders')
+    setSkeleton(true)
+    fetch('http://192.168.1.24:5000/sql/allVenders')
       .then((response) => response.json())
-
-      .then((json) => setApiData(json))
+      .then((json) => {setApiData(json) 
+        setSkeleton(false)})
       .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+      
   }, []);
   const navigation = useNavigation();
   return (
@@ -32,7 +33,7 @@ const VendorSlider = () => {
     }}>
       <Text style={{fontSize:19,fontWeight:'bold', color:'black'}}>Popular Vendors</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {skeleton===true? apiData.map((item, index) => (
+        {skeleton===false? apiData.map((item, index) => (
           <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 20,marginTop:5 }} onPress={() => {
             navigation.navigate('AllVendorProducts', {vendorId:item.vendorsId,
                vendorName: item.vendorName})
@@ -48,7 +49,7 @@ const VendorSlider = () => {
 
 
 
-            {/* below code is optional if you want to add text below the logos */}
+            {/*below code is optional if you want to add text below the logos */}
 
             {/* <Text style={{ fontSize: 13, fontWeight: "900" }}>{item.vendorName}</Text> */}
 
@@ -56,21 +57,21 @@ const VendorSlider = () => {
 
 
         )):
-        <View style={{display:"flex",flexDirection:"row",borderWidth:1,width:"100%"}}>
+        <View style={{width:"100%",flexDirection:"row",height:"87%"}}>
 
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9}  style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
     
@@ -83,4 +84,3 @@ const VendorSlider = () => {
 }
 
 export default VendorSlider
-
