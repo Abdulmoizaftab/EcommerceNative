@@ -91,7 +91,38 @@ router.get('/getOrders', (req, res) => {
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on product.product_id = order_items.product_id
-  inner join users on users.user_id = order_details.user_id `, function (err, recordset) {
+  inner join users on users.user_id = order_details.user_id 
+  order by order_id`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/productAdminPortal', (req, res) => {
+  req.app.locals.db.query(`
+  select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
+  from product
+  left join discount on discount.discount_id = product.discount_id
+  where product.vendor_id = 2`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+router.get('/getOrder', (req, res) => {
+  req.app.locals.db.query(`
+  select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
+  from product
+  left join discount on discount.discount_id = product.discount_id
+  where product_id = 1001516`, function (err, recordset) {
     if (err) {
       console.error(err)
       res.status(500).send('SERVER ERROR')
