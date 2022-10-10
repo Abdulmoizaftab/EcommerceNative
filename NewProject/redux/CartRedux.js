@@ -9,26 +9,9 @@ const cartSlice = createSlice({
     },
     reducers:{
         addProduct:(state,action)=>{
-            let check = 0
-            state.products.forEach((element)=>{
-                if (element.product.product_id === action.payload.product.product_id) {
-                    check = 1
-                    return
-                }
-            })
-
-            if (check === 0) {
-                state.quantity+=1;
-                state.products.push(action.payload);
-                state.total += action.payload.product.price * action.payload.qty;
-            } else {
-                state.products.forEach((element,index)=>{
-                    if (element.product.product_id === action.payload.product.product_id) {
-                        state.products[index].qty += action.payload.qty
-                    }
-                })
-            }
-            
+            state.quantity+=1;
+            state.products.push(action.payload);
+            state.total += action.payload.product.price * action.payload.qty;
         },
         resetCart:(state,action)=>{
             state.quantity=0;

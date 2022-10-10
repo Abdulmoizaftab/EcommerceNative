@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import SearchBar from '../components/SearchBar'
 import LinearGradient from 'react-native-linear-gradient';
 import {Skeleton,NativeBaseProvider} from 'native-base'
@@ -19,9 +19,9 @@ const CategoryScreen = ({navigation}) => {
       setSkeleton(false)
     }
 
-    useEffect(() => {
-      getCategories()
-    }, [])
+  useEffect(() => {
+    getCategories()
+  }, [])
 
   return (
     <NativeBaseProvider>
@@ -120,15 +120,15 @@ const CategoryScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    categoryCard:{
-        width: "100%",
-        height: 113,
-        elevation:5,
-        borderColor: "#8580AF",
-        borderRadius: 15,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between',
+  categoryCard: {
+    width: "100%",
+    height: 113,
+    elevation: 5,
+    borderColor: "#8580AF",
+    borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 
 
         

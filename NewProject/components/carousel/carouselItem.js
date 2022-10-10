@@ -46,8 +46,15 @@ const styles = StyleSheet.create({
     image: {
         flex:1,
         borderRadius: 10,
+<<<<<<< HEAD
         resizeMode:'contain',
         width:'100%'
+=======
+        resizeMode:'stretch',
+        
+
+
+>>>>>>> origin/branch-hassan
     },
     itemTitle: {
         color: 'white',

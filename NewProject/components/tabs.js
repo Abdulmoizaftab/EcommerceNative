@@ -15,8 +15,12 @@ const Tabs = ({cat_id,setHeading,setId}) => {
   }
 
   const getsubCategories=async()=>{
+<<<<<<< HEAD
     setSkeleton(true)
     const datas=await fetch(`http://192.168.1.17:5000/sql/getSubCategories/${cat_id}`)
+=======
+    const datas=await fetch(`http://192.168.1.19:5000/sql/getSubCategories/${cat_id}`)
+>>>>>>> origin/branch-hassan
     const res=await datas.json()
     for (let i = 0; i < res.length; i++) {
       setData((data)=>[...data,res[i]])
