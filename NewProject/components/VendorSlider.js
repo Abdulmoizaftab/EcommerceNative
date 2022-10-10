@@ -49,7 +49,7 @@ const VendorSlider = ({popular,setPopular}) => {
 
 
 
-            {/* below code is optional if you want to add text below the logos */}
+            {/*below code is optional if you want to add text below the logos */}
 
             {/* <Text style={{ fontSize: 13, fontWeight: "900" }}>{item.vendorName}</Text> */}
 
@@ -84,4 +84,3 @@ const VendorSlider = ({popular,setPopular}) => {
 }
 
 export default VendorSlider
-
