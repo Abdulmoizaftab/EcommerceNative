@@ -84,7 +84,7 @@ router.get('/category', (req, res) => {
   })
 })
 
-router.get('/getOrders', (req, res) => {
+router.get('/getOrdersAdminPortal', (req, res) => {
   req.app.locals.db.query(`select order_items.* , order_details.user_id , order_details.total, order_details.payment_id , order_details.orderStatus, 
   product.vendor_id,product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
   users.username,users.address,users.email,users.telephone
