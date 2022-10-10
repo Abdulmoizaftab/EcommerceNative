@@ -17,9 +17,10 @@ import axios from 'axios'
 
 
 
-const AddressBook = () => {
+const AddressBook = ({route}) => {
 
   let bgcolor = '#fff'
+  const {checkOutTrigger,setCheckOutTrigger} = route.params
   const navigate = useNavigation()
   const dispatch = useDispatch()
   const refRBSheet = useRef();
@@ -38,12 +39,16 @@ const AddressBook = () => {
     refUpdateRBSheet.current.open()
   }
 
+  const goToCheckOut = () =>{
+    navigate.navigate('CheckoutScreen', selectedValue)
+    setCheckOutTrigger(!checkOutTrigger)
+  }
 
 
 
 
   useEffect(() => {
-     axios.get(`http://192.168.1.24:5000/sql/getAddress/${user_id}`)
+     axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
       .then(function (response) {
         setDbAddress(response.data)
         // setSelectedValue[dbAddress[0]]
@@ -198,7 +203,7 @@ const AddressBook = () => {
         ) : (
           <>
             <View style={styles.checkBtn}>
-              <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={() => navigate.navigate('CheckoutScreen', selectedValue)}>
+              <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={goToCheckOut}>
                 <MaterialCommunityIcons name='check-bold' color='#E9ECFF' size={40} />
               </TouchableOpacity>
             </View>

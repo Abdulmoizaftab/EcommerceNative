@@ -13,19 +13,20 @@ const CheckOutScreenNew = ({ route }) => {
   const navigate = useNavigation()
   const address = useSelector(state => state.address)
   const selectedValue = route.params
+  console.log('selected=>',selectedValue);
   const [dbAddress,setDbAddress] = useState([]);
+  const [checkOutTrigger,setCheckOutTrigger] = useState(true);
   const user_id =2010;
 
   useEffect(() => {
-    console.log('hello');
-    axios.get(`http://192.168.1.24:5000/sql/getAddress/${user_id}`)
+    axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
      .then(function (response) {
        setDbAddress(response.data)
      })
      .catch(function (err) {
        console.log(err);
      })
- }, [])
+ }, [checkOutTrigger])
 
   return (
     <>
@@ -33,7 +34,7 @@ const CheckOutScreenNew = ({ route }) => {
         <View style={styles.main}>
           <View style={styles.informationView}>
             <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Shipping Information</Text>
-            <TouchableOpacity onPress={() => navigate.navigate('AddressBook')}>
+            <TouchableOpacity onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
               <Text style={styles.buttonAdd}>
                 Add
               </Text>
@@ -43,6 +44,7 @@ const CheckOutScreenNew = ({ route }) => {
             {
               dbAddress.length !== 0 ? (
                 selectedValue !== undefined ? (
+                  Object.keys(selectedValue).length !==0 ? (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
                       <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.recipent}</Text>
@@ -54,6 +56,20 @@ const CheckOutScreenNew = ({ route }) => {
                       <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.mobile}</Text>
                     </View>
                   </View>
+
+                  ):(
+                    <View style={styles.addressDetailsView}>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].recipent}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].address_line}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress[0].mobile}</Text>
+                    </View>
+                  </View>
+                  )
                 ) : (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
@@ -68,7 +84,7 @@ const CheckOutScreenNew = ({ route }) => {
                   </View>
                 )
               ) : (
-                <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook')}>
+                <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
                   <Entypo name="plus" size={30} color="#444" />
                   <Text style={{ fontSize: 21 }}> Add Address</Text>
                 </TouchableOpacity>
