@@ -46,7 +46,7 @@ const sendMail=(email,name,user_id)=>{
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.14:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
     transporter.sendMail(mailOptions,function(error,info){
@@ -373,8 +373,8 @@ router.put('/session',(req,res)=>{
 })
 })
 
-router.get('/getFavourites',auth.isLogin,(req,res)=>{
-  req.app.locals.db.query(`select * from favourites where userId=${req.user_id.user_id}`, function(err, recordset){
+router.get('/getFavourites',(req,res)=>{
+  req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')
@@ -384,21 +384,32 @@ router.get('/getFavourites',auth.isLogin,(req,res)=>{
   })
 })
 
-router.post('/setFavourites',auth.isLogin,(req,res)=>{
+router.post('/setFavourites',(req,res)=>{
   const {favouritedProd}=req.body
-  req.app.locals.db.query(`insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},${req.user_id.user_id},1)`, function(err, recordset){
+  req.app.locals.db.query(`insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},2010,0)`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')
       return
     }
-    res.status(200).send("Data inserted");
+    else{
+      req.app.locals.db.query(`select product.imgs,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010`, function(err, recordset){
+        if(err){
+          console.error(err)
+          res.status(500).send('SERVER ERROR')
+          return
+        }
+        else{
+          res.status(201).json(recordset.recordset)
+        }
+      })
+    }
   })
 })
 
-router.post('/delFavourites',auth.isLogin,(req,res)=>{
+router.post('/delFavourites',(req,res)=>{
   const {favouritedProd}=req.body
-  req.app.locals.db.query(`update favourites set is_deleted=1 where userId=${req.user_id.user_id} and favouritedProd=${favouritedProd}`, function(err, recordset){
+  req.app.locals.db.query(`update favourites set is_deleted=1 where userId=2010 and favouritedProd=${favouritedProd}`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')
@@ -526,8 +537,8 @@ router.post('/setOrderDetails',(req,res)=>{
                   return
                 }
                 else{
-                  for (let index = 0; index < 3; index++) {
-                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},8,1,2010);`, function(err, recordset){
+                  for (let index = 0; index < 2; index++) {
+                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},7,2,2010);`, function(err, recordset){
                       if(err){
                         console.error(err)
                         res.status(500).send('SERVER ERROR')
@@ -547,8 +558,8 @@ router.post('/setOrderDetails',(req,res)=>{
   })
 })
 
-router.get('/getOrderDetails',(req,res)=>{
-  req.app.locals.db.query(`select order_items.item_id,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
+router.get('/getOrderDetails/:limit',(req,res)=>{
+  req.app.locals.db.query(`select top(${req.params.limit}) order_items.item_id,order_details.created_at,order_details.total,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on order_items.product_id = product.product_id

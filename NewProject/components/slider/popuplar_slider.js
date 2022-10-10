@@ -14,7 +14,7 @@ import SkeletonJs from '../Skeleton';
 import { NativeBaseProvider } from 'native-base';
 
 
-const Popuplar_slider = ({ navigate }) => {
+const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(10);
@@ -23,17 +23,18 @@ const Popuplar_slider = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.14:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.24:5000/sql/popular/${limit}`)
       .then((response) => response.json())
-      .then((json) => { setProducts(json) })
+      .then((json) => { setProducts(json) 
+        setIsloading(false)})
       .catch((error) => console.error(error))
 
-    setIsloading(false)
   }
 
   useEffect(() => {
     getdata()
-  }, [limit]);
+    setPopular(false)
+  }, [popular]);
 
   return (
     <View style={Styles.main}>
@@ -51,7 +52,7 @@ const Popuplar_slider = ({ navigate }) => {
     {
       isLoading?(
         <NativeBaseProvider>
-          <View>
+          <View >
             <SkeletonJs />
           </View>
         </NativeBaseProvider>

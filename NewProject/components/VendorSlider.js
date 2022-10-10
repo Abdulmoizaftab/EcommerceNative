@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import {Skeleton,NativeBaseProvider} from 'native-base'
+import {Skeleton,NativeBaseProvider,Center} from 'native-base'
 const items = [
   {
     image: require("../assets/fonts/images/samsung.png"),
@@ -10,18 +10,19 @@ const items = [
 
 ];
 
-const VendorSlider = () => {
+const VendorSlider = ({popular,setPopular}) => {
   const [apiData, setApiData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [skeleton,setSkeleton]=useState(false)
   useEffect(() => {
-    fetch('http://192.168.1.14:5000/sql/allVenders')
+    setSkeleton(true)
+    fetch('http://192.168.1.24:5000/sql/allVenders')
       .then((response) => response.json())
-
-      .then((json) => setApiData(json))
+      .then((json) => {setApiData(json) 
+        setSkeleton(false)})
       .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-  }, []);
+      setPopular(false)
+  }, [popular]);
   const navigation = useNavigation();
   return (
     <NativeBaseProvider>
@@ -32,7 +33,7 @@ const VendorSlider = () => {
     }}>
       <Text style={{fontSize:19,fontWeight:'bold', color:'black'}}>Popular Vendors</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {skeleton===true? apiData.map((item, index) => (
+        {skeleton===false? apiData.map((item, index) => (
           <TouchableOpacity key={index} style={{ alignItems: 'center', marginRight: 20,marginTop:5 }} onPress={() => {
             navigation.navigate('AllVendorProducts', {vendorId:item.vendorsId,
                vendorName: item.vendorName})
@@ -56,21 +57,21 @@ const VendorSlider = () => {
 
 
         )):
-        <View style={{display:"flex",flexDirection:"row",borderWidth:1,width:"100%"}}>
+        <View style={{width:"100%",flexDirection:"row",height:"87%"}}>
 
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9}  style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
-    <View activeOpacity={0.9} >
+    <View activeOpacity={0.9} style={{padding:5}}>
       <Skeleton  borderColor="coolGray.200" mb="3" w="57" h="57" rounded="30" startColor="coolGray.300" />
     </View>
     

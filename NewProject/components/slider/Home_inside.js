@@ -21,11 +21,12 @@ const Home_inside = ({ navigate }) => {
   const [limit, setlimit] = useState(6);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
+  const [head_comp,setHead_Comp] = useState(false)
 
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.14:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.24:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -65,32 +66,32 @@ const Home_inside = ({ navigate }) => {
     }
   }
 
-  const removeSpecificProduct = async (productData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        const removedData = cartItem.filter(object => object.product_id != productData.product_id)
-        console.log("🚀  file: Home_inside.js  line 71  removeSpecificProduct  removedData", removedData)
-        await AsyncStorage.removeItem('@cartItems')
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
-      }
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const removeSpecificProduct = async (productData) => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       const removedData = cartItem.filter(object => object.product_id != productData.product_id)
+  //       console.log("🚀  file: Home_inside.js  line 71  removeSpecificProduct  removedData", removedData)
+  //       await AsyncStorage.removeItem('@cartItems')
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
 
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@cartItems')
-      console.log("🚀  file: Home_inside.js  line 167  getData  jsonValue", jsonValue)
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const getData = async () => {
+  //   try {
+  //     const jsonValue = await AsyncStorage.getItem('@cartItems')
+  //     console.log("🚀  file: Home_inside.js  line 167  getData  jsonValue", jsonValue)
+  //     return jsonValue != null ? JSON.parse(jsonValue) : null;
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
 
 
@@ -188,8 +189,8 @@ const Home_inside = ({ navigate }) => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    setProducts([]);
-    setlimit(6);
+    setHead_Comp(true);
+    setlimit(4);
     setIsRefreshing(false)
   }
   
@@ -201,9 +202,8 @@ const Home_inside = ({ navigate }) => {
           <SearchBar navigate={navigate} />
         <Carousel data={dummyData} />
         <Categories navigate={navigate}/>
-        <VendorSlider/>
-        
-        <Popuplar_slider navigate={navigate}/>
+        <VendorSlider popular={head_comp} setPopular={setHead_Comp}/>
+        <Popuplar_slider navigate={navigate} popular={head_comp} setPopular={setHead_Comp}/>
         <View style={Style.middle2}>
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
@@ -217,6 +217,7 @@ const Home_inside = ({ navigate }) => {
       }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}  
       ListFooterComponent={flatlistEnd}
+      extraData={head_comp}
       onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh}/>
   </View>
   );
