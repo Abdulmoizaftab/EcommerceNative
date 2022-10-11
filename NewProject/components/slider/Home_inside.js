@@ -162,8 +162,8 @@ const Home_inside = ({ navigate }) => {
       image: element.item.imgs
     }
 
-    const isFavourate = id =>
-    Boolean(favArray.find(item => item.product_id === id));
+    // const isFavourate = id =>
+    // Boolean(favArray.find(item => item.product_id === id));
 
     return (
       <View style={Style.all_item_main2}>
@@ -191,7 +191,7 @@ const Home_inside = ({ navigate }) => {
           </View>
 
 
-          {isFavourate(element.item.product_id) ? (
+          {/* {isFavourate(element.item.product_id) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
                 onPress={() => {removeFav(productDetail)}}
@@ -203,7 +203,7 @@ const Home_inside = ({ navigate }) => {
                 onPress={() => {addToFav(productDetail)}}
                 style={Style.middle2_2_icon}
               />
-            )}
+            )} */}
 
 
 

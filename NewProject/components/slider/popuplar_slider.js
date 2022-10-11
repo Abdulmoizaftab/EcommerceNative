@@ -120,7 +120,7 @@ const Popuplar_slider = ({ navigate }) => {
 
 
 
-                  {isFavourate(element.product_id) ? (
+                  {/* {isFavourate(element.product_id) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
                 onPress={() => { 
@@ -146,7 +146,7 @@ const Popuplar_slider = ({ navigate }) => {
                   addToFav(productDetail)}}
                 style={Styles.favIcon}
               />
-            )}
+            )} */}
                   {/* <Icon style={Styles.favIcon} onPress={()=>{alert("hello g")}} name="md-heart-outline" /> */}
                 </View>
               </View>

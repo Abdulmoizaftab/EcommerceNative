@@ -25,9 +25,11 @@ const favouriteSlice = createSlice({
         removeFavourite:(state,action)=>{
             state.totalQuantity-=1
             // console.log(action.payload.product_id)
-            const modifiedFavourites = state.favourites.filter(item => item.product_id !== action.payload.product_id)
-            state.favourites = modifiedFavourites;
+            // const modifiedFavourites = state.favourites.filter(item => item.product_id !== action.payload.product_id)
+            // state.favourites = modifiedFavourites;
             // alert('remove from Fav');
+            state.favourites=action.payload
+            alert("data remove to fav")
         },
         addFavFailure:(state)=>{
             state.isFetching=false;

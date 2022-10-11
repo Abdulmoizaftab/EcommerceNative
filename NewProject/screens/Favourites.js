@@ -21,6 +21,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import {useDispatch, useSelector} from 'react-redux';
 import {removeFavourite} from '../redux/FavouritesRedux';
+import { remFavouriteDB } from '../redux/apiCalls';
 
 const Favorites = ({navigation}) => {
   const dispatch = useDispatch();
@@ -109,7 +110,7 @@ const Favorites = ({navigation}) => {
 
     return (<>
 
-      {item.is_deleted!==0?
+      {item.is_deleted===false?
       
       
       (<View style={Style.all_item_main2}>
@@ -143,13 +144,15 @@ const Favorites = ({navigation}) => {
         
 
           <TouchableOpacity
-            onPress={() =>{ removeFav(productDetail)}}
+           
             
             >
             {/* <Feather name="home" style={Style.middle2_2_icon} /> */}
             <MaterialCommunityIcons
               name="delete-alert-outline"
-              style={Style.middle2_2_icon}
+              style={Style.middle2_2_icon} 
+              
+              onPress={() =>{ remFavouriteDB(dispatch,productDetail)}}
             />
           </TouchableOpacity>
         </View>
@@ -194,7 +197,7 @@ const Favorites = ({navigation}) => {
         <View style={Style.main_img}>
           <Image style={{width: '70%', height: '35%'}} source={empty_cart} />
           <Text style={{color: 'gray', fontWeight: '400'}}>
-            No Favourites Items
+            No Favourite Items
           </Text>
         </View>
       )}

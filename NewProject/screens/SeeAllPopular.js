@@ -120,8 +120,8 @@ const SeeAllPopular = () => {
 
 
 
-    const isFavourate = id =>
-    Boolean(favArray.find(item => item.product_id === id));
+    // const isFavourate = id =>
+    // Boolean(favArray.find(item => item.product_id === id));
 
 
     return (
@@ -149,7 +149,7 @@ const SeeAllPopular = () => {
             </View>
           </TouchableOpacity>
 
-          {isFavourate(element.item.product_id) ? (
+          {/* {isFavourate(element.item.product_id) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
                 onPress={() => {removeFav(productDetail)}}
@@ -161,7 +161,7 @@ const SeeAllPopular = () => {
                 onPress={() => {addToFav(productDetail)}}
                 style={Style.favIcon}
               />
-            )}
+            )} */}
 
           {/* <TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
