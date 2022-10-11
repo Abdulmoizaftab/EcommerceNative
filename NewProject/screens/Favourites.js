@@ -21,7 +21,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import {useDispatch, useSelector} from 'react-redux';
 import {removeFavourite} from '../redux/FavouritesRedux';
-import { remFavouriteDB } from '../redux/apiCalls';
+import { getFavouriteDB, remFavouriteDB } from '../redux/apiCalls';
 
 const Favorites = ({navigation}) => {
   const dispatch = useDispatch();
@@ -35,9 +35,10 @@ const Favorites = ({navigation}) => {
 
   const getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@cartItems');
-      const result = JSON.parse(jsonValue);
-      setFavProducts(result);
+      getFavouriteDB()
+      // const jsonValue = await fetch('');
+      // const result = JSON.parse(jsonValue);
+      // setFavProducts(result);
     } catch (error) {
       alert('Something went wrong');
     }

@@ -12,8 +12,8 @@ import FlatButton from '../components/Button';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
-import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
-import { addFavouriteDB, remFavouriteDB } from '../redux/apiCalls';
+// import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+import { addFavouriteDB, remFavouriteDB, updateFavouriteDB } from '../redux/apiCalls';
 
 
 
@@ -30,13 +30,19 @@ const Product_detail = ({route}) => {
   
   const [price, setPrice] = useState(0)
   const [proId, setProId] = useState()
-  const [isDeleted, setIsDeleted] = useState()
+  const [allData, setAllData] = useState([])
+  // console.log("🚀 ~ file: Product_detail.js ~ line 34 ~ allData", allData)
+  const [isDeleted, setIsDeleted] = useState(true)
   const [prdName, setPrdName] = useState("")
   const refRBSheet = useRef();
 
 
 
 
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;  
+  console.log("🚀 ~ file: Product_detail.js ~ line 42 ~ favArray", favArray)
+  
 
 
   const dispatch =useDispatch();
@@ -55,46 +61,75 @@ const Product_detail = ({route}) => {
     const navigate = useNavigation()
     
     useEffect(() => {
+      setAllData(favArray)
       setImgArr([paramData.imgs,paramData.imgs])
       setPrdName(paramData.name)
       setPrice(paramData.price)
       setProId(paramData.product_id)
       // setIsDeleted(paramData.is_deleted)
-    },[paramData])
-    
+      if(favArray?.length>0){
+        const filteredFav = allData.filter(item => item.product_id === proId)       
+        console.log("🚀 ~ file: ===========XXX=XX================== ~ filteredFav", filteredFav)
+        // setIsDeleted(filteredFav[0].is_deleted)
+
+      }else{
+        setIsDeleted(true)
+      }
 
 
+    },[paramData,favArray])
     
-  const favouriteState = useSelector(state => state.favourite)
-  const favArray=favouriteState.favourites;  
-  favArray.filter(item => item.product_id === proId)
-  setIsDeleted(favArray[0].is_deleted)
+
 
 
     const addToFav = (productDetail) => {
       try {
-        
+        if(favArray&&favArray?.length>0){
+          const filteredFav = favArray?.filter(item => item.product_id === productDetail.product_id)        
+              if(filteredFav?.length>0){
+  
+                  try {
+                     
+                    updateFavouriteDB(dispatch,productDetail)           
+                    // setIsDeleted(false)
+                      // console.log(filteredFav);
+                  } catch (error) {
+                      console.log(error)
+                  }
+                  
+              }else{
+                
+          addFavouriteDB(dispatch,productDetail)
+              }
+
+        }else{
+          
+          addFavouriteDB(dispatch,productDetail)
+          // alert("array empty")         
+                    // setIsDeleted(false)
+        }
         // alert("added")
-        dispatch(addFavourite(productDetail));
+        // console.log(favArray)
+        // addFavouriteDB(dispatch,productDetail);
       } catch (error) {
         alert(error);
       }
     };
   
-    const removeFav = (productDetail) => {
-      try {
-        // alert("remove")
-        dispatch(removeFavourite(productDetail));
-      } catch (error) {
-        alert(error);
-      }
-    };
+    // const removeFav = (productDetail) => {
+    //   try {
+    //     // alert("remove")
+    //     dispatch(removeFavourite(productDetail));
+    //   } catch (error) {
+    //     alert(error);
+    //   }
+    // };
 
 
-    const isFavourate = id =>{
+    // const isFavourate = id =>{
 
       
-    }
+    // }
       // return true
     
 
@@ -107,9 +142,53 @@ const Product_detail = ({route}) => {
         
         <Icon style={Style.backBtn} name='arrow-back-circle' onPress={()=>navigate.goBack()}/>
         {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={()=>setIsFav(!isFav)}/> : <Icon style={Style.heartBtn} name='heart-outline' onPress={()=>setIsFav(!isFav)}/>} */}
-        {
-         isDeleted===false?
-          (<MaterialCommunityIcons
+        <MaterialCommunityIcons
+              name="cards-heart-outline"
+              onPress={() => {
+                const productDetail = {
+                product_id: proId,
+                name: prdName,
+                price: price,
+                image: paramData.imgs
+              };
+              addToFav(productDetail)
+              // addFavouriteDB(dispatch,productDetail)
+            
+            }}
+              style={Style.heartBtn}
+            />
+            <MaterialCommunityIcons
+            name="cards-heart"
+            onPress={() => {
+              const productDetail = {
+              product_id: proId,
+              name: prdName,
+              price: price,
+              image: paramData.imgs
+            };
+            remFavouriteDB(dispatch,productDetail)}}
+            style={Style.heartBtn2}
+          />
+        {/* {
+         isDeleted?(
+          <MaterialCommunityIcons
+              name="cards-heart-outline"
+              onPress={() => {
+                const productDetail = {
+                product_id: proId,
+                name: prdName,
+                price: price,
+                image: paramData.imgs
+              };
+              addToFav(productDetail)
+              // addFavouriteDB(dispatch,productDetail)
+            
+            }}
+              style={Style.heartBtn}
+            />
+        )
+          
+          :(<MaterialCommunityIcons
             name="cards-heart"
             onPress={() => {
               const productDetail = {
@@ -121,55 +200,12 @@ const Product_detail = ({route}) => {
             remFavouriteDB(dispatch,productDetail)}}
             style={Style.heartBtn}
           />)
-          :(
-            <MaterialCommunityIcons
-                name="cards-heart-outline"
-                onPress={() => {
-                  const productDetail = {
-                  product_id: proId,
-                  name: prdName,
-                  price: price,
-                  image: paramData.imgs
-                };
-                // addToFav(productDetail)
-                addFavouriteDB(dispatch,productDetail)
-              
-              }}
-                style={Style.heartBtn}
-              />
-          )
-        }
+        } */}
               
             
               
             
-        {/* {isFavourate(proId) ? (
-              <MaterialCommunityIcons
-                name="cards-heart"
-                onPress={() => {
-                  const productDetail = {
-                  product_id: proId,
-                  name: prdName,
-                  price: price,
-                  image: paramData.imgs
-                };
-                  removeFav(productDetail)}}
-                style={Style.heartBtn}
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="cards-heart-outline"
-                onPress={() => {
-                  const productDetail = {
-                  product_id: proId,
-                  name: prdName,
-                  price: price,
-                  image: paramData.imgs
-                };
-                addToFav(productDetail)}}
-                style={Style.heartBtn}
-              />
-            )} */}
+        
         
 
         <SliderBox
@@ -333,7 +369,7 @@ const Style = StyleSheet.create({
     left:15,
   },
   heartBtn:{
-    fontSize:30,
+    fontSize:40,
     color:'#5A56E9',
     position:'absolute',
     zIndex:999,
@@ -341,11 +377,11 @@ const Style = StyleSheet.create({
     right:15,
   },
    heartBtn2:{
-    fontSize:30,
+    fontSize:40,
     color:'#5A56E9',
     position:'absolute',
     zIndex:999,
-    top:40,
+    top:50,
     right:15,
   },
   bottomSheetDrag:{

@@ -287,6 +287,54 @@ router.post('/delFavourites',(req,res)=>{
 })
 
 
+router.post('/updateFavourites',(req,res)=>{
+  const {favouritedProd}=req.body
+  req.app.locals.db.query(`update favourites set is_deleted=0 where userId=2010 and favouritedProd=${favouritedProd}`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    else{
+      req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+        if(err){
+          console.error(err)
+          res.status(500).send('SERVER ERROR')
+          return
+        }
+        else{
+          res.status(201).json(recordset.recordset)
+        }
+      })
+    }
+  })
+})
+
+router.get('/getFavourites',(req,res)=>{
+  req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }else{
+            res.status(201).json(recordset.recordset)
+          }
+    // else{
+    //   req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+    //     if(err){
+    //       console.error(err)
+    //       res.status(500).send('SERVER ERROR')
+    //       return
+    //     }
+    //     else{
+    //       res.status(201).json(recordset.recordset)
+    //     }
+    //   })
+    // }
+  })
+})
+
+
 
 
 module.exports = router
