@@ -13,7 +13,7 @@ const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([])
 
   const getCategories = async () => {
-    const data = await fetch('http://192.168.1.19:5000/sql//allCategories')
+    const data = await fetch('http://192.168.1.29:5000/sql//allCategories')
     const res = await data.json()
     setCategories(res)
   }

@@ -98,44 +98,44 @@ const Product_detail = ({ route }) => {
 
 
             >
-             
-
-                <TouchableOpacity onPress={() => setModalVisible(false)} style={Style.modalContainer} activeOpacity={0.9} >
-                  <View style={Style.centeredView}>
-                    <View style={Style.modalView}>
-                      <View style={Style.writeAReviewHeading}><Text style={{ fontSize: 25, fontWeight: '500' }} >WRITE A REVIEW</Text></View>
-                      <View style={{ marginTop: '5%' }}>
-
-                        <StarRating
-                          rating={rating}
-                          onChange={setRating}
-                          enableHalfStar={false}
-                          starSize={46}
-                        />
-
-                      </View>
 
 
-                      <TextInput
-                        style={Style.input}
-                        placeholder={'Write a review'}
-                        // underlineColorAndroid='transparent'
-                        // underlineColorAndroid='bla'
-                        numberOfLines={2}
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={Style.modalContainer} activeOpacity={0.9} >
+                <View style={Style.centeredView}>
+                  <View style={Style.modalView}>
+                    <View style={Style.writeAReviewHeading}><Text style={{ fontSize: 25, fontWeight: '500' }} >WRITE A REVIEW</Text></View>
+                    <View style={{ marginTop: '5%' }}>
 
-
+                      <StarRating
+                        rating={rating}
+                        onChange={setRating}
+                        enableHalfStar={false}
+                        starSize={46}
                       />
 
-                      <TouchableOpacity style={{ width: '60%', alignItems: 'center' }} onPress={() => setModalVisible(!modalVisible)}>
-                        <View style={{ width: '100%', alignItems: 'center', backgroundColor: 'black', marginTop: '30%' }}>
-                          <Text style={{ fontSize: 20, textAlign: 'center', color: "#fff", fontWeight: '300', padding: 8 }}>Post</Text>
-                        </View>
-                      </TouchableOpacity>
                     </View>
-                  </View>
-                </TouchableOpacity>
 
-             
+
+                    <TextInput
+                      style={Style.input}
+                      placeholder={'Write a review'}
+                      // underlineColorAndroid='transparent'
+                      // underlineColorAndroid='bla'
+                      numberOfLines={2}
+
+
+                    />
+
+                    <TouchableOpacity style={{ width: '60%', alignItems: 'center' }} onPress={() => setModalVisible(!modalVisible)}>
+                      <View style={{ width: '100%', alignItems: 'center', backgroundColor: 'black', marginTop: '30%' }}>
+                        <Text style={{ fontSize: 20, textAlign: 'center', color: "#fff", fontWeight: '300', padding: 8 }}>Post</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+
             </Modal>
 
 

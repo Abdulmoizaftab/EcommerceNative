@@ -12,7 +12,7 @@ const cartSlice = createSlice({
             // console.log("🚀 ~ ", state, action)
             state.quantity += 1;
             state.products.push(action.payload);
-            state.total += action.payload.product.price * action.payload.qty;
+            state.total += action.payload.price * action.payload.quantity;
             
         },
         resetCartTest: (state, action) => {
@@ -23,25 +23,25 @@ const cartSlice = createSlice({
         },
         deleteProductTest: (state, action) => {
             state.products.filter((x) => {
-                if (x.product.product_id === action.payload) {
-                    state.total -= x.product.price * x.qty
+                if (x.product_id === action.payload) {
+                    state.total -= x.price * x.quantity
                 }
             })
             state.quantity -= 1
-            const modifiedCart = state.products.filter(item => item.product.product_id !== action.payload)
+            const modifiedCart = state.products.filter(item => item.product_id !== action.payload)
             state.products = modifiedCart
         },
         modifyCartTest:(state,action)=>{ 
             state.products.filter((x)=>{
-                if(x.product.product_id===action.payload.product_id){
-                    state.total -= x.product.price * x.qty
-                    state.total += x.product.price * action.payload.qty
+                if(x.product_id===action.payload.product_id){
+                    state.total -= x.price * x.quantity
+                    state.total += x.price * action.payload.quantity
                 }
             })
             
             state.products.forEach((element,index)=>{
-                if(element.product.product_id===action.payload.product_id){
-                    state.products[index].qty = action.payload.qty
+                if(element.product_id===action.payload.product_id){
+                    state.products[index].quantity = action.payload.quantity
                 }
             })
 

@@ -1,24 +1,41 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect,useState } from 'react';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import CheckoutBottomSheet from '../components/CheckoutBottomSheet';
 import AddToCart_Comp from '../components/addToCart_Comp'
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
-const AddToCart = ({route,navigation}) => {
+const AddToCart = ({ route, navigation }) => {
   const products = useSelector(state => state.test.products)
   const quantity = useSelector(state => state.test.quantity)
   const total = useSelector(state => state.test.total)
+  //console.log('quantity',quantity);
+  //console.log('total',total);
+  const [dbProds, setDbProds] = useState([])
+  const [trigger, setTrigger] = useState(true)
 
-  
+
+  useEffect(() => {
+    axios.get(`http://192.168.1.29:5000/sql/getCartItem`)
+      .then(function (res) {
+        setDbProds(res.data)
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+  }, [trigger])
+
+
+
   const refRBSheet = useRef();
 
   const navigate = useNavigation();
 
   return (
-    products.length !== 0 ? (
+    dbProds.length !== 0 ? (
       <View style={Style.main}>
         <View style={Style.topHeader}>
           <View style={Style.topHeader_inside}>
@@ -28,15 +45,15 @@ const AddToCart = ({route,navigation}) => {
                   <Text style={Style.topHeader_inside_text1}>ITEMS ({quantity})</Text>
                   <Text style={Style.topHeader_inside_text2}>TOTAL: RS {total}.00</Text>
                 </>
-              ) : 
+              ) :
                 null
-              
+
             }
 
-          </View> 
+          </View>
         </View>
-        
-        <AddToCart_Comp  Products = {products} />
+
+        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} />
         <TouchableOpacity activeOpacity={1} onPress={() => refRBSheet.current.open()} style={{ width: "100%", backgroundColor: "white", padding: 10, justifyContent: "center", alignItems: "center", position: "absolute", bottom: 0, borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
           <Text>
             <SimpleLineIcons name='arrow-up' style={{ fontWeight: "bold", color: "black", fontSize: 25 }} />
@@ -74,7 +91,7 @@ const AddToCart = ({route,navigation}) => {
     ) : (
       <View style={Style.main}>
 
-        <AddToCart_Comp  />
+        <AddToCart_Comp />
 
       </View>
     )
