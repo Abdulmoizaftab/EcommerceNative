@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Image } from 'react-native'
 import React , {useEffect,useState} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -8,6 +8,8 @@ import Feather from 'react-native-vector-icons/Feather'
 import { Radio, NativeBaseProvider } from 'native-base'
 import axios from 'axios'
 import { useSelector } from 'react-redux';
+import loadingGif from '../assets/fonts/images/loader.gif'
+
 
 const CheckOutScreenNew = ({ route }) => {
   const navigate = useNavigation()
@@ -15,6 +17,7 @@ const CheckOutScreenNew = ({ route }) => {
   const selectedValue = route.params
   console.log('selected=>',selectedValue);
   const [dbAddress,setDbAddress] = useState([]);
+  const [loading,setLoading] = useState(true);
   const [checkOutTrigger,setCheckOutTrigger] = useState(true);
   const user_id =2010;
 
@@ -22,6 +25,7 @@ const CheckOutScreenNew = ({ route }) => {
     axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
      .then(function (response) {
        setDbAddress(response.data)
+       setLoading(false)
      })
      .catch(function (err) {
        console.log(err);
@@ -84,10 +88,19 @@ const CheckOutScreenNew = ({ route }) => {
                   </View>
                 )
               ) : (
-                <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
-                  <Entypo name="plus" size={30} color="#444" />
-                  <Text style={{ fontSize: 21 }}> Add Address</Text>
-                </TouchableOpacity>
+
+                  loading === true ? (
+                  <View style={styles.loaderGifView}>
+                    <Image style={styles.imgStyleGif} source={loadingGif}></Image>
+                  </View>
+
+                  ):(
+                    <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
+                      <Entypo name="plus" size={30} color="#444" />
+                      <Text style={{ fontSize: 21 }}> Add Address</Text>
+                    </TouchableOpacity>
+                  )
+                
               )
             }
 
@@ -214,5 +227,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'white',
     fontWeight: '600'
+  },
+  imgStyleGif: {
+    width: 50,
+    height: 50,
+  },
+  loaderGifView:{
+    alignSelf: 'center',
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    padding: '5%',
+    alignItems:'center',
+    justifyContent:'center'
   }
 })

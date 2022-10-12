@@ -112,7 +112,6 @@ const AddressBook = ({route}) => {
             loading === true ? (
               <View style={styles.imgView}>
                 <Image style={styles.imgStyleGif} source={loadingGif}></Image>
-                <Text style={{ color: 'gray', fontWeight: '400' }}></Text>
               </View>
             ) : (
               <View style={styles.imgView}>
