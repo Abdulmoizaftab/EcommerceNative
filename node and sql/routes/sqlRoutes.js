@@ -256,6 +256,115 @@ router.get('/subCategoryProducts/:limit/:hierId',(req,res)=>{ //products of a ce
   })
 })
 
+router.post('/addCartItem',(req,res)=>{
+  const {product_id,quantity}=req.body
+  req.app.locals.db.query(`select * from cart_item where product_id=${product_id} and user_id=2010`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    else{
+      if(Object.keys(recordset.recordset).length !== 0){
+
+        if (recordset.recordset[0].is_deleted === true) {
+          req.app.locals.db.query(`update cart_item set quantity=${quantity} , is_deleted = 0 where product_id=${product_id} and user_id=2010`, function(err, recordset){
+            if(err){
+              console.error(err)
+              res.status(500).send('SERVER ERROR')
+              return
+            }
+            res.status(201).send("Data updated successfully")
+          })
+        } else {
+          req.app.locals.db.query(`update cart_item set quantity=${quantity}+${recordset.recordset[0].quantity} where product_id=${product_id} and user_id=2010`, function(err, recordset){
+            if(err){
+              console.error(err)
+              res.status(500).send('SERVER ERROR')
+              return
+            }
+            res.status(201).send("Data updated successfully")
+          })
+        }
+      }
+      else{
+        req.app.locals.db.query(`insert into cart_item (product_id,quantity,user_id,is_deleted) values (${product_id},${quantity},2010,0)`, function(err, recordset){
+          if(err){
+            console.error(err)
+            res.status(500).send('SERVER ERROR')
+            return
+          }
+          res.status(201).send("Data added successfully")
+        })
+      }
+    }
+  })
+})
+router.get('/getCartItem',(req,res)=>{
+  req.app.locals.db.query(`select product.* , cart_item.user_id , cart_item.quantity
+  from product
+  inner join cart_item on product.product_id = cart_item.product_id
+  where user_id=2010 and is_deleted=0`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    else{
+      if(Object.keys(recordset.recordset).length !== 0){
+        res.status(201).json(recordset.recordset)
+      }
+      else{
+        res.status(201).send("No data")
+      }
+    }
+  })
+})
+
+router.post('/delCartItem',(req,res)=>{
+  const {product_id} = req.body
+  req.app.locals.db.query(`select * from cart_item where product_id=${product_id} and user_id=2010`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    else{
+      if(Object.keys(recordset.recordset).length !== 0){
+        if(recordset.recordset[0].quantity > 1 ){
+
+          req.app.locals.db.query(`update cart_item set quantity=(${recordset.recordset[0].quantity} - 1) where product_id=${product_id} and user_id=2010`, function(err, recordset){
+            if(err){
+              console.error(err)
+              res.status(500).send('SERVER ERROR')
+              return
+            }
+            res.status(201).send("Data updated successfully")
+          })
+        }
+        else{
+          res.status(200).send("No more quantity to delete")
+        }
+      }
+      else{
+        res.send("No data to delete")
+      }
+    }
+  })
+})
+
+router.post('/deleteFromCart',(req,res)=>{
+  const {product_id} = req.body
+  req.app.locals.db.query(`update cart_item set is_deleted = 1 where product_id=${product_id} and user_id=2010`, function(err, recordset){
+    if(err){
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    
+  })
+})
+
 
 router.get("/filterAllByPrice/:ascDesc/:limit", (req,res) =>{
   req.app.locals.db.query(`select top(${req.params.limit}) * from product order by price ${req.params.ascDesc}`, function(err, recordset) {

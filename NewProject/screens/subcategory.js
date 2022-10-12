@@ -28,7 +28,11 @@ const Subcategory = ({navigation, route}) => {
     if (!id) {
       setProducts([]);
       await fetch(
+<<<<<<< HEAD
         `http://192.168.1.17:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+=======
+        `http://192.168.1.29:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+>>>>>>> origin/branch-hassan
       )
         .then(response => response.json())
         .then(json => {

@@ -153,10 +153,12 @@ const Product_detail = ({ route }) => {
                         </View>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                </TouchableOpacity>
 
-             
+
+                    
+                  </View>
+              </TouchableOpacity>
+
             </Modal>
 
 

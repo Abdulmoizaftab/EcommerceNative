@@ -7,30 +7,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import empty_cart from '../image/empty_cart.png';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { deleteProductTest, addProductTest, resetCartTest, modifyCartTest } from '../redux/Test_Redux';
+import { cartModificationDecrease, cartModificationIncrease,deleteFromCart } from '../redux/apiCalls';
 
-const AddToCart_Comp = () => {
-
-  // console.log(Products)
+const AddToCart_Comp = ({products,trigger,setTrigger}) => {
   const dispatch = useDispatch()
+  const [error, setError] = useState(false)
   const reduxData = useSelector(state => state.cart.products);
-
   const reduxDataTest = useSelector(state => state.test.products);
   const TestreduxDataTotal = useSelector(state => state.test.total);
   const TestreduxDataTotalTest = useSelector(state => state.cart.total);
-  const TestreduxDataquantity = useSelector(state => state.test.quantity);
+  const testreduxDataquantity = useSelector(state => state.test.quantity);
   // console.log("🚀 ~ file: addToCart_Comp.js ~ line 20 ~ TestreduxDataquantity", TestreduxDataTotal,TestreduxDataTotalTest)
 
-  const getData = () => {
-    console.log("🚀 ~ ", reduxDataTest)
-  }
+  // const getData = () => {
+  //   console.log("🚀 ~ ", reduxDataTest)
+  // }
   const selectItem = (item, checkboxValue) => {
     if (checkboxValue == true) {
-      console.log("🚀 false", checkboxValue)
+      // console.log("🚀 false", checkboxValue)
+      // console.log("🚀 check", item)
       dispatch(addProductTest(item))
     }
     else {
-      console.log("🚀 true", checkboxValue, item.product.product_id)
-      dispatch(deleteProductTest(item.product.product_id))
+      // console.log("🚀 true", checkboxValue, item.product_id)
+      dispatch(deleteProductTest(item.product_id))
     }
   }
 
@@ -38,29 +38,53 @@ const AddToCart_Comp = () => {
     dispatch(resetCartTest())
   }
 
-  // console.log(reduxData)
+  const decreaseQuantity = (element) => {
+    const payload = {
+      product_id : element.product_id
+    }
+    // dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product_id }))
+    dispatch(modifyCartTest({ quantity: element.quantity - 1, product_id: element.product_id }))
+    cartModificationDecrease(dispatch, payload);
+    setTrigger(!trigger)
+  }
+  
+  const increaseQuantity = (element) => {
+    const payload = {
+      product_id : element.product_id,
+      quantity:1
+    }
+    // dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product_id }))
+    dispatch(modifyCartTest({ quantity: element.quantity + 1, product_id: element.product_id }))
+    cartModificationIncrease(dispatch, payload);
+    setTrigger(!trigger)
+  }
+  
+  const isItemChecked = (id) =>{
+    let isChecked=false;
+    if (reduxDataTest.length === 0) {
+      return false
+    } 
+    else {
+      reduxDataTest.map((element)=>{
+        if(element.product_id === id){
+          isChecked=true
+        }
+      })
 
-  // const selectItem = (item,checkboxValue)=>{
-  //   console.log(checkboxValue)
-  // } 
+      return isChecked
+    }
+  }
+  
+  
+  const errorFunction = () =>{
+    setTimeout(() => {
+      setError(false)
+    }, 5000);
 
-
-  // console.log(items)
-  // const Items = useSelector(
-  //   (state) => state.cartReducer.selectedItems.items 
-  //   );
-  //   console.log(Items)
-  // Items.map((item)=>{
-  //   return(
-  //     console.log(item.product.price)
-  //   )
-  // })
-  // const total = reduxData
-  //     .map((item) => Number(item.product.price))
-  //     .reduce((prev, curr) => prev + curr, 0);
-
-  // console.log(total)
-
+    return(
+      <Text style={{alignSelf:"center" , color:'red' , marginVertical:'2%' }}>Please deselect the item and then delete it from the cart. </Text>
+    )
+  }
 
   const re_icon = () => {
     return (
@@ -73,19 +97,33 @@ const AddToCart_Comp = () => {
     {
       text: re_icon(),
       onPress: () => {
-
-        //alert("Delete Cancel...!!",i)
-        console.log("hello==>", che);
-        dispatch(deleteProduct(reduxData[che].product.product_id))
-        dispatch(deleteProductTest(reduxData[che].product.product_id))
+        //const isItemChecked = checkSelectDAta(che.product_id)
+        const check = isItemChecked(che.product_id)
+        if (check) {
+          setError(true)
+        } else {
+          const payload={
+            product_id: che.product_id,
+          }
+          //alert("Delete Cancel...!!",i)
+          //console.log("hello==>", che.product_id);
+          //dispatch(deleteProductTest(che.product_id))
+          // if (isItemChecked) {
+            //   //selectItem(che,isItemChecked)
+            //   selectItem(che,!isItemChecked)
+            // } 
+            dispatch(deleteProductTest(che.product_id))
+            deleteFromCart(dispatch, payload);
+            setTrigger(!trigger)  
+        }
       },
       backgroundColor: "red"
     },
   ]
-  const checkSelectDAta = (id) => (
+  const checkSelectDAta = (id) => {
     // Boolean(cartItems.find((item)=> item.title === food.title ))
-    Boolean(reduxDataTest.find((item) => item.product.product_id === id))
-  )
+    Boolean(reduxDataTest.find((item) => item.product_id === id))
+   }
   const test = useSelector(state => state.cart.products)
 
   // const SelectAll = () => {
@@ -100,10 +138,21 @@ const AddToCart_Comp = () => {
 
   return (
 
-    reduxData.length !== 0 ? (
+    products && products.length !== 0 ? (
 
       <View style={Style.item}>
         {/* <Button style={{marginTop:2}} title='Select All' onPress={getData}></Button> */}
+        
+        {
+          error ? (
+            //<Text style={{alignSelf:"center" , color:'red' , marginVertical:'2%' }}>Please deselect the item and then delete it from the cart. </Text>
+            errorFunction()
+          ):(
+            null
+          )
+        }
+
+
         <ScrollView showsVerticalScrollIndicator={false}>
 
           {/* for debuging */}
@@ -123,9 +172,9 @@ const AddToCart_Comp = () => {
 
 
 
-          {reduxData.map((element, index) => {
+          {products && products.map((element, index) => {
             return (
-              <Swipeout right={swipeoutBtns} key={index} onOpen={() => setChe(index)} backgroundColor="#e8e6e6" style={Style.swipe_style}>
+              <Swipeout right={swipeoutBtns} key={index} onOpen={() => setChe(element)} backgroundColor="#e8e6e6" style={Style.swipe_style}>
                 <View style={Style.item_inside}>
                   <View style={Style.img_view}>
                     <View style={Style.check_btn1} >
@@ -133,21 +182,21 @@ const AddToCart_Comp = () => {
                         <BouncyCheckbox
                           iconStyle={{ borderColor: 'lightgrey' }}
                           fillColor="#5A56E9"
-                          isChecked={checkSelectDAta(element.product.product_id)}
+                          isChecked={checkSelectDAta(element.product_id)}
                           onPress={(checkboxValue) => selectItem(element, checkboxValue)}
                         />
                       </View>
                     </View>
-                    <Image source={{ uri: element.product.imgs }} style={Style.img} />
+                    <Image source={{ uri: element.imgs }} style={Style.img} />
                   </View>
                   <View style={Style.details}>
-                    <Text style={Style.detail_text}>{element.product.name.split(/\s+/).slice(0, 3).join(" ") + "..."}....</Text>
-                    <Text style={Style.detail_text}>Rs {element.product.price}.00</Text>
+                    <Text style={Style.detail_text}>{element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}....</Text>
+                    <Text style={Style.detail_text}>Rs {element.price}.00</Text>
                     <Text style={Style.detail_text}>Color: Purple</Text>
                     <View style={Style.details_bottom}>
                       <Text style={Style.detail_text}>Size: 5.5 inch</Text>
                       <View style={Style.counter}>
-                        {element.qty === 1 ? (
+                        {element.quantity === 1 ? (
                           <View style={Style.counter_btn_disabled}>
                             <View>
                               <Text style={Style.counter_btn_text}>-</Text>
@@ -156,22 +205,16 @@ const AddToCart_Comp = () => {
                         ) : (
                           <View style={Style.counter_btn}>
                             <TouchableOpacity
-                              onPress={() => {
-                                dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product.product_id }))
-                                dispatch(modifyCartTest({ qty: element.qty - 1, product_id: element.product.product_id }))
-                              }}
+                              onPress={()=>decreaseQuantity(element)}
                             >
                               <Text style={Style.counter_btn_text}>-</Text>
                             </TouchableOpacity>
                           </View>
                         )}
-                        <Text style={Style.counter_variable}>{element.qty}</Text>
+                        <Text style={Style.counter_variable}>{element.quantity}</Text>
                         <View style={Style.counter_btn}>
                           <TouchableOpacity
-                            onPress={() => {
-                              dispatch(modifyCart({ qty: element.qty + 1, product_id: element.product.product_id }))
-                              dispatch(modifyCartTest({ qty: element.qty + 1, product_id: element.product.product_id }))
-                            }}
+                            onPress={() => increaseQuantity(element)}
                           >
                             <Text style={Style.counter_btn_text}>+</Text>
                           </TouchableOpacity>
@@ -196,6 +239,8 @@ const AddToCart_Comp = () => {
 
 
   )
+
+  
 };
 const Style = StyleSheet.create({
   item: {
