@@ -7,11 +7,7 @@ import axios from 'axios';
 export const login =async (dispatch,user)=>{
     dispatch(loginStart());
     try {
-<<<<<<< HEAD
         const res = await axios.post("http://192.168.1.17:5000/sql/login",user);
-=======
-        const res = await axios.post("http://192.168.1.19:5000/sql/login",user);
->>>>>>> origin/branch-hassan
         dispatch(loginSuccess(res.data));
         console.log("Data==>",res);
     } catch (error) {

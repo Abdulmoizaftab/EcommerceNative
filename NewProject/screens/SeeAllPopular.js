@@ -32,11 +32,7 @@ const SeeAllPopular = () => {
 
   const getdata = async () => {
     setIsloading(true)
-<<<<<<< HEAD
     await fetch(`http://192.168.1.17:5000/sql/popular/${limit}`)
-=======
-    await fetch(`http://192.168.1.19:5000/sql/popular/${limit}`)
->>>>>>> origin/branch-hassan
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))

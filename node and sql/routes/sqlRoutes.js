@@ -590,17 +590,17 @@ router.post("/giveRating", (req, res) => {
   const ratingColumnNames = ['one_star_ratings', 'two_star_ratings', 'three_star_ratings', 'four_star_ratings', 'five_star_ratings']
   const bodyData = req.body
   req.app.locals.db.query(`insert into user_reviews values(${bodyData.user_id},${bodyData.product_id},'${bodyData.userReview}' , ${bodyData.userRating})
-  update product set ${ratingColumnNames[bodyData.userRating-1]} = (${ratingColumnNames[bodyData.userRating-1]} + 1) , numberOfRatings=(numberOfRatings+1) where product_id = 8
+  update product set ${ratingColumnNames[bodyData.userRating-1]} = (${ratingColumnNames[bodyData.userRating-1]} + 1) , numberOfRatings=(numberOfRatings+1) where product_id = ${bodyData.product_id}
   DECLARE @isRatingNull float
-  select @isRatingNull =  rating from product where product_id = 8
+  select @isRatingNull =  rating from product where product_id = ${bodyData.product_id}
   if @isRatingNull is not null
   BEGIN
-    update product set rating = ( ((1*one_star_ratings)+(2*two_star_ratings)+(3*three_star_ratings)+(4*four_star_ratings)+(5*five_star_ratings))/(numberOfRatings) ) where product_id=8
+    update product set rating = ( ((1*one_star_ratings)+(2*two_star_ratings)+(3*three_star_ratings)+(4*four_star_ratings)+(5*five_star_ratings))/(numberOfRatings) ) where product_id=${bodyData.product_id}
   END
   
   ELSE
   BEGIN
-    update product set rating = ${bodyData.userRating} where product_id=8 
+    update product set rating = ${bodyData.userRating} where product_id=${bodyData.product_id}
   END`, function (err, recordset) {
     if (err) {
       console.error(err)

@@ -7,6 +7,8 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import BottomSheet from '../components/BottomSheet';
 import FlatButton from '../components/Button';
 import StarRating from 'react-native-star-rating-widget';
+import {StarRatingDisplay} from 'react-native-star-rating-widget';
+import axios from 'axios';
 
 
 
@@ -16,10 +18,13 @@ const Product_detail = ({ route }) => {
   const [imgArr, setImgArr] = useState(["https://kimerahome.b-cdn.net/wp-content/uploads/2022/01/CADBURY-SILK-HEART-BLUSH-150-GM.jpg", "https://cdn.shopify.com/s/files/1/0474/6828/2012/products/FOPBarsPO6_2pcEach.jpg?v=1642502710", "https://cdn0.woolworths.media/content/wowproductimages/large/194423.jpg"])
   const [prdSize, setPrdSize] = useState(['Small', 'Medium', 'Large'])
   const [prdColor, setPrdColor] = useState(['Green', 'Blue', 'Red'])
+  const [prdRating, setPrdRating] = useState(0)
   const [isFav, setIsFav] = useState(false)
   const [price, setPrice] = useState(0)
   const [prdName, setPrdName] = useState("")
+  const [userReview, setUserReview] = useState("")
   const refRBSheet = useRef();
+  const user_id =2010
 
   const renderSize = ({ item }) => (
     <View style={Style.sizeItem}>
@@ -39,11 +44,27 @@ const Product_detail = ({ route }) => {
     setImgArr([paramData.imgs, paramData.imgs])
     setPrice(paramData.price)
     setPrdName(paramData.name)
+    setPrdRating(paramData.rating)
   }, [paramData])
 
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
+
+  const postReview = () =>{
+    const bodyData = {
+      user_id,
+      product_id: paramData.product_id,
+      userRating: rating,
+      userReview
+    }
+
+    axios.post(`http://192.168.1.17:5000/sql/giveRating`,bodyData)
+    setRating(0)
+    setUserReview("")
+    setModalVisible(!modalVisible)
+    console.log(bodyData);
+  }
 
   return (
 
@@ -91,7 +112,7 @@ const Product_detail = ({ route }) => {
               visible={modalVisible}
 
               onRequestClose={() => {
-                Alert.alert("Thank you.");
+                //Alert.alert("Thank you.");
                 setModalVisible(!modalVisible);
               }}
               statusBarTranslucent={true}
@@ -110,6 +131,7 @@ const Product_detail = ({ route }) => {
                           rating={rating}
                           onChange={setRating}
                           enableHalfStar={false}
+                          enableSwiping={true}
                           starSize={46}
                         />
 
@@ -119,14 +141,13 @@ const Product_detail = ({ route }) => {
                       <TextInput
                         style={Style.input}
                         placeholder={'Write a review'}
-                        // underlineColorAndroid='transparent'
-                        // underlineColorAndroid='bla'
-                        numberOfLines={2}
-
-
+                        multiline={true}
+                        numberOfLines={4}
+                        value={userReview}
+                        onChangeText={setUserReview}
                       />
 
-                      <TouchableOpacity style={{ width: '60%', alignItems: 'center' }} onPress={() => setModalVisible(!modalVisible)}>
+                      <TouchableOpacity style={{ width: '60%', alignItems: 'center' }} onPress={postReview}>
                         <View style={{ width: '100%', alignItems: 'center', backgroundColor: 'black', marginTop: '30%' }}>
                           <Text style={{ fontSize: 20, textAlign: 'center', color: "#fff", fontWeight: '300', padding: 8 }}>Post</Text>
                         </View>
@@ -149,12 +170,10 @@ const Product_detail = ({ route }) => {
 
 
               <View >
-                <StarRating
-                  rating={rating}
-                  onChange={setRating}
+                <StarRatingDisplay
+                  rating={prdRating}
                   enableHalfStar={false}
                   starSize={29}
-
                 />
               </View>
 
