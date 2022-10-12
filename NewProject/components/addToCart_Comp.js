@@ -14,7 +14,6 @@ const AddToCart_Comp = ({products,trigger,setTrigger}) => {
   const [error, setError] = useState(false)
   const reduxData = useSelector(state => state.cart.products);
   const reduxDataTest = useSelector(state => state.test.products);
-  console.log(reduxDataTest);
   const TestreduxDataTotal = useSelector(state => state.test.total);
   const TestreduxDataTotalTest = useSelector(state => state.cart.total);
   const testreduxDataquantity = useSelector(state => state.test.quantity);
@@ -23,6 +22,12 @@ const AddToCart_Comp = ({products,trigger,setTrigger}) => {
   // const getData = () => {
   //   console.log("🚀 ~ ", reduxDataTest)
   // }
+
+  useEffect(() => {
+   dispatch(resetCartTest())
+  }, [])
+  
+
   const selectItem = (item, checkboxValue) => {
     if (checkboxValue == true) {
       // console.log("🚀 false", checkboxValue)
@@ -33,10 +38,6 @@ const AddToCart_Comp = ({products,trigger,setTrigger}) => {
       // console.log("🚀 true", checkboxValue, item.product_id)
       dispatch(deleteProductTest(item.product_id))
     }
-  }
-
-  const clearData = () => {
-    dispatch(resetCartTest())
   }
 
   const decreaseQuantity = (element) => {

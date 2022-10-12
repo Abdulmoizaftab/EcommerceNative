@@ -605,6 +605,7 @@ router.get('/getCartItem',auth.isLogin,(req,res)=>{
 
 
 router.post('/setOrderDetails',(req,res)=>{
+
   const {amount,prodArr}=req.body
   req.app.locals.db.query(`insert into payment_details (amount,provider,status,user_id) values (${amount},'Cash On Delivery',0,2010)`, function(err, recordset){
     if(err){
@@ -634,8 +635,8 @@ router.post('/setOrderDetails',(req,res)=>{
                   return
                 }
                 else{
-                  for (let index = 0; index < 2; index++) {
-                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},7,2,2010);`, function(err, recordset){
+                  for (let index = 0; index < prodArr.length; index++) {
+                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},${prodArr[index].product_id},${prodArr[index].quantity},2010);`, function(err, recordset){
                       if(err){
                         console.error(err)
                         res.status(500).send('SERVER ERROR')
@@ -643,7 +644,7 @@ router.post('/setOrderDetails',(req,res)=>{
                       }
                     })
                   }
-                  res.status(201).send("Loop completed successfully..!!!")
+                  res.status(201).json(prodArr)
                 }
               })
 

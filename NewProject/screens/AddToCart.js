@@ -19,7 +19,7 @@ const AddToCart = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    axios.get(`http://192.168.1.29:5000/sql/getCartItem`)
+    axios.get(`http://192.168.1.17:5000/sql/getCartItem`)
       .then(function (res) {
         setDbProds(res.data)
       })
@@ -54,39 +54,49 @@ const AddToCart = ({ route, navigation }) => {
         </View>
 
         <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} />
+        {
+          quantity !== 0 && total !== 0 ? (
+            <>
         <TouchableOpacity activeOpacity={1} onPress={() => refRBSheet.current.open()} style={{ width: "100%", backgroundColor: "white", padding: 10, justifyContent: "center", alignItems: "center", position: "absolute", bottom: 0, borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
           <Text>
             <SimpleLineIcons name='arrow-up' style={{ fontWeight: "bold", color: "black", fontSize: 25 }} />
           </Text>
         </TouchableOpacity>
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          height={310}
-          openDuration={400}
-          closeDuration={400}
-          closeOnPressMask={true}
-          closeOnPressBack={false}
-          dragFromTopOnly={true}
-          animationType="slide"
-          customStyles={{
-            wrapper: {
-              backgroundColor: "transparent"
-            },
-            draggableIcon: {
-              backgroundColor: "#000",
-              width: 75
+            <RBSheet
+              ref={refRBSheet}
+              closeOnDragDown={true}
+              height={310}
+              openDuration={400}
+              closeDuration={400}
+              closeOnPressMask={true}
+              closeOnPressBack={false}
+              dragFromTopOnly={true}
+              animationType="slide"
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "transparent"
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                  width: 75
 
-            },
-            container: {
-              borderTopLeftRadius: 25,
-              borderTopRightRadius: 25,
-            }
+                },
+                container: {
+                  borderTopLeftRadius: 25,
+                  borderTopRightRadius: 25,
+                }
+                
+              }}
+              >
+              <CheckoutBottomSheet total={total} reference={refRBSheet} />
+            </RBSheet>
+                </>
+          ) : (
+            null
+          )
+        }
 
-          }}
-        >
-          <CheckoutBottomSheet total={total} reference={refRBSheet} />
-        </RBSheet>
+        
       </View>
     ) : (
       <View style={Style.main}>

@@ -7,57 +7,91 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, { useState,useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import {Modal,NativeBaseProvider} from 'native-base';
+import axios from 'axios';
 
 
-const Summary = ({route}) => {
-  const [products,setProducts]=useState([]);
+
+const Summary = ({route,navigation}) => {
+  const [showModal, setShowModal] = useState(false);
   const {data}=route.params
+  const testProducts = useSelector(state => state.test.products);
+  const testquantity = useSelector(state => state.test.quantity);
+  const testTotal = useSelector(state => state.test.total);
   // useEffect(() => {
   //   setProducts()
   // }, [])
 
   
-  console.log("data==>",data);
-  return (
-    <View style={Style.main}>
+  console.log("data==>",testProducts,testquantity,testTotal);
+
+  const Checkout=async()=>{
+    setShowModal(true)
+    const obj={
+      amount:testTotal,
+      prodArr:testProducts
       
+    }
+    //await axios.post('http://192.168.1.24:5000/sql/setOrderDetails', obj)
+    console.log("Data inserted successfully");
+    // const obj={
+    //   prodArr:testProducts
+    // }
+    // console.log("sadsad==>",obj.prodArr);
+    setTimeout(()=>{
+      setShowModal(false)
+      navigation.navigate('TabNav')
+    }, 3000)
+  }
+
+  return (
+    <NativeBaseProvider>
+    <View style={Style.main}>
+      {/* Header */}
       <View style={Style.topHeader}>
         <View style={Style.topHeader_inside}>
           <>
-            <Text style={Style.topHeader_inside_text1}>ITEMS 1</Text>
-            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. 99.00</Text>
+            <Text style={Style.topHeader_inside_text1}>ITEMS ({testquantity})</Text>
+            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. {testTotal}.00</Text>
           </>
         </View>
       </View>
       
       <ScrollView showsVerticalScrollIndicator={false}>
+
+        {/* listHeader */}
         <View style={{padding: '3%', marginBottom: '20%'}}>
           <View style={Style.items}>
             <View style={Style.items_head}>
-              <Text style={Style.items_head_text}>1 Items</Text>
+              <Text style={Style.items_head_text}>{testquantity} Items</Text>
             </View>
-            <View style={Style.items_list} >
+
+            {/* list */}
+            {testProducts && testProducts.map((v,i)=>{
+              return <View style={Style.items_list} key={i} >
               <View>
                 <Image
                   source={{
-                    uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFU7U2h0umyF0P6E_yhTX45sGgPEQAbGaJ4g&usqp=CAU',
+                    uri: v.imgs,
                   }}
                   style={Style.img}
                 />
               </View>
-              <View>
+              <View style={{width:"68%"}}>
                 <Text style={Style.items_list_text_desc}>
-                  Panda baby panda baby pahjh...
+                {v.name.split(/\s+/).slice(0, 5).join(" ") + "....."}
                 </Text>
                 <Text style={Style.items_list_text_same}>Size: NA</Text>
                 <Text style={Style.items_list_text_same}>Color: NA</Text>
-                <Text style={Style.items_list_text_same}>Qty: 1</Text>
-                <Text style={Style.items_list_text_price}>Rs. 99.00</Text>
+                <Text style={Style.items_list_text_same}>Qty: {v.quantity}</Text>
+                <Text style={Style.items_list_text_price}>Rs. {v.price}.00</Text>
               </View>
             </View>
+            })}
            </View>
 
-          
+           {/* Shipping */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -72,7 +106,7 @@ const Summary = ({route}) => {
             </View>
           </View>
 
-          
+          {/* Contacts */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -83,7 +117,7 @@ const Summary = ({route}) => {
             </View>
           </View>
 
-          
+          {/* PaymentMethod */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -94,7 +128,7 @@ const Summary = ({route}) => {
             </View>
           </View>
 
-          
+          {/* OrderDeatils */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -103,7 +137,7 @@ const Summary = ({route}) => {
             <View style={Style.address_list}>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>Order Total:</Text>
-                <Text style={Style.order_list_text_same}>Rs. 99.00</Text>
+                <Text style={Style.order_list_text_same}>Rs. {testTotal}.00</Text>
               </View>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>
@@ -121,16 +155,39 @@ const Summary = ({route}) => {
                 <Text style={Style.order_list_text_same_end}>
                   Total Payable:
                 </Text>
-                <Text style={Style.order_list_text_same_end}>Rs. 990.00</Text>
+                <Text style={Style.order_list_text_same_end}>Rs. {testTotal+200-10}.00</Text>
               </View>
             </View>
           </View>
         </View>
       </ScrollView>
-          <TouchableOpacity activeOpacity={0.8} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4.5%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}>
+      {/* Checkout button */}
+          <TouchableOpacity activeOpacity={1} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4.5%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}
+          onPress={()=>Checkout()}>
           <Text style={{color:"white",fontWeight:"bold",fontSize:17,letterSpacing:3}}>Place Order</Text>
       </TouchableOpacity>
+
+            {/* Modal */}
+
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{
+      
+      bg: "#000000"
+    }}>
+        <Modal.Content maxWidth="400px" >
+          <Modal.Header style={{backgroundColor:"#5A56E9"}} width="100%">
+            <Text style={{color:"white",fontSize:18}}>Your order is being proceed!</Text>
+            </Modal.Header>
+          <Modal.Body style={{backgroundColor:"white"}}>
+            <Image source={{
+                    uri: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3f80bc04-eaf0-44c3-858c-4a6de0889b5f/ddhmdg6-350b4ffa-0c63-4f25-b470-28b407bc4b99.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzNmODBiYzA0LWVhZjAtNDRjMy04NThjLTRhNmRlMDg4OWI1ZlwvZGRobWRnNi0zNTBiNGZmYS0wYzYzLTRmMjUtYjQ3MC0yOGI0MDdiYzRiOTkuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PsT1UcJOCheIujDApFbnIBcxTVJsYWzUpJLI6__Nap4',
+                  }} style={{height:100,width:110,alignSelf:"center"}}/>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+
+
     </View>
+    </NativeBaseProvider>
   );
 };
 
