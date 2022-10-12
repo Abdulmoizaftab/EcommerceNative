@@ -32,6 +32,7 @@ const App = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          
         }}>
         <Stack.Screen name="TabNav" component={TabNav} />
         <Stack.Screen name="Login" component={Login} />

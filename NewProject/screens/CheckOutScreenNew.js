@@ -19,7 +19,7 @@ const CheckOutScreenNew = ({ route }) => {
   const user_id =2010;
 
   useEffect(() => {
-    axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
+    axios.get(`http://192.168.1.24:5000/sql/getAddress/${user_id}`)
      .then(function (response) {
        setDbAddress(response.data)
      })
@@ -121,7 +121,7 @@ const CheckOutScreenNew = ({ route }) => {
       {
         dbAddress.length !==0 ? (
         <View style={styles.finalCheckout}>
-          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary')}>
+          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary',{data:dbAddress})}>
             <Text style={styles.checkoutBtnText}>Checkout</Text>
           </TouchableOpacity>
         </View>

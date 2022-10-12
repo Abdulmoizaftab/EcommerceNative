@@ -7,59 +7,57 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, { useState,useEffect } from 'react';
-import { useSelector } from 'react-redux';
+
 
 const Summary = ({route}) => {
   const [products,setProducts]=useState([]);
-  const address = useSelector(state => state.address)
-  const test = useSelector(state => state.test)
-  useEffect(() => {
-    setProducts(test.products)
-  }, [])
+  const {data}=route.params
+  // useEffect(() => {
+  //   setProducts()
+  // }, [])
 
   
-  console.log("data==>",products);
+  console.log("data==>",data);
   return (
     <View style={Style.main}>
+      
       <View style={Style.topHeader}>
         <View style={Style.topHeader_inside}>
           <>
-            <Text style={Style.topHeader_inside_text1}>ITEMS ({test.quantity})</Text>
-            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. {test.total}.00</Text>
+            <Text style={Style.topHeader_inside_text1}>ITEMS 1</Text>
+            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. 99.00</Text>
           </>
         </View>
       </View>
-      {/* cart items */}
+      
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{padding: '3%', marginBottom: '20%'}}>
           <View style={Style.items}>
             <View style={Style.items_head}>
-              <Text style={Style.items_head_text}>{test.quantity} Items</Text>
+              <Text style={Style.items_head_text}>1 Items</Text>
             </View>
-            {products.map((v,i)=>{
-              return <View style={Style.items_list} key={i}>
+            <View style={Style.items_list} >
               <View>
                 <Image
                   source={{
-                    uri: v.product.imgs,
+                    uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFU7U2h0umyF0P6E_yhTX45sGgPEQAbGaJ4g&usqp=CAU',
                   }}
                   style={Style.img}
                 />
               </View>
               <View>
                 <Text style={Style.items_list_text_desc}>
-                  {v.product.name.substring(0,27)}...
+                  Panda baby panda baby pahjh...
                 </Text>
                 <Text style={Style.items_list_text_same}>Size: NA</Text>
                 <Text style={Style.items_list_text_same}>Color: NA</Text>
-                <Text style={Style.items_list_text_same}>Qty: {v.qty}</Text>
-                <Text style={Style.items_list_text_price}>Rs. {v.product.price}.00</Text>
+                <Text style={Style.items_list_text_same}>Qty: 1</Text>
+                <Text style={Style.items_list_text_price}>Rs. 99.00</Text>
               </View>
             </View>
-            })}
-          </View>
+           </View>
 
-          {/* Address */}
+          
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -67,25 +65,25 @@ const Summary = ({route}) => {
             </View>
             <View style={Style.address_list}>
               <Text style={Style.address_list_text_same}>
-                {address.addresses[0].address}, Pakistan.
+                {data[0].address_line}, Pakistan.
               </Text>
-              <Text style={Style.address_list_text_same}>{address.addresses[0].title}.</Text>
-              <Text style={Style.address_list_text_same}>Receiving by {address.addresses[0].recipent}.</Text>
+              <Text style={Style.address_list_text_same}>{data[0].address_title}.</Text>
+              <Text style={Style.address_list_text_same}>Receiving by {data[0].recipent}.</Text>
             </View>
           </View>
 
-          {/* contact */}
+          
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
               <Text style={Style.items_head_text}>Contacts</Text>
             </View>
             <View style={Style.address_list}>
-              <Text style={Style.address_list_text_same}>0{address.addresses[0].phone}.</Text>
+              <Text style={Style.address_list_text_same}>{data[0].mobile}</Text>
             </View>
           </View>
 
-          {/* payment */}
+          
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -96,7 +94,7 @@ const Summary = ({route}) => {
             </View>
           </View>
 
-          {/* Order details */}
+          
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -105,7 +103,7 @@ const Summary = ({route}) => {
             <View style={Style.address_list}>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>Order Total:</Text>
-                <Text style={Style.order_list_text_same}>Rs. {test.total}.00</Text>
+                <Text style={Style.order_list_text_same}>Rs. 99.00</Text>
               </View>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>
@@ -123,7 +121,7 @@ const Summary = ({route}) => {
                 <Text style={Style.order_list_text_same_end}>
                   Total Payable:
                 </Text>
-                <Text style={Style.order_list_text_same_end}>Rs. {test.total+200-10}.00</Text>
+                <Text style={Style.order_list_text_same_end}>Rs. 990.00</Text>
               </View>
             </View>
           </View>

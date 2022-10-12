@@ -15,6 +15,7 @@ const AddToCart_Comp = () => {
   const reduxData = useSelector(state => state.cart.products);
 
   const reduxDataTest = useSelector(state => state.test.products);
+  console.log(reduxDataTest);
   const TestreduxDataTotal = useSelector(state => state.test.total);
   const TestreduxDataTotalTest = useSelector(state => state.cart.total);
   const TestreduxDataquantity = useSelector(state => state.test.quantity);

@@ -46,7 +46,7 @@ const sendMail=(email,name,user_id)=>{
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.17:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
     transporter.sendMail(mailOptions,function(error,info){
@@ -373,16 +373,16 @@ router.put('/session',(req,res)=>{
 })
 })
 
-router.get('/getFavourites',(req,res)=>{
-  req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
-    if(err){
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
-    }
-    res.status(200).json(recordset.recordset);
-  })
-})
+// router.get('/getFavourites',(req,res)=>{
+//   req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
+//     if(err){
+//       console.error(err)
+//       res.status(500).send('SERVER ERROR')
+//       return
+//     }
+//     res.status(200).json(recordset.recordset);
+//   })
+// })
 
 router.post('/setFavourites',(req,res)=>{
   const {favouritedProd}=req.body
@@ -587,16 +587,16 @@ router.get("/getAddress/:user_id", (req,res) =>{
     })
 })
 
-router.get("/getSingleAddress/:address_id", (req,res) =>{
-  req.app.locals.db.query(`select * from user_address where address_id = ${req.params.address_id} and isDeleted = 0`, function(err, recordset) {
-      if (err) {
-        console.error(err)
-        res.status(500).send('SERVER ERROR')
-        return
-      }
-      res.status(200).json(recordset.recordset)
-    })
-})
+// router.get("/getSingleAddress/:address_id", (req,res) =>{
+//   req.app.locals.db.query(`select * from user_address where address_id = ${req.params.address_id} and isDeleted = 0`, function(err, recordset) {
+//       if (err) {
+//         console.error(err)
+//         res.status(500).send('SERVER ERROR')
+//         return
+//       }
+//       res.status(200).json(recordset.recordset)
+//     })
+// })
 
 router.post("/giveRating", (req, res) => {
   const ratingColumnNames = ['one_star_ratings', 'two_star_ratings', 'three_star_ratings', 'four_star_ratings', 'five_star_ratings']
