@@ -240,28 +240,73 @@ router.get('/allDiscountProducts/:limit',(req,res)=>{ //ALL DISCOUNTED PRODUCTS
   })
 })
 
-router.post('/setFavourites',(req,res)=>{
-  const {favouritedProd}=req.body
-  req.app.locals.db.query(`insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},2010,0)`, function(err, recordset){
-    if(err){
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
-    }
-    else{
-      req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
-        if(err){
-          console.error(err)
-          res.status(500).send('SERVER ERROR')
-          return
+
+
+//======================================================================
+router.post("/setFavourites", (req, res) => {
+  const { favouritedProd } = req.body;
+  req.app.locals.db.query(
+    `select * from favourites where userId = 2010 and favouritedProd = ${favouritedProd}`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      } else {
+        if (Object.keys(recordset.recordset).length !== 0) {
+          req.app.locals.db.query(
+            `update favourites set is_deleted=0 where userId=2010 and favouritedProd=${favouritedProd}`,
+            function (err, recordset) {
+              if (err) {
+                console.error(err);
+                res.status(500).send("SERVER ERROR");
+                return;
+              } else {
+                req.app.locals.db.query(
+                  `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`,
+                  function (err, recordset) {
+                    if (err) {
+                      console.error(err);
+                      res.status(500).send("SERVER ERROR");
+                      return;
+                    } else {
+                      res.status(201).json(recordset.recordset);
+                    }
+                  }
+                );
+              }
+            }
+          );
+        } else {
+          req.app.locals.db.query(
+            `insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},2010,0)`,
+            function (err, recordset) {
+              if (err) {
+                console.error(err);
+                res.status(500).send("SERVER ERROR");
+                return;
+              } else {
+                req.app.locals.db.query(
+                  `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`,
+                  function (err, recordset) {
+                    if (err) {
+                      console.error(err);
+                      res.status(500).send("SERVER ERROR");
+                      return;
+                    } else {
+                      res.status(201).json(recordset.recordset);
+                    }
+                  }
+                );
+              }
+            }
+          );
         }
-        else{
-          res.status(201).json(recordset.recordset)
-        }
-      })
+      }
     }
-  })
-})
+  );
+});
+//======================================================================
 
 router.post('/delFavourites',(req,res)=>{
   const {favouritedProd}=req.body
@@ -272,7 +317,7 @@ router.post('/delFavourites',(req,res)=>{
       return
     }
     else{
-      req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+      req.app.locals.db.query(`  select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
         if(err){
           console.error(err)
           res.status(500).send('SERVER ERROR')
@@ -296,7 +341,7 @@ router.post('/updateFavourites',(req,res)=>{
       return
     }
     else{
-      req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+      req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
         if(err){
           console.error(err)
           res.status(500).send('SERVER ERROR')
@@ -311,7 +356,7 @@ router.post('/updateFavourites',(req,res)=>{
 })
 
 router.get('/getFavourites',(req,res)=>{
-  req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+  req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')

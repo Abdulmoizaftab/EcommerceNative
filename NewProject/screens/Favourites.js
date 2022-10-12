@@ -35,7 +35,7 @@ const Favorites = ({navigation}) => {
 
   const getData = async () => {
     try {
-      getFavouriteDB()
+      getFavouriteDB(dispatch,"")
       // const jsonValue = await fetch('');
       // const result = JSON.parse(jsonValue);
       // setFavProducts(result);

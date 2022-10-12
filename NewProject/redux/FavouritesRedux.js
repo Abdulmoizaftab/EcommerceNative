@@ -13,19 +13,19 @@ const favouriteSlice = createSlice({
 
            
             //    const tempFav = {...action.payload,favQuantity:1};
-               state.totalQuantity+=1;
+              // state.totalQuantity+=1;
             //    console.log(state.favourites.includes(action.payload.product_id))
             //    state.favourites.push(action.payload);
             //    alert('added to fav');
             // state.isFetching=false;
             state.favourites=action.payload
-            alert("data added to fav")
+            // alert("data added to fav")
            
         }, getFavourite:(state,action)=>{
 
            
             //    const tempFav = {...action.payload,favQuantity:1};
-               state.totalQuantity+=1;
+              // state.totalQuantity+=1;
             //    console.log(state.favourites.includes(action.payload.product_id))
             //    state.favourites.push(action.payload);
             //    alert('added to fav');
@@ -35,13 +35,13 @@ const favouriteSlice = createSlice({
            
         },
         removeFavourite:(state,action)=>{
-            state.totalQuantity-=1
+           // state.totalQuantity-=1
             // console.log(action.payload.product_id)
             // const modifiedFavourites = state.favourites.filter(item => item.product_id !== action.payload.product_id)
             // state.favourites = modifiedFavourites;
             // alert('remove from Fav');
             state.favourites=action.payload
-            alert("data remove to fav")
+            // alert("data remove to fav")
         },
         addFavFailure:(state)=>{
             state.isFetching=false;
