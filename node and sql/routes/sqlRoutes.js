@@ -46,7 +46,7 @@ const sendMail=(email,name,user_id)=>{
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.17:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
     transporter.sendMail(mailOptions,function(error,info){
@@ -471,16 +471,16 @@ router.put('/session',(req,res)=>{
 })
 })
 
-router.get('/getFavourites',(req,res)=>{
-  req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
-    if(err){
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
-    }
-    res.status(200).json(recordset.recordset);
-  })
-})
+// router.get('/getFavourites',(req,res)=>{
+//   req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
+//     if(err){
+//       console.error(err)
+//       res.status(500).send('SERVER ERROR')
+//       return
+//     }
+//     res.status(200).json(recordset.recordset);
+//   })
+// })
 
 router.post('/setFavourites',(req,res)=>{
   const {favouritedProd}=req.body
@@ -519,6 +519,7 @@ router.post('/delFavourites',(req,res)=>{
 
 
 router.post('/setOrderDetails',(req,res)=>{
+
   const {amount,prodArr}=req.body
   req.app.locals.db.query(`insert into payment_details (amount,provider,status,user_id) values (${amount},'Cash On Delivery',0,2010)`, function(err, recordset){
     if(err){
@@ -548,8 +549,8 @@ router.post('/setOrderDetails',(req,res)=>{
                   return
                 }
                 else{
-                  for (let index = 0; index < 2; index++) {
-                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},7,2,2010);`, function(err, recordset){
+                  for (let index = 0; index < prodArr.length; index++) {
+                    req.app.locals.db.query(`insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},${prodArr[index].product_id},${prodArr[index].quantity},2010);`, function(err, recordset){
                       if(err){
                         console.error(err)
                         res.status(500).send('SERVER ERROR')
@@ -557,7 +558,7 @@ router.post('/setOrderDetails',(req,res)=>{
                       }
                     })
                   }
-                  res.status(201).send("Loop completed successfully..!!!")
+                  res.status(201).json(prodArr)
                 }
               })
 
@@ -598,16 +599,16 @@ router.get("/getAddress/:user_id", (req,res) =>{
     })
 })
 
-router.get("/getSingleAddress/:address_id", (req,res) =>{
-  req.app.locals.db.query(`select * from user_address where address_id = ${req.params.address_id} and isDeleted = 0`, function(err, recordset) {
-      if (err) {
-        console.error(err)
-        res.status(500).send('SERVER ERROR')
-        return
-      }
-      res.status(200).json(recordset.recordset)
-    })
-})
+// router.get("/getSingleAddress/:address_id", (req,res) =>{
+//   req.app.locals.db.query(`select * from user_address where address_id = ${req.params.address_id} and isDeleted = 0`, function(err, recordset) {
+//       if (err) {
+//         console.error(err)
+//         res.status(500).send('SERVER ERROR')
+//         return
+//       }
+//       res.status(200).json(recordset.recordset)
+//     })
+// })
 
 router.post("/giveRating", (req, res) => {
   const ratingColumnNames = ['one_star_ratings', 'two_star_ratings', 'three_star_ratings', 'four_star_ratings', 'five_star_ratings']
