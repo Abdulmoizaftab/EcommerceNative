@@ -16,12 +16,15 @@ const AddToCart = ({ route, navigation }) => {
   //console.log('total',total);
   const [dbProds, setDbProds] = useState([])
   const [trigger, setTrigger] = useState(true)
+  const [loading, setLoading] = useState(true)
+
 
 
   useEffect(() => {
     axios.get(`http://192.168.1.17:5000/sql/getCartItem`)
       .then(function (res) {
         setDbProds(res.data)
+        setLoading(false)
       })
       .catch(function (err) {
         console.log(err);
@@ -53,7 +56,7 @@ const AddToCart = ({ route, navigation }) => {
           </View>
         </View>
 
-        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} />
+        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} />
         {
           quantity !== 0 && total !== 0 ? (
             <>
@@ -101,8 +104,8 @@ const AddToCart = ({ route, navigation }) => {
     ) : (
       <View style={Style.main}>
 
-        <AddToCart_Comp />
-
+        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} />
+        {/* <Text>hello</Text> */}
       </View>
     )
 

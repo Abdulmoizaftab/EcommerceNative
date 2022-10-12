@@ -8,10 +8,13 @@ import empty_cart from '../image/empty_cart.png';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { deleteProductTest, addProductTest, resetCartTest, modifyCartTest } from '../redux/Test_Redux';
 import { cartModificationDecrease, cartModificationIncrease,deleteFromCart } from '../redux/apiCalls';
+import loadingGif from '../assets/fonts/images/loader.gif'
 
-const AddToCart_Comp = ({products,trigger,setTrigger}) => {
+const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
   const dispatch = useDispatch()
   const [error, setError] = useState(false)
+  const [dbProduct, setDbProduct] = useState([])
+  const [swipeClose, setSwipeClose] = useState(true)
   const reduxData = useSelector(state => state.cart.products);
   const reduxDataTest = useSelector(state => state.test.products);
   const TestreduxDataTotal = useSelector(state => state.test.total);
@@ -113,8 +116,9 @@ const AddToCart_Comp = ({products,trigger,setTrigger}) => {
           // if (isItemChecked) {
             //   //selectItem(che,isItemChecked)
             //   selectItem(che,!isItemChecked)
-            // } 
+            // }
             dispatch(deleteProductTest(che.product_id))
+            setSwipeClose(true) 
             deleteFromCart(dispatch, payload);
             setTrigger(!trigger)  
         }
@@ -176,7 +180,7 @@ const AddToCart_Comp = ({products,trigger,setTrigger}) => {
 
           {products && products.map((element, index) => {
             return (
-              <Swipeout right={swipeoutBtns} key={index} onOpen={() => setChe(element)} backgroundColor="#e8e6e6" style={Style.swipe_style}>
+              <Swipeout right={swipeoutBtns} key={index} close={swipeClose} onOpen={() => {setChe(element); setSwipeClose(false)}} backgroundColor="#e8e6e6" style={Style.swipe_style} >
                 <View style={Style.item_inside}>
                   <View style={Style.img_view}>
                     <View style={Style.check_btn1} >
@@ -230,13 +234,23 @@ const AddToCart_Comp = ({products,trigger,setTrigger}) => {
 
       </View>
     ) : (
-      <View style={Style.main_img}>
+        <View style={Style.main_img}>
+          {
+            loading === true ? (
+              <View style={Style.imgView}>
+                <Image style={Style.imgStyleGif} source={loadingGif}></Image>
+                <Text style={{ color: 'gray', fontWeight: '400' }}></Text>
+              </View>
+            ) : (
 
-        <View style={Style.imgView}>
-          <Image style={Style.imgStyle} source={empty_cart}></Image>
-          <Text style={{ color: 'gray', fontWeight: '400' }}>Products added to the cart will be shown here</Text>
-        </View>
-      </View>
+              <View style={Style.imgView}>
+                <Image style={Style.imgStyle} source={empty_cart}></Image>
+                <Text style={{ color: 'gray', fontWeight: '400' }}>Products added to the cart will be shown here</Text>
+              </View>
+            )
+          
+            }
+        </View> 
     )
 
 
@@ -341,6 +355,10 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
+  },
+  imgStyleGif: {
+    width: 50,
+    height: 50,
   },
   main_img: {
     flex: 1,

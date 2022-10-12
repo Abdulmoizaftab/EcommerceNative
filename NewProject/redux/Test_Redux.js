@@ -19,7 +19,6 @@ const cartSlice = createSlice({
             state.quantity = 0;
             state.products = []
             state.total = 0
-            console.log(state);
         },
         deleteProductTest: (state, action) => {
             state.products.filter((x) => {
