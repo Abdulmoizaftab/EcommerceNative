@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import NumericInput from 'react-native-numeric-input'
 import FlatButton from './Button';
 import { addProduct } from '../redux/CartRedux'
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
+import axios from 'axios'
+import {addToCart} from '../redux/apiCalls'
 
 
 const BottomSheet = ({ reference, prodData }) => {
@@ -11,14 +13,31 @@ const BottomSheet = ({ reference, prodData }) => {
   const dispatch = useDispatch()
   const [qty, setQty] = useState(1);
   const [product, setProduct] = useState(prodData);
+  const reduxDataProd = useSelector(state => state.cart.products);
+  const reduxDataQty = useSelector(state => state.cart.quantity);
+
+
+  // useEffect(()=>{
+
+  //   axios.post('http://192.168.1.29:5000/addCartItem', data={})
+  //   .then()
+  //   .catch()
+  //   console.log('getting fro redux',reduxDataProd,reduxDataQty)
+  // },[])
+
 
   const onAddCart = () => {
     reference.current.close();
     const payload = {
-      product,
-      qty
+      product_id: product.product_id,
+      quantity:qty
     }
-    dispatch(addProduct(payload))
+
+
+    console.log(payload)
+
+      //  dispatch(addProduct(payload))
+      addToCart(dispatch,payload)
   }
 
   return (
