@@ -117,12 +117,16 @@ router.get('/productAdminPortal', (req, res) => {
   })
 })
 
-router.get('/getOrder', (req, res) => {
+router.get('/getSpecificOrder', (req, res) => {
   req.app.locals.db.query(`
-  select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
-  from product
-  left join discount on discount.discount_id = product.discount_id
-  where product_id = 1001516`, function (err, recordset) {
+  select order_items.* , order_details.total, order_details.payment_id , order_details.orderStatus, 
+  product.vendor_id,product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
+  users.username,users.address,users.email,users.telephone
+  from order_items
+  inner join order_details on order_items.order_id = order_details.order_id
+  inner join product on product.product_id = order_items.product_id
+  inner join users on users.user_id = order_details.user_id 
+  where item_id = 4`, function (err, recordset) {
     if (err) {
       console.error(err)
       res.status(500).send('SERVER ERROR')
