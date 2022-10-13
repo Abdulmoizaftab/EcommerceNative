@@ -396,6 +396,21 @@ router.get("/filterAllByPrice/:ascDesc/:limit", (req,res) =>{
     })
 })
 
+router.post('/deleteOnCheckout',(req,res)=>{
+  const toRemoveArr = req.body
+
+  toRemoveArr.forEach(element => {
+    req.app.locals.db.query(`update cart_item set is_deleted = 1 where product_id=${element.product_id} and user_id=2010`, function(err, recordset){
+      if(err){
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+    })
+  });
+  res.status(200).send('Done')
+})
+
 router.get("/filterAllByRating/:ascDesc/:limit", (req,res) =>{
   req.app.locals.db.query(`select top(${req.params.limit}) * from product order by rating ${req.params.ascDesc}`, function(err, recordset) {
       if (err) {
@@ -576,6 +591,15 @@ router.post('/setOrderDetails',(req,res)=>{
                       }
                     })
                   }
+                  prodArr.forEach(element => {
+                    req.app.locals.db.query(`update cart_item set is_deleted = 1 where product_id=${element.product_id} and user_id=2010`, function(err, recordset){
+                      if(err){
+                        console.error(err)
+                        res.status(500).send('SERVER ERROR')
+                        return
+                      }
+                    })
+                  });
                   res.status(201).json(prodArr)
                 }
               })

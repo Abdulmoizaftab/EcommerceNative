@@ -182,17 +182,14 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
             return (
               <Swipeout right={swipeoutBtns} key={index} close={swipeClose} onOpen={() => {setChe(element); setSwipeClose(false)}} backgroundColor="#e8e6e6" style={Style.swipe_style} >
                 <View style={Style.item_inside}>
-                  <View style={Style.img_view}>
-                    <View style={Style.check_btn1} >
-                      <View style={{ marginLeft: 17, width: 30 }}>
-                        <BouncyCheckbox
+                <BouncyCheckbox
                           iconStyle={{ borderColor: 'lightgrey' }}
                           fillColor="#5A56E9"
                           isChecked={checkSelectDAta(element.product_id)}
                           onPress={(checkboxValue) => selectItem(element, checkboxValue)}
+                          style={{width:"11%",padding:"1%"}}
                         />
-                      </View>
-                    </View>
+                  <View style={Style.img_view}>
                     <Image source={{ uri: element.imgs }} style={Style.img} />
                   </View>
                   <View style={Style.details}>
@@ -279,18 +276,19 @@ const Style = StyleSheet.create({
     borderRadius: 5,
   },
   img_view: {
-    // borderWidth:1,
-    width: "35%",
+    //borderWidth:1,
+    width: "25%",
     flexDirection: 'row',
     justifyContent: "center",
     alignItems: "center",
   }, img: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
   },
   details: {
-    width: "65%",
+    width: "62%",
     padding: 3,
+    // borderWidth:1
   }, detail_text: {
     color: "black",
     marginVertical: "1%"
@@ -315,20 +313,21 @@ const Style = StyleSheet.create({
 
   },
   check_btn1: {
+    borderWidth:1
     // backgroundColor: "#5A56E9",
     //backgroundColor:newColor,
     // borderWidth: 2,
 
-    borderColor: 'silver',
-    width: 45,
-    height: 45,
-    alignItems: "center",
-    borderRadius: 20,
-    justifyContent: "center",
-    //borderWidth: 2,
-    position: 'relative',
-    left: 7,
-    alignItems: 'center',
+    // borderColor: 'silver',
+    // width: 45,
+    // height: 45,
+    // alignItems: "center",
+    // borderRadius: 20,
+    // justifyContent: "center",
+    // //borderWidth: 2,
+    // position: 'relative',
+    // left: 7,
+    // alignItems: 'center',
 
   },
   counter_btn_disabled: {

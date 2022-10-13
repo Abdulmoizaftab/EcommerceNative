@@ -54,7 +54,11 @@ export const addressUpdate = async (dispatch, addressObj) => {
 }
 export const addToCart = async (dispatch, prod) => {
     try {
+<<<<<<< HEAD
         await axios.post('http://192.168.1.17:5000/sql/addCartItem', prod)
+=======
+        await axios.post('http://192.168.1.24:5000/sql/addCartItem', prod)
+>>>>>>> origin/branch-umair
     } catch (error) {
         console.log(error);
     }
@@ -62,7 +66,11 @@ export const addToCart = async (dispatch, prod) => {
 
 export const cartModificationDecrease = async (dispatch, prod) => {
     try {
+<<<<<<< HEAD
         await axios.post('http://192.168.1.17:5000/sql/delCartItem', prod)
+=======
+        await axios.post('http://192.168.1.24:5000/sql/delCartItem', prod)
+>>>>>>> origin/branch-umair
     } catch (error) {
         console.log(error);
     }
@@ -70,14 +78,22 @@ export const cartModificationDecrease = async (dispatch, prod) => {
 
 export const cartModificationIncrease = async (dispatch, prod) => {
     try {
+<<<<<<< HEAD
         await axios.post('http://192.168.1.17:5000/sql/addCartItem', prod)
+=======
+        await axios.post('http://192.168.1.24:5000/sql/addCartItem', prod)
+>>>>>>> origin/branch-umair
     } catch (error) {
         console.log(error);
     }
 }
 export const deleteFromCart = async (dispatch, prod) => {
     try {
+<<<<<<< HEAD
         await axios.post('http://192.168.1.17:5000/sql/deleteFromCart', prod)
+=======
+        await axios.post('http://192.168.1.24:5000/sql/deleteFromCart', prod)
+>>>>>>> origin/branch-umair
     } catch (error) {
         console.log(error);
     }
