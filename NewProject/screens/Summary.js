@@ -33,7 +33,7 @@ const Summary = ({route,navigation}) => {
       prodArr:testProducts
       
     }
-    //await axios.post('http://192.168.1.24:5000/sql/setOrderDetails', obj)
+    await axios.post('http://192.168.1.24:5000/sql/setOrderDetails', obj)
     console.log("Data inserted successfully");
     // const obj={
     //   prodArr:testProducts
@@ -179,8 +179,9 @@ const Summary = ({route,navigation}) => {
             </Modal.Header>
           <Modal.Body style={{backgroundColor:"white"}}>
             <Image source={{
-                    uri: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3f80bc04-eaf0-44c3-858c-4a6de0889b5f/ddhmdg6-350b4ffa-0c63-4f25-b470-28b407bc4b99.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzNmODBiYzA0LWVhZjAtNDRjMy04NThjLTRhNmRlMDg4OWI1ZlwvZGRobWRnNi0zNTBiNGZmYS0wYzYzLTRmMjUtYjQ3MC0yOGI0MDdiYzRiOTkuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.PsT1UcJOCheIujDApFbnIBcxTVJsYWzUpJLI6__Nap4',
-                  }} style={{height:100,width:110,alignSelf:"center"}}/>
+                    uri: 'https://nicefuntours.com/wp-content/uploads/2019/12/ShyCautiousAfricanpiedkingfisher-max-1mb.gif',
+                  }} style={{height:120,width:120,alignSelf:"center"}}/>
+                  <Text style={{alignSelf:"center",color:"black"}}>Thankyou for order</Text>
           </Modal.Body>
         </Modal.Content>
       </Modal>
@@ -226,15 +227,17 @@ const Style = StyleSheet.create({
   items: {
     borderWidth: 1,
     width: '100%',
-    borderColor: '#cccccc',
+    borderColor: '#fff',
     borderRadius: 5,
+    backgroundColor:'#fff'
   },
   items_head: {
     width: '100%',
     padding: '2%',
     backgroundColor: '#5A56E9',
     borderTopRightRadius:5,
-    borderTopLeftRadius:5
+    borderTopLeftRadius:5,
+    borderColor:'#fff'
   },
   items_head_text: {
     fontWeight: 'bold',
@@ -243,13 +246,14 @@ const Style = StyleSheet.create({
   },
   items_list: {
     borderTopWidth: 1,
-    borderColor: '#cccccc',
+    borderColor: '#fff',
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     padding: '2%',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor:'#fff'
   },
   img: {
     width: 100,
