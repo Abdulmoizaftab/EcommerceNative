@@ -11,7 +11,7 @@ const wait = (timeout) => {
 }
 
 
-const Notification = () => {
+const Notification = ({navigation}) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -19,56 +19,43 @@ const Notification = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
   return (
-    <View>
-      <View style={styles.NavTop}>
-        <View style={styles.ParentNavTop1}>
-          <View style={styles.NavTop1}>
-            <MaterialCommunityIcons name='chevron-left' color={'#5d59ee'} style={{ fontSize: 50, marginLeft: '-8%' }} />
-            <TouchableOpacity><Text style={{ color: '#5d59ee', fontSize: 15, width: 50, marginLeft: -12, fontWeight: '500' }}>Back</Text></TouchableOpacity>
-          </View>
-          <TouchableOpacity><Text style={styles.clearall}>Clear All</Text></TouchableOpacity>
+    <View style={styles.all_item_main}>
+      
+      <View style={styles.head_main}>
+        <View>
+        <AntDesign name='arrowleft' style={styles.head_icon} onPress={()=>navigation.goBack()}/>
         </View>
-        <View style={styles.BottomNav}><Text style={styles.notify}>Notifications</Text></View>
+        <View style={styles.head_text_view}>
+          <Text style={styles.head_text}>Notifications</Text>
+        </View>
       </View>
-
-      <View style={styles.timeElaspe}>
-        <Text style={styles.Recent}>RECENT</Text>
-      </View>
-
-      <ScrollView style={{marginBottom:'10%'}}  refreshControl={
+      <ScrollView  refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
           />
-        }>
+          
+        } showsVerticalScrollIndicator={false}>
+          <View style={{borderBottomWidth:1,width:"92%",borderColor:"#b3b1b1",alignSelf:"center"}}>
+        <Text style={{color:"gray",fontSize:16,width:"95%"}}>All</Text>
+      </View>
         {arr.map((item, index) => (
 
           <View style={styles.ParentNotification} key={index}>
             <View style={styles.Notification}>
               <View style={styles.innerLeft}>
-                <Image
-                  style={styles.tinyLogo}
-                  source={{
-                    uri: 'https://p.kindpng.com/picc/s/134-1341734_contacts-icon-contacts-icon-png-transparent-png.png',
-                  }}
-                />
+                
                 <View style={styles.TextContainer}>
-                  <Text style={styles.NotificationText}>Moiz Bhai Has invited you to join Scrum Meeting working</Text>
-                  <Text style={{ alignSelf: 'flex-start', paddingTop: 4, marginLeft: '6%' }}>12 Hours Ago</Text>
+                  <Text style={{color:"gray",fontWeight:"bold"}}>Your order status has been changed. You can get your order in 3-4 working days</Text>
+                  <Text style={{color:"#c7c6c5",fontSize:11,marginTop:5}}>12 Hours Ago</Text>
                 </View>
               </View>
               <View style={styles.NotificationIcons}>
-                <AntDesign name='checkcircle' color={'#9CCC66'} size={30} />
-                <AntDesign name='closecircle' color={'#E3797C'} size={30} />
-
+                <AntDesign name='closecircle' color={'red'} style={{opacity:0.6}} size={30} />
               </View>
             </View>
           </View>
-          // <View>
-          //   <Text>
-          //     hello
-          //   </Text>
-          // </View>
+          
         ))}
       </ScrollView>
 
@@ -81,49 +68,34 @@ const Notification = () => {
 export default Notification
 
 const styles = StyleSheet.create({
-  NavTop: {
-    borderBottomWidth: 2,
-    borderColor: 'silver',
-    height: 100,
+  all_item_main: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: "#e8e7e6",
   },
-  NavTop1: {
-    // borderWidth: 2,
-    height: 50,
-    // borderColor: 'green',
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '30%',
-
-
+  
+  head_main:{
+    display:"flex",
+    flexDirection:"row",
+    alignItems:"center",
+    width:"100%",
+    padding:"3%",
+    backgroundColor:"#5A56E9"
   },
-  BottomNav: {
-    // borderWidth:2,
-    // borderColor:'magenta',
-    height: 45,
-    width: '70%'
-
+  head_icon:{
+    fontSize:20,
+    color:"white"
   },
-  ParentNavTop1: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    // borderWidth:2,
-    width: '98%'
+  head_text_view:{
+    width:"95%",
+    justifyContent:"center",
+    alignItems:"center"
   },
-  clearall: {
-    fontSize: 18,
-    color: '#5d59ee',
-    marginTop: 8,
+  head_text:{
+    fontSize:19,color:"white",fontWeight:"bold"
   },
-  notify: {
-    fontSize: 35,
-    marginLeft: '7%',
-    color: 'black',
-    fontWeight: '700',
-    marginTop: '-2%'
-
-
-  },
+  
+  
 
   timeElaspe: {
     borderBottomWidth: 2,
@@ -194,29 +166,19 @@ const styles = StyleSheet.create({
   },
   TextContainer: {
 
-    // borderWidth: 1,
-    flex: 1,
-    width: '80%',
-    alignItems: 'center',
+    
+    width: '100%',
     justifyContent: 'center',
     paddingTop: '2%',
     paddingBottom: '2%'
 
   },
-  NotificationText: {
-    fontSize: 15,
-    color: 'gray',
-    fontWeight: 'bold'
-
-  },
   NotificationIcons: {
-    // borderWidth: 2,
     // height: '50%',
-    flex: 1,
     width: '20%',
     // borderColor: 'red',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
 
   }
 
