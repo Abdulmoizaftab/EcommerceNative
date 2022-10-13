@@ -19,7 +19,7 @@ const BottomSheet = ({ reference, prodData }) => {
 
   // useEffect(()=>{
 
-  //   axios.post('http://192.168.1.24:5000/addCartItem', data={})
+  //   axios.post('http://192.168.1.17:5000/addCartItem', data={})
   //   .then()
   //   .catch()
   //   console.log('getting fro redux',reduxDataProd,reduxDataQty)

@@ -1,7 +1,8 @@
 import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import empty_cart from '../image/empty_cart.png';
+import noOrder from '../assets/fonts/images/noOrder.png';
+import loaderGif from '../assets/fonts/images/loader.gif';
 import { NativeBaseProvider,Skeleton } from 'native-base';
 
 
@@ -53,7 +54,7 @@ const Orders = ({navigation}) => {
 
   const getData = async () => {
     try {
-      const res = await fetch(`http://192.168.1.24:5000/sql/getOrderDetails/${limit}`);
+      const res = await fetch(`http://192.168.1.17:5000/sql/getOrderDetails/${limit}`);
       const result = await res.json();
       const main_arr = [result[0]];
       var id=result[0].order_id
@@ -94,7 +95,7 @@ const Orders = ({navigation}) => {
         {item.order_id?
         <View style={Style.card_header}>
           <View style={Style.card_footer2}>
-          <Text style={Style.header_order_text}>Order {item.order_id} > </Text>
+          <Text style={Style.header_order_text}>Order {item.order_id}  </Text>
           <View style={Style.card_footer}>
           {/* <Text style={Style.card_footer_text1}>1 Items, </Text> */}
           <Text style={Style.card_footer_text2}>Total: Rs. {item.total}</Text>
@@ -122,7 +123,7 @@ const Orders = ({navigation}) => {
             <Text style={Style.price}>Rs. {item.price}</Text>
             <View style={Style.details_bottom}>
               <Text style={Style.qty}>Qty: {item.quantity}</Text>
-              <Text style={Style.status}>{item.orderStatus} > </Text>
+              <Text style={Style.status}>{item.orderStatus}</Text>
             </View>
           </View>
         </View>
@@ -161,10 +162,16 @@ const Orders = ({navigation}) => {
           refreshing={IsRefreshing} onRefresh={onRefresh}
         />
       ) : (
+        isLoading?(
         <View style={Style.main_img}>
-          <Image style={{width: '70%', height: '35%'}} source={empty_cart} />
-          <Text style={{color: 'gray', fontWeight: '400'}}>No Order Items</Text>
+          <Image style={{width: 50, height: 50}} source={loaderGif} />
         </View>
+        ):(
+        <View style={Style.main_img}>
+          <Image style={{width: '70%', height: '35%'}} source={noOrder} />
+          <Text style={{color: 'gray', fontWeight: '400'}}>You haven't ordered anything yet.</Text>
+        </View>
+        )
       )}
     </View>
   );
@@ -236,7 +243,7 @@ const Style = StyleSheet.create({
     color: '#fff',
     marginVertical: '1%',
     backgroundColor: '#5A56E9',
-    padding: 5,
+    padding: 7,
     borderRadius: 10,
     fontSize: 12,
     fontStyle: 'italic',
