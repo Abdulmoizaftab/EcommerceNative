@@ -21,6 +21,10 @@ import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
 import SeeAllProducts from './screens/SeeAllProducts';
 import { View,Text } from 'react-native';
+import AllDiscountedProducts from './screens/AllDiscountedProducts';
+import ProfileScreen from './screens/profileScreen';
+
+
 const Stack=createNativeStackNavigator();
 const App = () => {
   useEffect(() => {
@@ -53,6 +57,7 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen
           options={{
             headerShown: true,
@@ -66,6 +71,7 @@ const App = () => {
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SeeAllProducts" component={SeeAllProducts} />
+        <Stack.Screen name="AllDiscountedProducts" component={AllDiscountedProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen
           options={{headerShown:true,

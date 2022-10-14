@@ -21,7 +21,7 @@ const Categories = ({navigate}) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.feature2} activeOpacity={0.7}>
+          <TouchableOpacity style={styles.feature2} activeOpacity={0.7} onPress={()=>navigate.navigate('AllDiscountedProducts')}>
             <View style={{ flexDirection: "row", paddingTop: "4%" }}>
               <Text style={{ paddingLeft: 10, color:"#5956E9",fontWeight:"bold" }}>
                 All Discount

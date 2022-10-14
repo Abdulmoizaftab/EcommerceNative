@@ -12,13 +12,21 @@ import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SkeletonJs from '../Skeleton';
 import { NativeBaseProvider } from 'native-base';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch,useSelector } from 'react-redux';
+import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
 
 const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(10);
   const [isLoading, setIsloading] = useState(true);
+
+  
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;
+  
+  const dispatch =useDispatch();
 
 
   const getdata = async () => {
@@ -35,6 +43,32 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
     getdata()
     setPopular(false)
   }, [popular]);
+
+  
+
+  const addToFav = (productDetail) => {
+    try {
+      
+      // alert("added")
+      dispatch(addFavourite(productDetail));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const removeFav = (productDetail) => {
+    try {
+      // alert("remove")
+      dispatch(removeFavourite(productDetail));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+
+  const isFavourate = id =>
+  Boolean(favArray.find(item => item.product_id === id));
+
 
   return (
     <View style={Styles.main}>
@@ -56,7 +90,12 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
             <SkeletonJs />
           </View>
         </NativeBaseProvider>
-      ):products?.map((element,key)=>(
+      ):products?.map((element,key)=>
+
+
+      
+      
+      (
         <TouchableOpacity key={key} onPress={() => navigate.navigate('Product_detail',element)}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
@@ -70,13 +109,44 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                 <Text style={Styles.cardTitle}>
                   {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
                 </Text>
-                <Text style={Styles.cardPrice}>RS. {element.price}</Text>
+                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                 <View style={Styles.cardBotm}>
-                  <Icon style={Styles.favIcon} name="md-heart-outline" />
                   <Text style={Styles.rating}>
                     4.5{' '}
                     <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
                   </Text>
+
+
+
+
+                  {/* {isFavourate(element.product_id) ? (
+              <MaterialCommunityIcons
+                name="cards-heart"
+                onPress={() => { 
+                  const productDetail = {
+                  product_id: element.product_id,
+                  name: element.name,
+                  price: element.price,
+                  image: element.imgs
+                };
+                removeFav(productDetail)}}
+                style={Styles.favIcon}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="cards-heart-outline"
+                onPress={() => {
+                  const productDetail = {
+                    product_id: element.product_id,
+                    name: element.name,
+                    price: element.price,
+                    image: element.imgs
+                  };
+                  addToFav(productDetail)}}
+                style={Styles.favIcon}
+              />
+            )} */}
+                  {/* <Icon style={Styles.favIcon} onPress={()=>{alert("hello g")}} name="md-heart-outline" /> */}
                 </View>
               </View>
             </View>
@@ -174,7 +244,7 @@ const Styles = StyleSheet.create({
   },
   rating: {
     color: '#E3A500',
-    fontSize: 12
+    fontSize: 15
   },
   cardBotm: {
     flexDirection: 'row',
@@ -182,10 +252,10 @@ const Styles = StyleSheet.create({
     marginBottom: 8,
   },
   favIcon: {
-    color: '#FB2F53',
-    fontSize: 13,
+    color: '#5A56E9',
+    fontSize: 25,
     fontWeight: '800',
-    marginTop: 1.5,
+    // marginTop: 1.5,
   },
 });
 

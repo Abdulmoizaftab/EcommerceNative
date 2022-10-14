@@ -12,6 +12,13 @@ import axios from 'axios';
 
 
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch,useSelector } from 'react-redux';
+// import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+import { addFavouriteDB, remFavouriteDB, updateFavouriteDB,getFavouriteDB } from '../redux/apiCalls';
+
+
+
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 const Product_detail = ({ route }) => {
   const paramData = route.params
@@ -20,11 +27,18 @@ const Product_detail = ({ route }) => {
   const [prdColor, setPrdColor] = useState(['Green', 'Blue', 'Red'])
   const [prdRating, setPrdRating] = useState(0)
   const [isFav, setIsFav] = useState(false)
-  const [price, setPrice] = useState(0)
-  const [prdName, setPrdName] = useState("")
+  const [price, setPrice] = useState(paramData.price)
+  const [proId, setProId] = useState(paramData.product_id)
+  const [prdName, setPrdName] = useState(paramData.name)
   const [userReview, setUserReview] = useState("")
   const refRBSheet = useRef();
   const user_id =2010
+
+
+
+  const favouriteState = useSelector(state => state.favourite)  
+  const favArray=favouriteState.favourites;  
+  const dispatch =useDispatch();
 
   const renderSize = ({ item }) => (
     <View style={Style.sizeItem}>
@@ -42,8 +56,7 @@ const Product_detail = ({ route }) => {
   useEffect(() => {
 
     setImgArr([paramData.imgs, paramData.imgs])
-    setPrice(paramData.price)
-    setPrdName(paramData.name)
+    getFavouriteDB(dispatch)
     setPrdRating(paramData.rating)
   }, [paramData])
 
@@ -66,15 +79,84 @@ const Product_detail = ({ route }) => {
     console.log(bodyData);
   }
 
+
+
+    const addToFav = (productDetail) => {
+      try {
+        console.log('hell',productDetail);
+      //*======================================================== Add or update the product inside data bases and redux
+      addFavouriteDB(dispatch,productDetail)
+       } catch (error) {
+        alert(error);
+      }
+    };
+  
+   
+    
+      
+
+
   return (
 
     <ScrollView scrollEnabled={true}>
-      <View style={Style.container} >
-        <View>
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }} >
+    <View style={Style.container} >
+      <View style={{flexDirection:'row',justifyContent:'center'}} >
+        
+        <Icon style={Style.backBtn} name='arrow-back-circle' onPress={()=>navigate.goBack()}/>
+        
+
+
+
+
+        {
+         favArray.filter(item => item.product_id === proId).length > 0
+         
+      //*======================================================== Check point to flip the heart buttons
+         ?(
+          <MaterialCommunityIcons
+            name="cards-heart"
+            onPress={() => {
+              const productDetail = {
+              product_id: proId,
+              name: prdName,
+              price: price,
+              image: paramData.imgs
+            };
+            remFavouriteDB(dispatch,productDetail)
+
+          }}
+            style={Style.heartBtn}
+          />
+          
+        )
+          
+          :(      
+          
+          
+          <MaterialCommunityIcons
+              name="cards-heart-outline"
+              onPress={() => {
+                const productDetail = {
+                product_id: proId,
+                name: prdName,
+                price: price,
+                image: paramData.imgs
+              };
+              addToFav(productDetail)
+            
+            }}
+              style={Style.heartBtn}
+            />)
+        }
+              
+            
+              
+            
+        
+        
 
             <Icon style={Style.backBtn} name='arrow-back-circle' onPress={() => navigate.goBack()} />
-            {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={() => setIsFav(!isFav)} /> : <Icon style={Style.heartBtn} name='heart-outline' onPress={() => setIsFav(!isFav)} />}
+            {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={() => setIsFav(!isFav)} /> : <Icon style={Style.heartBtn} name='heart-outline' onPress={() => setIsFav(!isFav)} />} */}
 
 
 
@@ -236,8 +318,8 @@ const Product_detail = ({ route }) => {
           </RBSheet>
         </View>
 
-      </View>
-    </ScrollView>
+        </ScrollView>
+      // </View>
   );
 }
 
@@ -320,13 +402,32 @@ const Style = StyleSheet.create({
     top: 6,
     left: 15,
   },
-  heartBtn: {
-    fontSize: 30,
-    color: 'red',
-    position: 'absolute',
-    zIndex: 999,
-    top: 6,
-    right: 15,
+  heartBtn:{
+    fontSize:40,
+    color:'#5A56E9',
+    position:'absolute',
+    zIndex:999,
+    top:6,
+    right:15,
+  },
+   heartBtn2:{
+    fontSize:40,
+    color:'#5A56E9',
+    position:'absolute',
+    zIndex:999,
+    top:50,
+    right:15,
+  },
+  bottomSheetDrag:{
+    height:50,
+    width:"100%",
+    backgroundColor:'white',
+    position:'absolute',
+    bottom:40,
+    borderWidth:1,
+    borderColor:'lightGrey',
+    borderTopLeftRadius:25,
+    borderTopRightRadius:25,
   },
 
   Line: {
