@@ -14,8 +14,19 @@ import SortBottomSheet from '../components/SortBottomSheet';
 
 
 
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch,useSelector } from 'react-redux';
+import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+
+
 const SeeAllPopular = () => {
   const navigate = useNavigation()
+
+  
+  const favouriteState = useSelector(state => state.favourite)
+  const favArray=favouriteState.favourites;  
+  const dispatch =useDispatch();
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(20);
@@ -109,6 +120,29 @@ const SeeAllPopular = () => {
     setIsRefreshing(false)
   }
 
+  const addToFav = (productDetail) => {
+    try {
+      
+      // alert("added")
+      dispatch(addFavourite(productDetail));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const removeFav = (productDetail) => {
+    try {
+      // alert("remove")
+      dispatch(removeFavourite(productDetail));
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+
+
+
+
   const flatlistEnd = () => {
     return (
       isLoading ?
@@ -120,26 +154,40 @@ const SeeAllPopular = () => {
     );
   }
 
-  const addToCart = async (productData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-      else {
-        let cartItem = [];
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const addToCart = async (productData) => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //     else {
+  //       let cartItem = [];
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
   const renderItem = (element) => {
+
+    const productDetail = {
+      product_id: element.item.product_id,
+      name: element.item.name,
+      price: element.item.price,
+      image: element.item.imgs
+    }
+
+
+
+
+    // const isFavourate = id =>
+    // Boolean(favArray.find(item => item.product_id === id));
+
 
     return (
       <View style={Style.all_item_main2}>
@@ -183,9 +231,23 @@ const SeeAllPopular = () => {
             {/* </View> */}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+          {/* {isFavourate(element.item.product_id) ? (
+              <MaterialCommunityIcons
+                name="cards-heart"
+                onPress={() => {removeFav(productDetail)}}
+                style={Style.favIcon}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="cards-heart-outline"
+                onPress={() => {addToFav(productDetail)}}
+                style={Style.favIcon}
+              />
+            )} */}
+
+          {/* <TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
@@ -395,5 +457,11 @@ const Style = StyleSheet.create({
     paddingHorizontal: '5%',
     justifyContent:'space-between',
     alignItems:'center'
-  }
+  },
+   favIcon: {
+    color: '#5A56E9',
+    fontSize: 25,
+    fontWeight: '800',
+    // marginTop: 1.5,
+  },
 });

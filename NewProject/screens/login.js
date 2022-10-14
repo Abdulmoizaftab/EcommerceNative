@@ -35,6 +35,10 @@ const Login = ({ navigation }) => {
   }
   
   return (
+
+    <TouchableWithoutFeedback onPress={()=>{
+      Keyboard.dismiss()
+    }}>
     <View style={Style.main}>
       <View style={Style.dot1}></View>
       <View style={Style.dot2}></View>
@@ -72,6 +76,7 @@ const Login = ({ navigation }) => {
         </View>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 const Style = StyleSheet.create({
