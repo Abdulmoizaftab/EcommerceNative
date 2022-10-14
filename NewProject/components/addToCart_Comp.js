@@ -260,7 +260,8 @@ const Style = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     padding: "1%",
-    marginBottom: "20%"
+    flex:1,
+    marginBottom:'7%'
   }, swipe_style: {
     width: "98.5%",
     alignSelf: 'center',

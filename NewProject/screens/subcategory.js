@@ -131,7 +131,7 @@ const Subcategory = ({navigation, route}) => {
             </View>
           </View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => addToCart(productDetail)}
             style={{
               flexDirection: 'column',
@@ -145,7 +145,7 @@ const Subcategory = ({navigation, route}) => {
               marginBottom: 4,
             }}>
             <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
 <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
@@ -282,8 +282,11 @@ const Style = StyleSheet.create({
   },
   cardTitle: {
     margin: 2,
+    marginVertical:'3%',
+    paddingHorizontal:'3%',
     color: 'black',
     fontSize: 13,
+    zIndex:-997,
   },
   cardPrice: {
     fontSize: 17,
@@ -301,8 +304,9 @@ const Style = StyleSheet.create({
   cardBotm: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: '5%',
-    paddingLeft: '2%',
-    alignItems: 'center',
+    marginVertical: "3%",
+    paddingLeft: "2%",
+    alignItems: "center",
+    width:'95%'
   },
 });
