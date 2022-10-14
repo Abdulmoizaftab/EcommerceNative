@@ -170,11 +170,13 @@ const Home_inside = ({ navigate }) => {
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
           <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)}>
+            <View style={{borderBottomWidth: 1,width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
+
             <Image style={Style.all_item_main4_img}
               resizeMode="cover"
               source={{ uri: element.item.imgs }}
-            />
-          </TouchableOpacity>
+              />
+              </View>
           <View>
             <Text style={Style.cardTitle}>
               {element.item.name.split(/\s+/).slice(0, 4).join(" ") + "..."}
@@ -185,7 +187,7 @@ const Home_inside = ({ navigate }) => {
                 RS. {element.item.price}
               </Text>
               <Text style={Style.rating}>
-                4.5{' '}
+                {element.item.rating}{' '}
                 <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
               </Text>
             </View>
@@ -193,16 +195,16 @@ const Home_inside = ({ navigate }) => {
 
 
           {/* {isFavourate(element.item.product_id) ? (
-              <MaterialCommunityIcons
-                name="cards-heart"
-                onPress={() => {removeFav(productDetail)}}
-                style={Style.middle2_2_icon}
-              />
+            <MaterialCommunityIcons
+            name="cards-heart"
+            onPress={() => {removeFav(productDetail)}}
+            style={Style.middle2_2_icon}
+            />
             ) : (
               <MaterialCommunityIcons
-                name="cards-heart-outline"
-                onPress={() => {addToFav(productDetail)}}
-                style={Style.middle2_2_icon}
+              name="cards-heart-outline"
+              onPress={() => {addToFav(productDetail)}}
+              style={Style.middle2_2_icon}
               />
             )} */}
 
@@ -212,22 +214,22 @@ const Home_inside = ({ navigate }) => {
           {/* {
             favArray.includes(element.item.product_id)?(<TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="heart" style={Style.middle2_2_icon} />
-          </TouchableOpacity>)
+            </TouchableOpacity>)
           :(<TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
+          <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
           </TouchableOpacity>)
-          } */}
+        } */}
           
 
           {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={removeValue} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            </TouchableOpacity>
+            
+            <TouchableOpacity onPress={removeValue} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <Feather name="delete" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => removeSpecificProduct(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+            <TouchableOpacity onPress={() => removeSpecificProduct(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
             <Feather name="home" style={Style.middle2_2_icon} />
           </TouchableOpacity> */}
 
@@ -235,6 +237,7 @@ const Home_inside = ({ navigate }) => {
           <Feather name="flower" style={Style.middle2_2_icon} />
         </TouchableOpacity> */}
 
+        </TouchableOpacity>
         </View>
       </View>
     )
@@ -324,7 +327,7 @@ const Style = StyleSheet.create({
     marginRight: 4,
   },
   middle2_2_icon: {
-    fontSize: 25,
+    fontSize: 15,
     marginRight: 10,
     color: "gray"
   },
@@ -351,10 +354,8 @@ const Style = StyleSheet.create({
     elevation:-998
   },
   all_item_main4: {
-    borderBottomWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomColor: "#ACACAC",
     paddingBottom: 8,
     zIndex:-997,
     elevation:-998
@@ -367,6 +368,7 @@ const Style = StyleSheet.create({
   },
   cardTitle: {
     margin: 2,
+    marginVertical:'3%',
     color: 'black',
     fontSize: 13,
     zIndex:-997,
@@ -388,7 +390,7 @@ const Style = StyleSheet.create({
   cardBotm: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: "5%",
+    marginVertical: "3%",
     paddingLeft: "2%",
     alignItems: "center"
   }

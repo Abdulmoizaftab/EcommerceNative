@@ -109,10 +109,10 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                 <Text style={Styles.cardTitle}>
                   {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
                 </Text>
-                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                 <View style={Styles.cardBotm}>
+                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                   <Text style={Styles.rating}>
-                    4.5{' '}
+                    {element.rating}{' '}
                     <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
                   </Text>
 
@@ -202,7 +202,7 @@ const Styles = StyleSheet.create({
     color: "gray"
   },
   cardDesc: {
-    paddingHorizontal: 10,
+    paddingHorizontal: "4%",
   },
   ProdCard: {
     alignItems: 'center',
@@ -231,7 +231,7 @@ const Styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
     flexWrap: 'wrap',
-    color: "black"
+    color: "black",
   },
   cardPrice: {
     fontSize: 17,
@@ -249,7 +249,7 @@ const Styles = StyleSheet.create({
   cardBotm: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginVertical: "3%",
   },
   favIcon: {
     color: '#5A56E9',
