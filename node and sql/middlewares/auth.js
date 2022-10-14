@@ -25,19 +25,21 @@ const isLogin=async(req,res,next)=>{
     }
 }
 
-// const isLogout=async(req,res,next)=>{
-//     try {
-//         if(req.session.user_id){
-//             console.log("you are logged in");
-//         }
-//         else{
-//             console.log("Not logged in");
-//         }
-//     } catch (error) {
+const isLogout=async(req,res,next)=>{
+    try {
+        if(!req.session.user_id){
+            next()
+        }
+        else{
+            res.status(200).send("You are logged in")
+        }
         
-//     }
-// }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports={
-    isLogin
+    isLogin,
+    isLogout
 }

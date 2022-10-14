@@ -118,7 +118,7 @@ const Favorites = ({navigation}) => {
         <View style={Style.all_item_main3}>
           <TouchableOpacity
             style={Style.all_item_main4}
-            onPress={() => navigate.navigate('Product_detail')}>
+            onPress={() => navigation.navigate('Product_detail',item)}>
             {item.discount > 0 ? (
               <View>
                 <Text style={Style.discount}>{item.discount}%</Text>
