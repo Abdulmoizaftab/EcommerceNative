@@ -83,7 +83,7 @@ const Product_detail = ({ route }) => {
 
     const addToFav = (productDetail) => {
       try {
-        
+        console.log('hell',productDetail);
       //*======================================================== Add or update the product inside data bases and redux
       addFavouriteDB(dispatch,productDetail)
        } catch (error) {
@@ -156,7 +156,7 @@ const Product_detail = ({ route }) => {
         
 
             <Icon style={Style.backBtn} name='arrow-back-circle' onPress={() => navigate.goBack()} />
-            {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={() => setIsFav(!isFav)} /> : <Icon style={Style.heartBtn} name='heart-outline' onPress={() => setIsFav(!isFav)} />}
+            {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={() => setIsFav(!isFav)} /> : <Icon style={Style.heartBtn} name='heart-outline' onPress={() => setIsFav(!isFav)} />} */}
 
 
 

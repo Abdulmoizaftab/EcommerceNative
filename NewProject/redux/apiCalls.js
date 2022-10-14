@@ -89,7 +89,7 @@ export const addFavouriteDB = async (dispatch, data) => {
 
     try {
 
-        const res = await axios.post("http://192.168.1.4:5000/sql/setFavourites", { favouritedProd: data.product_id });
+        const res = await axios.post("http://192.168.1.17:5000/sql/setFavourites", { favouritedProd: data.product_id });
         // const result=await res.json()
         dispatch(addFavourite(res.data));
         //console.log(res.data);
@@ -106,7 +106,7 @@ export const updateFavouriteDB = async (dispatch, data) => {
 
     try {
 
-        const res = await axios.post("http://192.168.1.4:5000/sql/updateFavourites", { favouritedProd: data.product_id });
+        const res = await axios.post("http://192.168.1.17:5000/sql/updateFavourites", { favouritedProd: data.product_id });
         // const result=await res.json()
         dispatch(addFavourite(res.data));
         console.log(res.data);
@@ -122,7 +122,7 @@ export const getFavouriteDB = async (dispatch) => {
 
     try {
 
-        const res = await axios.get("http://192.168.1.4:5000/sql/getFavourites");
+        const res = await axios.get("http://192.168.1.17:5000/sql/getFavourites");
         // const result=await res.json()
         dispatch(getFavourite(res.data));
         //console.log("==========XXXX===",res.data);
@@ -136,7 +136,7 @@ export const getFavouriteDB = async (dispatch) => {
 
 export const remFavouriteDB = async (dispatch, data) => {
     try {
-        const res = await axios.post("http://192.168.1.4:5000/sql/delFavourites", { favouritedProd: data.product_id });
+        const res = await axios.post("http://192.168.1.17:5000/sql/delFavourites", { favouritedProd: data.product_id });
         // const result=await res.json()
         dispatch(removeFavourite(res.data));
         //  console.log(res.data);
