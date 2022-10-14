@@ -9,7 +9,7 @@ const ProfileScreen = ({navigation}) => {
     const [categories,setCategories]=useState([])
 
     const getCategories=async()=>{
-      const data=await fetch('http://192.168.1.4:5000/sql//allCategories')
+      const data=await fetch('http://192.168.1.17:5000/sql//allCategories')
       const res=await data.json()
       setCategories(res)
     }
@@ -24,7 +24,9 @@ const ProfileScreen = ({navigation}) => {
     <ScrollView>
         <View style={{alignItems:'center', justifyContent:'center',width:"100%",backgroundColor:"white",height:"100%"}}>
         <LinearGradient style={styles.profileCard} start={{x: 0, y: 0}} end={{x: 1.2, y: 0}} colors={['#fff', '#D1D1ED']}>
-             <Text style={styles.cardText}>Profile user text</Text>
+             <Text style={styles.userName}>Profile user text</Text>
+             <Text style={styles.userEmail}>user@gmail.com</Text>
+             <Text style={styles.userEmail}>0310 xxxxxx67</Text>
              {/* <Image
              style={styles.logo}
              source={{
@@ -35,7 +37,7 @@ const ProfileScreen = ({navigation}) => {
            </LinearGradient>
             
       
-        <TouchableOpacity activeOpacity={0.9} style={{marginVertical:"2%",width: "90%"}} onPress={()=>navigation.navigate('Subcategory',{cat_id:v.HierLevel,cat:v.name})}>
+          <TouchableOpacity activeOpacity={0.9} style={{marginVertical:"2%",width: "90%"}} onPress={()=>navigation.navigate('Subcategory',{cat_id:v.HierLevel,cat:v.name})}>
              <LinearGradient style={styles.profileButton} start={{x: 0, y: 0}} end={{x: 1.2, y: 0}} colors={['#fff', '#D1D1ED']}>
              <Text style={styles.cardText}>My Orders</Text>
             
@@ -72,20 +74,23 @@ const ProfileScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
     profileCard:{
-        width: "100%",
-        height: 250,
+        width: "90%",
+        height: 150,
         elevation:5,
         borderColor: "#8580AF",
         borderRadius: 15,
-        flexDirection:'row',
+        flexDirection:'column',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'center',
+        marginTop:"6%",
+        borderColor:"#5D59EE",
+        borderWidth:3,
 
 
         
     },profileButton:{
       width: "100%",
-      height: 80,
+      height: 70,
       elevation:5,
       borderColor: "#8580AF",
       borderRadius: 15,
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
       
   },
     cardText:{
-        fontSize:20,
+        fontSize:19,
         color: "#5D59EE",
         marginLeft:"5%",
         width:"100%"
@@ -106,6 +111,22 @@ const styles = StyleSheet.create({
         // width: 150,
         // height:100,
         resizeMode:'cover',
+    },userName:{
+      
+      fontSize:22,
+      color: "#5D59EE",
+      alignSelf:'center',
+      fontWeight:'bold',
+      
+
+
+    },userEmail:{
+      
+      fontSize:16,
+      color: "gray",
+      alignSelf:'center',
+      // fontWeight:'bold',
+
     }
 
 });
