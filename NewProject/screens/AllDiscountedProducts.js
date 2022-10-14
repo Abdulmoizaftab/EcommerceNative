@@ -98,22 +98,22 @@ const AllDiscountedProducts = () => {
 
 
 
-  const addToFav = async productDetail => {
-    try {
-      dispatch(addFavourite(productDetail));
-    } catch (error) {
-      alert(error);
-    }
-  };
+  // const addToFav = async productDetail => {
+  //   try {
+  //     dispatch(addFavourite(productDetail));
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
 
-  const removeFav = async productDetail => {
-    try {
+  // const removeFav = async productDetail => {
+  //   try {
       
-      dispatch(removeFavourite(productDetail));
-    } catch (error) {
-      alert(error);
-    }
-  };
+  //     dispatch(removeFavourite(productDetail));
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
 
   const renderItem = element => {
 
@@ -143,7 +143,7 @@ const AllDiscountedProducts = () => {
               </Text>
             </View>
 
-            {isFavourate(element.item.product_id) ? (
+            {/* {isFavourate(element.item.product_id) ? (
               <MaterialCommunityIcons
                 name="cards-heart"
                 onPress={() => {removeFav(productDetail);}}
@@ -155,7 +155,7 @@ const AllDiscountedProducts = () => {
                 onPress={() => {addToFav(productDetail);}}
                 style={Style.middle2_2_icon}
               />
-            )}
+            )} */}
 
             <Image
               style={Style.all_item_main4_img}
