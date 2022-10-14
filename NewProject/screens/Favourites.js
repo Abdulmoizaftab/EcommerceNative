@@ -127,7 +127,7 @@ const Favorites = ({navigation}) => {
             <Image
               style={Style.all_item_main4_img}
               resizeMode="cover"
-              source={{uri: item.image}}
+              source={{uri: item.imgs}}
             />
           </TouchableOpacity>
           <View>
