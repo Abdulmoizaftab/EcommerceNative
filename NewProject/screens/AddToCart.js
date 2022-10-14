@@ -21,7 +21,7 @@ const AddToCart = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    axios.get(`http://192.168.1.17:5000/sql/getCartItem`)
+    axios.get(`http://192.168.1.4:5000/sql/getCartItem`)
       .then(function (res) {
         setDbProds(res.data)
         setLoading(false)

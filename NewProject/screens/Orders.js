@@ -54,7 +54,7 @@ const Orders = ({navigation}) => {
 
   const getData = async () => {
     try {
-      const res = await fetch(`http://192.168.1.17:5000/sql/getOrderDetails/${limit}`);
+      const res = await fetch(`http://192.168.1.4:5000/sql/getOrderDetails/${limit}`);
       const result = await res.json();
       const main_arr = [result[0]];
       var id=result[0].order_id
