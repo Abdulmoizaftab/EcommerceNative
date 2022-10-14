@@ -19,6 +19,8 @@ import AllVendorProducts from './screens/AllVendorProducts';
 import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
+import SeeAllProducts from './screens/SeeAllProducts';
+import { View,Text } from 'react-native';
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
 import ProfileScreen from './screens/profileScreen';
 
@@ -34,6 +36,7 @@ const App = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          
         }}>
         <Stack.Screen name="TabNav" component={TabNav} />
         <Stack.Screen name="Login" component={Login} />
@@ -67,6 +70,7 @@ const App = () => {
             headerTitleAlign: "center"
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
+        <Stack.Screen name="SeeAllProducts" component={SeeAllProducts} />
         <Stack.Screen name="AllDiscountedProducts" component={AllDiscountedProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen

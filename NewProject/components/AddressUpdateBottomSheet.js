@@ -1,48 +1,50 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { updateAddress } from '../redux/AddressRedux'
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addressUpdate } from '../redux/apiCalls'
+import axios from 'axios'
+import { useNavigation } from '@react-navigation/native'
 
-const AddressUpdateBottomSheet = ({reference,modifying_id}) => {
-    //console.log(modifying_id);
+const AddressUpdateBottomSheet = ({ reference, addressToUpdate,trigger,setTrigger }) => {
+
+    const navigate = useNavigation()
     const dispatch = useDispatch()
-    const state = useSelector(state => state.address)
-    const toModify = state.addresses.filter(item => item.id === modifying_id)
-    //console.log(toModify[0].title);
-    const [title, setTttle] = useState(toModify[0].title)
-    const [recipent, setRecipent] = useState(toModify[0].recipent)
-    const [address, setAddress] = useState(toModify[0].address)
-    const [phoneInput, setPhoneInput] = useState(toModify[0].phone.toString())
-    const [id ,setId] = useState(modifying_id)
+    const [title, setTitle] = useState(addressToUpdate.address_title)
+    const [recipent, setRecipent] = useState(addressToUpdate.recipent)
+    const [address, setAddress] = useState(addressToUpdate.address_line)
+    const [phoneInput, setPhoneInput] = useState(addressToUpdate.mobile)
+    const address_id = addressToUpdate.address_id
 
 
     const handlePress = () => {
         reference.current.close();
-        const phone = parseInt(phoneInput)
+        const phone = phoneInput
         const payload = {
-            id,
             address,
             phone,
             recipent,
             title,
         }
-        dispatch(updateAddress(payload))
+        addressUpdate(dispatch, { address_id, payload })
+        // navigate.navigate('AddressBook')
+        setTrigger(!trigger)
     }
 
     return (
         <View style={styles.main}>
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='card-text-outline' color='gray' size={20} /> Address Title</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setTttle} value={title} />
+            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setTitle} value={title} />
 
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='account-outline' color='gray' size={20} /> Recipent Name</Text>
             <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setRecipent} value={recipent} />
 
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='map-marker-outline' color='gray' size={20} /> Address</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setAddress} value={address}/>
+            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setAddress} value={address} />
 
             <Text style={styles.inputLabelStyle} ><MaterialCommunityIcons name='phone-outline' color='gray' size={20} /> Phone #</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} keyboardType='numeric' onChangeText={setPhoneInput} value={phoneInput}/>
+            <TextInput selectionColor='black' style={styles.inputStyle} keyboardType='numeric' onChangeText={setPhoneInput} value={phoneInput} />
 
             <TouchableOpacity style={styles.btnStyle} onPress={handlePress}>
                 <Text style={styles.btnText}>Update Address</Text>

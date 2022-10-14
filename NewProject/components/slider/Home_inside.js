@@ -30,11 +30,12 @@ const Home_inside = ({ navigate }) => {
   const [limit, setlimit] = useState(6);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
+  const [head_comp,setHead_Comp] = useState(false)
 
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.4:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.17:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -74,32 +75,32 @@ const Home_inside = ({ navigate }) => {
     }
   }
 
-  const removeSpecificProduct = async (productData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        const removedData = cartItem.filter(object => object.product_id != productData.product_id)
-        console.log("🚀  file: Home_inside.js  line 71  removeSpecificProduct  removedData", removedData)
-        await AsyncStorage.removeItem('@cartItems')
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
-      }
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const removeSpecificProduct = async (productData) => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       const removedData = cartItem.filter(object => object.product_id != productData.product_id)
+  //       console.log("🚀  file: Home_inside.js  line 71  removeSpecificProduct  removedData", removedData)
+  //       await AsyncStorage.removeItem('@cartItems')
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(removedData));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
 
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@cartItems')
-      console.log("🚀  file: Home_inside.js  line 167  getData  jsonValue", jsonValue)
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const getData = async () => {
+  //   try {
+  //     const jsonValue = await AsyncStorage.getItem('@cartItems')
+  //     console.log("🚀  file: Home_inside.js  line 167  getData  jsonValue", jsonValue)
+  //     return jsonValue != null ? JSON.parse(jsonValue) : null;
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
 
 
@@ -245,11 +246,11 @@ const Home_inside = ({ navigate }) => {
 
   const onRefresh = () => {
     setIsRefreshing(true);
-    setProducts([]);
-    setlimit(6);
+    setHead_Comp(true);
+    setlimit(4);
     setIsRefreshing(false)
   }
-
+  
   return (
     <View style={Style.all_item_main}>
       <FlatList
@@ -266,31 +267,24 @@ const Home_inside = ({ navigate }) => {
         
           {/* //?Categories buttons============================================== */}
         <Categories navigate={navigate}/>
-
-        
-          {/* //?Vendor Slider============================================== */}
-        <VendorSlider/>
-        
-          {/* //?popular Slider============================================== */}
-        <Popuplar_slider navigate={navigate}/>
-
+        <VendorSlider popular={head_comp} setPopular={setHead_Comp}/>
+        <Popuplar_slider navigate={navigate} popular={head_comp} setPopular={setHead_Comp}/>
         <View style={Style.middle2}>
 
 
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
         </View>
-
-
-        {/* <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6}>
+        <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6} onPress={()=>navigate.navigate("SeeAllProducts")}>
           <Text style={Style.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
-        </TouchableOpacity> */}
+        </TouchableOpacity> 
         </View>
         </View>
       }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}  
       ListFooterComponent={flatlistEnd}
+      extraData={head_comp}
       onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh}/>
   </View>
   );
@@ -332,7 +326,7 @@ const Style = StyleSheet.create({
   middle2_2_icon: {
     fontSize: 25,
     marginRight: 10,
-    color: '#5A56E9'
+    color: "gray"
   },
   all_item_main: {
     flex: 1,
@@ -342,7 +336,10 @@ const Style = StyleSheet.create({
   all_item_main2: {
     width: '50%',
     padding: 4,
-    justifyContent: "center"
+    justifyContent: "center",
+    zIndex:-997,
+    elevation:-998
+    
   },
   all_item_main3: {
     padding: 5,
@@ -350,6 +347,8 @@ const Style = StyleSheet.create({
     borderRadius: 10,
     elevation: 3.5,
     shadowColor: '#52006A',
+    zIndex:-997,
+    elevation:-998
   },
   all_item_main4: {
     borderBottomWidth: 1,
@@ -357,15 +356,21 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: "#ACACAC",
     paddingBottom: 8,
+    zIndex:-997,
+    elevation:-998
   },
   all_item_main4_img: {
     width: '80%',
-    height: 120
+    height: 120,
+    zIndex:-997,
+    //elevation:-998
   },
   cardTitle: {
     margin: 2,
     color: 'black',
-    fontSize: 13
+    fontSize: 13,
+    zIndex:-997,
+    elevation:-998
   },
   cardPrice: {
     fontSize: 17,

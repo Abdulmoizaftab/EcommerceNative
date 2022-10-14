@@ -1,25 +1,44 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Image } from 'react-native'
+import React , {useEffect,useState} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Octicons from 'react-native-vector-icons/Octicons'
 import Feather from 'react-native-vector-icons/Feather'
 import { Radio, NativeBaseProvider } from 'native-base'
-
+import axios from 'axios'
 import { useSelector } from 'react-redux';
+import loadingGif from '../assets/fonts/images/loader.gif'
+
 
 const CheckOutScreenNew = ({ route }) => {
   const navigate = useNavigation()
   const address = useSelector(state => state.address)
   const selectedValue = route.params
+  console.log('selected=>',selectedValue);
+  const [dbAddress,setDbAddress] = useState([]);
+  const [loading,setLoading] = useState(true);
+  const [checkOutTrigger,setCheckOutTrigger] = useState(true);
+  const user_id =2010;
+
+  useEffect(() => {
+    axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
+     .then(function (response) {
+       setDbAddress(response.data)
+       setLoading(false)
+     })
+     .catch(function (err) {
+       console.log(err);
+     })
+ }, [checkOutTrigger])
+
   return (
     <>
       <ScrollView>
         <View style={styles.main}>
           <View style={styles.informationView}>
             <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Shipping Information</Text>
-            <TouchableOpacity onPress={() => navigate.navigate('AddressBook')}>
+            <TouchableOpacity onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
               <Text style={styles.buttonAdd}>
                 Add
               </Text>
@@ -27,37 +46,61 @@ const CheckOutScreenNew = ({ route }) => {
           </View>
           <View style={styles.addAddressBtnView}>
             {
-              address.addresses.length !== 0 ? (
+              dbAddress.length !== 0 ? (
                 selectedValue !== undefined ? (
+                  Object.keys(selectedValue).length !==0 ? (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
                       <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.recipent}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address}</Text>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address_line}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {selectedValue.phone}</Text>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.mobile}</Text>
                     </View>
                   </View>
+
+                  ):(
+                    <View style={styles.addressDetailsView}>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].recipent}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].address_line}</Text>
+                    </View>
+                    <View style={styles.addressDetailsInside}>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress[0].mobile}</Text>
+                    </View>
+                  </View>
+                  )
                 ) : (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{address.addresses[0].recipent}</Text>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].recipent}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{address.addresses[0].address}</Text>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].address_line}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {address.addresses[0].phone}</Text>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress[0].mobile}</Text>
                     </View>
                   </View>
                 )
               ) : (
-                <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook')}>
-                  <Entypo name="plus" size={30} color="#444" />
-                  <Text style={{ fontSize: 21 }}> Add Address</Text>
-                </TouchableOpacity>
+
+                  loading === true ? (
+                  <View style={styles.loaderGifView}>
+                    <Image style={styles.imgStyleGif} source={loadingGif}></Image>
+                  </View>
+
+                  ):(
+                    <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
+                      <Entypo name="plus" size={30} color="#444" />
+                      <Text style={{ fontSize: 21 }}> Add Address</Text>
+                    </TouchableOpacity>
+                  )
+                
               )
             }
 
@@ -66,7 +109,7 @@ const CheckOutScreenNew = ({ route }) => {
           <View style={[styles.informationView, { marginTop: '4%' }]}>
             <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Payment Information</Text>
             <TouchableOpacity activeOpacity={1}>
-              <Text style={[styles.buttonAdd, { color: 'transparent' }]}>
+              <Text style={[styles.buttonAdd, { color: 'white' }]}>
                 Add
               </Text>
             </TouchableOpacity>
@@ -89,9 +132,9 @@ const CheckOutScreenNew = ({ route }) => {
         </View>
       </ScrollView>
       {
-        address.addresses.length !==0 ? (
+        dbAddress.length !==0 ? (
         <View style={styles.finalCheckout}>
-          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary')}>
+          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary',{data:dbAddress})}>
             <Text style={styles.checkoutBtnText}>Checkout</Text>
           </TouchableOpacity>
         </View>
@@ -113,10 +156,15 @@ const styles = StyleSheet.create({
     marginVertical: '5%',
   },
   buttonAdd: {
-    color: '#5D59EE',
+    color: 'white',
     fontSize: 18,
     fontWeight: '500',
     opacity: 1,
+    backgroundColor:"#5D59EE",
+    padding:5,
+    borderRadius:10,
+    width:60,
+    textAlign:'center'
   },
   addAddressBtnView: {
     alignSelf: 'center',
@@ -162,16 +210,16 @@ const styles = StyleSheet.create({
   finalCheckout: {
     alignSelf: 'center',
     position: 'absolute',
-    bottom: '2%',
+    bottom: '0%',
     justifyContent: 'center',
-    zIndex: 999
+    zIndex: 999,
+    width:"100%"
   },
   checkoutBtn: {
     backgroundColor: '#5D59EE',
-    padding: '7%',
+    padding: '3%',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 25,
     elevation: 10,
     shadowColor: '#333'
   },
@@ -179,5 +227,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'white',
     fontWeight: '600'
+  },
+  imgStyleGif: {
+    width: 50,
+    height: 50,
+  },
+  loaderGifView:{
+    alignSelf: 'center',
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    padding: '5%',
+    alignItems:'center',
+    justifyContent:'center'
   }
 })

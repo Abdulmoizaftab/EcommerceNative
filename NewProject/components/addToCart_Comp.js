@@ -7,60 +7,89 @@ import { useDispatch, useSelector } from 'react-redux';
 import empty_cart from '../image/empty_cart.png';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { deleteProductTest, addProductTest, resetCartTest, modifyCartTest } from '../redux/Test_Redux';
+import { cartModificationDecrease, cartModificationIncrease,deleteFromCart } from '../redux/apiCalls';
+import loadingGif from '../assets/fonts/images/loader.gif'
 
-const AddToCart_Comp = () => {
-
-  // console.log(Products)
+const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
   const dispatch = useDispatch()
+  const [error, setError] = useState(false)
+  const [dbProduct, setDbProduct] = useState([])
+  const [swipeClose, setSwipeClose] = useState(true)
   const reduxData = useSelector(state => state.cart.products);
-
   const reduxDataTest = useSelector(state => state.test.products);
   const TestreduxDataTotal = useSelector(state => state.test.total);
   const TestreduxDataTotalTest = useSelector(state => state.cart.total);
-  const TestreduxDataquantity = useSelector(state => state.test.quantity);
+  const testreduxDataquantity = useSelector(state => state.test.quantity);
   // console.log("🚀 ~ file: addToCart_Comp.js ~ line 20 ~ TestreduxDataquantity", TestreduxDataTotal,TestreduxDataTotalTest)
 
-  const getData = () => {
-    console.log("🚀 ~ ", reduxDataTest)
-  }
+  // const getData = () => {
+  //   console.log("🚀 ~ ", reduxDataTest)
+  // }
+
+  useEffect(() => {
+   dispatch(resetCartTest())
+  }, [])
+  
+
   const selectItem = (item, checkboxValue) => {
     if (checkboxValue == true) {
-      console.log("🚀 false", checkboxValue)
+      // console.log("🚀 false", checkboxValue)
+      // console.log("🚀 check", item)
       dispatch(addProductTest(item))
     }
     else {
-      console.log("🚀 true", checkboxValue, item.product.product_id)
-      dispatch(deleteProductTest(item.product.product_id))
+      // console.log("🚀 true", checkboxValue, item.product_id)
+      dispatch(deleteProductTest(item.product_id))
     }
   }
 
-  const clearData = () => {
-    dispatch(resetCartTest())
+  const decreaseQuantity = (element) => {
+    const payload = {
+      product_id : element.product_id
+    }
+    // dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product_id }))
+    dispatch(modifyCartTest({ quantity: element.quantity - 1, product_id: element.product_id }))
+    cartModificationDecrease(dispatch, payload);
+    setTrigger(!trigger)
   }
+  
+  const increaseQuantity = (element) => {
+    const payload = {
+      product_id : element.product_id,
+      quantity:1
+    }
+    // dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product_id }))
+    dispatch(modifyCartTest({ quantity: element.quantity + 1, product_id: element.product_id }))
+    cartModificationIncrease(dispatch, payload);
+    setTrigger(!trigger)
+  }
+  
+  const isItemChecked = (id) =>{
+    let isChecked=false;
+    if (reduxDataTest.length === 0) {
+      return false
+    } 
+    else {
+      reduxDataTest.map((element)=>{
+        if(element.product_id === id){
+          isChecked=true
+        }
+      })
 
-  // console.log(reduxData)
+      return isChecked
+    }
+  }
+  
+  
+  const errorFunction = () =>{
+    setTimeout(() => {
+      setError(false)
+    }, 5000);
 
-  // const selectItem = (item,checkboxValue)=>{
-  //   console.log(checkboxValue)
-  // } 
-
-
-  // console.log(items)
-  // const Items = useSelector(
-  //   (state) => state.cartReducer.selectedItems.items 
-  //   );
-  //   console.log(Items)
-  // Items.map((item)=>{
-  //   return(
-  //     console.log(item.product.price)
-  //   )
-  // })
-  // const total = reduxData
-  //     .map((item) => Number(item.product.price))
-  //     .reduce((prev, curr) => prev + curr, 0);
-
-  // console.log(total)
-
+    return(
+      <Text style={{alignSelf:"center" , color:'red' , marginVertical:'2%' }}>Please deselect the item and then delete it from the cart. </Text>
+    )
+  }
 
   const re_icon = () => {
     return (
@@ -73,19 +102,34 @@ const AddToCart_Comp = () => {
     {
       text: re_icon(),
       onPress: () => {
-
-        //alert("Delete Cancel...!!",i)
-        console.log("hello==>", che);
-        dispatch(deleteProduct(reduxData[che].product.product_id))
-        dispatch(deleteProductTest(reduxData[che].product.product_id))
+        //const isItemChecked = checkSelectDAta(che.product_id)
+        const check = isItemChecked(che.product_id)
+        if (check) {
+          setError(true)
+        } else {
+          const payload={
+            product_id: che.product_id,
+          }
+          //alert("Delete Cancel...!!",i)
+          //console.log("hello==>", che.product_id);
+          //dispatch(deleteProductTest(che.product_id))
+          // if (isItemChecked) {
+            //   //selectItem(che,isItemChecked)
+            //   selectItem(che,!isItemChecked)
+            // }
+            dispatch(deleteProductTest(che.product_id))
+            setSwipeClose(true) 
+            deleteFromCart(dispatch, payload);
+            setTrigger(!trigger)  
+        }
       },
       backgroundColor: "red"
     },
   ]
-  const checkSelectDAta = (id) => (
+  const checkSelectDAta = (id) => {
     // Boolean(cartItems.find((item)=> item.title === food.title ))
-    Boolean(reduxDataTest.find((item) => item.product.product_id === id))
-  )
+    Boolean(reduxDataTest.find((item) => item.product_id === id))
+   }
   const test = useSelector(state => state.cart.products)
 
   // const SelectAll = () => {
@@ -100,10 +144,21 @@ const AddToCart_Comp = () => {
 
   return (
 
-    reduxData.length !== 0 ? (
+    products && products.length !== 0 ? (
 
       <View style={Style.item}>
         {/* <Button style={{marginTop:2}} title='Select All' onPress={getData}></Button> */}
+        
+        {
+          error ? (
+            //<Text style={{alignSelf:"center" , color:'red' , marginVertical:'2%' }}>Please deselect the item and then delete it from the cart. </Text>
+            errorFunction()
+          ):(
+            null
+          )
+        }
+
+
         <ScrollView showsVerticalScrollIndicator={false}>
 
           {/* for debuging */}
@@ -123,31 +178,28 @@ const AddToCart_Comp = () => {
 
 
 
-          {reduxData.map((element, index) => {
+          {products && products.map((element, index) => {
             return (
-              <Swipeout right={swipeoutBtns} key={index} onOpen={() => setChe(index)} backgroundColor="#e8e6e6" style={Style.swipe_style}>
+              <Swipeout right={swipeoutBtns} key={index} close={swipeClose} onOpen={() => {setChe(element); setSwipeClose(false)}} backgroundColor="#e8e6e6" style={Style.swipe_style} >
                 <View style={Style.item_inside}>
-                  <View style={Style.img_view}>
-                    <View style={Style.check_btn1} >
-                      <View style={{ marginLeft: 17, width: 30 }}>
-                        <BouncyCheckbox
+                <BouncyCheckbox
                           iconStyle={{ borderColor: 'lightgrey' }}
                           fillColor="#5A56E9"
-                          isChecked={checkSelectDAta(element.product.product_id)}
+                          isChecked={checkSelectDAta(element.product_id)}
                           onPress={(checkboxValue) => selectItem(element, checkboxValue)}
+                          style={{width:"11%",padding:"1%"}}
                         />
-                      </View>
-                    </View>
-                    <Image source={{ uri: element.product.imgs }} style={Style.img} />
+                  <View style={Style.img_view}>
+                    <Image source={{ uri: element.imgs }} style={Style.img} />
                   </View>
                   <View style={Style.details}>
-                    <Text style={Style.detail_text}>{element.product.name.split(/\s+/).slice(0, 3).join(" ") + "..."}....</Text>
-                    <Text style={Style.detail_text}>Rs {element.product.price}.00</Text>
+                    <Text style={Style.detail_text}>{element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}....</Text>
+                    <Text style={Style.detail_text}>Rs {element.price}.00</Text>
                     <Text style={Style.detail_text}>Color: Purple</Text>
                     <View style={Style.details_bottom}>
                       <Text style={Style.detail_text}>Size: 5.5 inch</Text>
                       <View style={Style.counter}>
-                        {element.qty === 1 ? (
+                        {element.quantity === 1 ? (
                           <View style={Style.counter_btn_disabled}>
                             <View>
                               <Text style={Style.counter_btn_text}>-</Text>
@@ -156,22 +208,16 @@ const AddToCart_Comp = () => {
                         ) : (
                           <View style={Style.counter_btn}>
                             <TouchableOpacity
-                              onPress={() => {
-                                dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product.product_id }))
-                                dispatch(modifyCartTest({ qty: element.qty - 1, product_id: element.product.product_id }))
-                              }}
+                              onPress={()=>decreaseQuantity(element)}
                             >
                               <Text style={Style.counter_btn_text}>-</Text>
                             </TouchableOpacity>
                           </View>
                         )}
-                        <Text style={Style.counter_variable}>{element.qty}</Text>
+                        <Text style={Style.counter_variable}>{element.quantity}</Text>
                         <View style={Style.counter_btn}>
                           <TouchableOpacity
-                            onPress={() => {
-                              dispatch(modifyCart({ qty: element.qty + 1, product_id: element.product.product_id }))
-                              dispatch(modifyCartTest({ qty: element.qty + 1, product_id: element.product.product_id }))
-                            }}
+                            onPress={() => increaseQuantity(element)}
                           >
                             <Text style={Style.counter_btn_text}>+</Text>
                           </TouchableOpacity>
@@ -185,17 +231,29 @@ const AddToCart_Comp = () => {
 
       </View>
     ) : (
-      <View style={Style.main_img}>
+        <View style={Style.main_img}>
+          {
+            loading === true ? (
+              <View style={Style.imgView}>
+                <Image style={Style.imgStyleGif} source={loadingGif}></Image>
+                <Text style={{ color: 'gray', fontWeight: '400' }}></Text>
+              </View>
+            ) : (
 
-        <View style={Style.imgView}>
-          <Image style={Style.imgStyle} source={empty_cart}></Image>
-          <Text style={{ color: 'gray', fontWeight: '400' }}>Products added to the cart will be shown here</Text>
-        </View>
-      </View>
+              <View style={Style.imgView}>
+                <Image style={Style.imgStyle} source={empty_cart}></Image>
+                <Text style={{ color: 'gray', fontWeight: '400' }}>Products added to the cart will be shown here</Text>
+              </View>
+            )
+          
+            }
+        </View> 
     )
 
 
   )
+
+  
 };
 const Style = StyleSheet.create({
   item: {
@@ -218,18 +276,19 @@ const Style = StyleSheet.create({
     borderRadius: 5,
   },
   img_view: {
-    // borderWidth:1,
-    width: "35%",
+    //borderWidth:1,
+    width: "25%",
     flexDirection: 'row',
     justifyContent: "center",
     alignItems: "center",
   }, img: {
-    height: 100,
-    width: 100,
+    height: 80,
+    width: 80,
   },
   details: {
-    width: "65%",
+    width: "62%",
     padding: 3,
+    // borderWidth:1
   }, detail_text: {
     color: "black",
     marginVertical: "1%"
@@ -254,20 +313,21 @@ const Style = StyleSheet.create({
 
   },
   check_btn1: {
+    borderWidth:1
     // backgroundColor: "#5A56E9",
     //backgroundColor:newColor,
     // borderWidth: 2,
 
-    borderColor: 'silver',
-    width: 45,
-    height: 45,
-    alignItems: "center",
-    borderRadius: 20,
-    justifyContent: "center",
-    //borderWidth: 2,
-    position: 'relative',
-    left: 7,
-    alignItems: 'center',
+    // borderColor: 'silver',
+    // width: 45,
+    // height: 45,
+    // alignItems: "center",
+    // borderRadius: 20,
+    // justifyContent: "center",
+    // //borderWidth: 2,
+    // position: 'relative',
+    // left: 7,
+    // alignItems: 'center',
 
   },
   counter_btn_disabled: {
@@ -294,6 +354,10 @@ const Style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
+  },
+  imgStyleGif: {
+    width: 50,
+    height: 50,
   },
   main_img: {
     flex: 1,

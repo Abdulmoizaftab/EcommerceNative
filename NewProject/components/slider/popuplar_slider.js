@@ -12,13 +12,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SkeletonJs from '../Skeleton';
 import { NativeBaseProvider } from 'native-base';
-
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
 
-const Popuplar_slider = ({ navigate }) => {
+const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(10);
@@ -33,17 +31,18 @@ const Popuplar_slider = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.4:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.17:5000/sql/popular/${limit}`)
       .then((response) => response.json())
-      .then((json) => { setProducts(json) })
+      .then((json) => { setProducts(json) 
+        setIsloading(false)})
       .catch((error) => console.error(error))
 
-    setIsloading(false)
   }
 
   useEffect(() => {
     getdata()
-  }, [limit]);
+    setPopular(false)
+  }, [popular]);
 
   
 
@@ -87,7 +86,7 @@ const Popuplar_slider = ({ navigate }) => {
     {
       isLoading?(
         <NativeBaseProvider>
-          <View>
+          <View >
             <SkeletonJs />
           </View>
         </NativeBaseProvider>

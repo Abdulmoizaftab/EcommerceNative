@@ -58,12 +58,14 @@ const BottomNav = () => {
         <Tab.Screen name="Notification" component={Notification} options={{
           tabBarLabel: () => (
             <Text style={{color: "#5A56E9",fontSize:12}}>Notification</Text>
-          )
+          ),
+          unmountOnBlur:true
         }}/>
         <Tab.Screen name="Orders" component={Orders} options={{
           tabBarLabel: () => (
             <Text style={{color: "#5A56E9",fontSize:12}}>Orders</Text>
-          )
+          ),
+          unmountOnBlur:true
         }}/>
       </Tab.Navigator>
     

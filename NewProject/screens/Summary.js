@@ -6,86 +6,92 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, { useState,useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import {Modal,NativeBaseProvider} from 'native-base';
+import axios from 'axios';
 
-const Summary = () => {
+
+
+const Summary = ({route,navigation}) => {
+  const [showModal, setShowModal] = useState(false);
+  const {data}=route.params
+  const testProducts = useSelector(state => state.test.products);
+  const testquantity = useSelector(state => state.test.quantity);
+  const testTotal = useSelector(state => state.test.total);
+  // useEffect(() => {
+  //   setProducts()
+  // }, [])
+
+  
+  console.log("data==>",testProducts,testquantity,testTotal);
+
+  const Checkout=async()=>{
+    setShowModal(true)
+    const obj={
+      amount:testTotal,
+      prodArr:testProducts
+      
+    }
+    await axios.post('http://192.168.1.17:5000/sql/setOrderDetails', obj)
+    console.log("Data inserted successfully");
+    // const obj={
+    //   prodArr:testProducts
+    // }
+    // console.log("sadsad==>",obj.prodArr);
+    setTimeout(()=>{
+      setShowModal(false)
+      navigation.navigate('TabNav')
+    }, 3000)
+  }
+
   return (
+    <NativeBaseProvider>
     <View style={Style.main}>
+      {/* Header */}
       <View style={Style.topHeader}>
         <View style={Style.topHeader_inside}>
           <>
-            <Text style={Style.topHeader_inside_text1}>ITEMS (3)</Text>
-            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. 1347.00</Text>
+            <Text style={Style.topHeader_inside_text1}>ITEMS ({testquantity})</Text>
+            <Text style={Style.topHeader_inside_text2}>TOTAL: Rs. {testTotal}.00</Text>
           </>
         </View>
       </View>
-      {/* cart items */}
+      
       <ScrollView showsVerticalScrollIndicator={false}>
+
+        {/* listHeader */}
         <View style={{padding: '3%', marginBottom: '20%'}}>
           <View style={Style.items}>
             <View style={Style.items_head}>
-              <Text style={Style.items_head_text}>3 Items</Text>
+              <Text style={Style.items_head_text}>{testquantity} Items</Text>
             </View>
-            <View style={Style.items_list}>
-              <View>
-                <Image
-                  source={{
-                    uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
-                  }}
-                  style={Style.img}
-                />
-              </View>
-              <View>
-                <Text style={Style.items_list_text_desc}>
-                  Polo republica shirt brand new...
-                </Text>
-                <Text style={Style.items_list_text_same}>Size: Medium</Text>
-                <Text style={Style.items_list_text_same}>Color: Purple</Text>
-                <Text style={Style.items_list_text_same}>Qty: 2</Text>
-                <Text style={Style.items_list_text_price}>Rs. 200.00</Text>
-              </View>
-            </View>
-            <View style={Style.items_list}>
-              <View>
-                <Image
-                  source={{
-                    uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
-                  }}
-                  style={Style.img}
-                />
-              </View>
-              <View>
-                <Text style={Style.items_list_text_desc}>
-                  Polo republica shirt brand new...
-                </Text>
-                <Text style={Style.items_list_text_same}>Size: Medium</Text>
-                <Text style={Style.items_list_text_same}>Color: Purple</Text>
-                <Text style={Style.items_list_text_same}>Qty: 2</Text>
-                <Text style={Style.items_list_text_price}>Rs. 200.00</Text>
-              </View>
-            </View>
-            <View style={Style.items_list}>
-              <View>
-                <Image
-                  source={{
-                    uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
-                  }}
-                  style={Style.img}
-                />
-              </View>
-              <View>
-                <Text style={Style.items_list_text_desc}>
-                  Polo republica shirt brand new...
-                </Text>
-                <Text style={Style.items_list_text_same}>Size: Medium</Text>
-                <Text style={Style.items_list_text_same}>Color: Purple</Text>
-                <Text style={Style.items_list_text_same}>Qty: 2</Text>
-                <Text style={Style.items_list_text_price}>Rs. 200.00</Text>
-              </View>
-            </View>
-          </View>
 
-          {/* Address */}
+            {/* list */}
+            {testProducts && testProducts.map((v,i)=>{
+              return <View style={Style.items_list} key={i} >
+              <View>
+                <Image
+                  source={{
+                    uri: v.imgs,
+                  }}
+                  style={Style.img}
+                />
+              </View>
+              <View style={{width:"68%"}}>
+                <Text style={Style.items_list_text_desc}>
+                {v.name.split(/\s+/).slice(0, 5).join(" ") + "....."}
+                </Text>
+                <Text style={Style.items_list_text_same}>Size: NA</Text>
+                <Text style={Style.items_list_text_same}>Color: NA</Text>
+                <Text style={Style.items_list_text_same}>Qty: {v.quantity}</Text>
+                <Text style={Style.items_list_text_price}>Rs. {v.price}.00</Text>
+              </View>
+            </View>
+            })}
+           </View>
+
+           {/* Shipping */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -93,29 +99,36 @@ const Summary = () => {
             </View>
             <View style={Style.address_list}>
               <Text style={Style.address_list_text_same}>
-                House no: 55/6 Malir Extension colony.
+                {data[0].address_line}, Pakistan.
               </Text>
-              <Text style={Style.address_list_text_same}>Karachi</Text>
-              <Text style={Style.address_list_text_same}>75080</Text>
-              <Text style={Style.address_list_text_same}>Pakistan</Text>
-              <Text style={Style.address_list_text_same}>02134428946</Text>
-              <Text style={Style.address_list_text_same}>03162539564</Text>
+              <Text style={Style.address_list_text_same}>{data[0].address_title}.</Text>
+              <Text style={Style.address_list_text_same}>Receiving by {data[0].recipent}.</Text>
             </View>
           </View>
 
-          {/* contact */}
+          {/* Contacts */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
               <Text style={Style.items_head_text}>Contacts</Text>
             </View>
             <View style={Style.address_list}>
-              <Text style={Style.address_list_text_same}>02134428946</Text>
-              <Text style={Style.address_list_text_same}>03162539564</Text>
+              <Text style={Style.address_list_text_same}>{data[0].mobile}</Text>
             </View>
           </View>
 
-          {/* Order details */}
+          {/* PaymentMethod */}
+          <View style={{marginVertical: '3%'}}></View>
+          <View style={Style.items}>
+            <View style={Style.items_head}>
+              <Text style={Style.items_head_text}>Payment Method</Text>
+            </View>
+            <View style={Style.address_list}>
+              <Text style={Style.address_list_text_same}>Cash on delivery.</Text>
+            </View>
+          </View>
+
+          {/* OrderDeatils */}
           <View style={{marginVertical: '3%'}}></View>
           <View style={Style.items}>
             <View style={Style.items_head}>
@@ -124,7 +137,7 @@ const Summary = () => {
             <View style={Style.address_list}>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>Order Total:</Text>
-                <Text style={Style.order_list_text_same}>Rs. 1147.00</Text>
+                <Text style={Style.order_list_text_same}>Rs. {testTotal}.00</Text>
               </View>
               <View style={Style.order_list_views}>
                 <Text style={Style.order_list_text_same}>
@@ -142,16 +155,40 @@ const Summary = () => {
                 <Text style={Style.order_list_text_same_end}>
                   Total Payable:
                 </Text>
-                <Text style={Style.order_list_text_same_end}>Rs. 1347.00</Text>
+                <Text style={Style.order_list_text_same_end}>Rs. {testTotal+200-10}.00</Text>
               </View>
             </View>
           </View>
         </View>
       </ScrollView>
-          <TouchableOpacity activeOpacity={0.8} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}>
+      {/* Checkout button */}
+          <TouchableOpacity activeOpacity={1} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4.5%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}
+          onPress={()=>Checkout()}>
           <Text style={{color:"white",fontWeight:"bold",fontSize:17,letterSpacing:3}}>Place Order</Text>
       </TouchableOpacity>
+
+            {/* Modal */}
+
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{
+      
+      bg: "#000000"
+    }}>
+        <Modal.Content maxWidth="400px" >
+          <Modal.Header style={{backgroundColor:"#5A56E9"}} width="100%">
+            <Text style={{color:"white",fontSize:18}}>Your order is being proceed!</Text>
+            </Modal.Header>
+          <Modal.Body style={{backgroundColor:"white"}}>
+            <Image source={{
+                    uri: 'https://nicefuntours.com/wp-content/uploads/2019/12/ShyCautiousAfricanpiedkingfisher-max-1mb.gif',
+                  }} style={{height:120,width:120,alignSelf:"center"}}/>
+                  <Text style={{alignSelf:"center",color:"black"}}>Thankyou for order</Text>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+
+
     </View>
+    </NativeBaseProvider>
   );
 };
 
@@ -190,15 +227,17 @@ const Style = StyleSheet.create({
   items: {
     borderWidth: 1,
     width: '100%',
-    borderColor: '#cccccc',
+    borderColor: '#fff',
     borderRadius: 5,
+    backgroundColor:'#fff'
   },
   items_head: {
     width: '100%',
     padding: '2%',
     backgroundColor: '#5A56E9',
     borderTopRightRadius:5,
-    borderTopLeftRadius:5
+    borderTopLeftRadius:5,
+    borderColor:'#fff'
   },
   items_head_text: {
     fontWeight: 'bold',
@@ -207,13 +246,14 @@ const Style = StyleSheet.create({
   },
   items_list: {
     borderTopWidth: 1,
-    borderColor: '#cccccc',
+    borderColor: '#fff',
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     padding: '2%',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor:'#fff'
   },
   img: {
     width: 100,
