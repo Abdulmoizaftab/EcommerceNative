@@ -105,16 +105,22 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                     uri: element.imgs,
                   }}></Image>
               </View>
+
               <View style={Styles.cardDesc}>
                 <Text style={Styles.cardTitle}>
                   {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
                 </Text>
-                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                 <View style={Styles.cardBotm}>
+
+                <Text style={Styles.cardPrice}>RS.{element.price} </Text>
+                
+                  <View>
                   <Text style={Styles.rating}>
                     4.5{' '}
                     <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
                   </Text>
+                  </View>
+                  </View>
 
 
 
@@ -147,7 +153,6 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
               />
             )} */}
                   {/* <Icon style={Styles.favIcon} onPress={()=>{alert("hello g")}} name="md-heart-outline" /> */}
-                </View>
               </View>
             </View>
           </TouchableOpacity>
@@ -202,7 +207,12 @@ const Styles = StyleSheet.create({
     color: "gray"
   },
   cardDesc: {
+    display:'flex',
+    width:'100%',
     paddingHorizontal: 10,
+    justifyContent:'flex-start',
+    // backgroundColor:'pink',
+    left:0
   },
   ProdCard: {
     alignItems: 'center',
@@ -216,6 +226,8 @@ const Styles = StyleSheet.create({
     height: 190,
     marginLeft: 10,
     marginVertical: 5,
+    
+    // backgroundColor:'green',
   },
   imgContainer: {
     borderBottomWidth: 1,

@@ -139,7 +139,7 @@ const AllDiscountedProducts = () => {
             onPress={() => navigate.navigate('Product_detail', element.item)}>
             <View>
               <Text style={Style.discount}>
-                {element.item.discount_percent}%
+                {(element.item.discount_percent)*100}%
               </Text>
             </View>
 
