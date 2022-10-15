@@ -15,27 +15,21 @@ import SkeletonJs from '../components/Skeleton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeBaseProvider} from 'native-base';
 import SearchBar from '../components/SearchBar';
-import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+import {addFavourite, removeFavourite} from '../redux/FavouritesRedux';
 
-import { useDispatch,useSelector } from 'react-redux';
-
+import {useDispatch, useSelector} from 'react-redux';
 
 const AllDiscountedProducts = () => {
-
-  const favouriteState = useSelector(state => state.favourite)
-  const favArray=favouriteState.favourites;
+  const favouriteState = useSelector(state => state.favourite);
+  const favArray = favouriteState.favourites;
   const navigate = useNavigation();
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(20);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
-  const dispatch =useDispatch();
-
-
-
+  const dispatch = useDispatch();
 
   const getDisdata = async () => {
-
     setIsloading(true);
     await fetch(`http://192.168.1.4:5000/sql/allDiscountProducts/${limit}`)
       .then(response => response.json())
@@ -49,13 +43,10 @@ const AllDiscountedProducts = () => {
     getDisdata();
   }, [limit]);
 
-
-
   const onEndReached = () => {
     setlimit(limit + 4);
     setIsloading(false);
   };
-
 
   const onRefresh = () => {
     setIsRefreshing(true);
@@ -63,7 +54,6 @@ const AllDiscountedProducts = () => {
     setlimit(6);
     setIsRefreshing(false);
   };
-
 
   const flatlistEnd = () => {
     return isLoading ? (
@@ -74,11 +64,6 @@ const AllDiscountedProducts = () => {
       </NativeBaseProvider>
     ) : null;
   };
-
-
-
-
-  
 
   // const getData = async () => {
   //   try {
@@ -95,9 +80,6 @@ const AllDiscountedProducts = () => {
   //   getData();
   // }, []);
 
-
-
-
   // const addToFav = async productDetail => {
   //   try {
   //     dispatch(addFavourite(productDetail));
@@ -108,7 +90,7 @@ const AllDiscountedProducts = () => {
 
   // const removeFav = async productDetail => {
   //   try {
-      
+
   //     dispatch(removeFavourite(productDetail));
   //   } catch (error) {
   //     alert(error);
@@ -116,10 +98,6 @@ const AllDiscountedProducts = () => {
   // };
 
   const renderItem = element => {
-
-    
-
-
     const productDetail = {
       product_id: element.item.product_id,
       name: element.item.name,
@@ -139,7 +117,7 @@ const AllDiscountedProducts = () => {
             onPress={() => navigate.navigate('Product_detail', element.item)}>
             <View>
               <Text style={Style.discount}>
-                {(element.item.discount_percent)*100}%
+                {element.item.discount_percent * 100}%
               </Text>
             </View>
 
@@ -167,21 +145,24 @@ const AllDiscountedProducts = () => {
                 {element.item.name.split(/\s+/).slice(0, 4).join(' ') + '...'}
               </Text>
               <View style={Style.cardBotm}>
-                <Text style={Style.cardPrice}>RS. {element.item.price}</Text>
 
-              
+
+                <View >
+                  <Text style={Style.cardPrice}>RS. {element.item.price}</Text>
+                </View>
+
+                <View // style={Style.fav_icon_box}
+                >
+                  <Text style={Style.rating}>
+                    4.5{' '}
+                    <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
+                  </Text>
+                </View>
+
+
               </View>
             </View>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={Style.fav_icon_box}>
-            <Text style={Style.rating}>
-              4.5 <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-            </Text>
-          </TouchableOpacity>
-
-        
         </View>
       </View>
     );
