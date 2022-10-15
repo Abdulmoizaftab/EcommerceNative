@@ -170,7 +170,7 @@ const Home_inside = ({ navigate }) => {
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
           <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)}>
-            <View style={{borderBottomWidth: 1,width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
+            <View style={{borderBottomWidth: 1, paddingVertical:"3%",width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
 
             <Image style={Style.all_item_main4_img}
               resizeMode="cover"
