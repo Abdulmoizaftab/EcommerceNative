@@ -62,7 +62,7 @@ app.use(session({
     secret:'I am a boy',
     cookie: {
     // Session expires after 1 min of inactivity.
-    expires: 60000,
+    expires: 300000,
     },
 }))
 app.set("view engine","hbs")

@@ -89,7 +89,7 @@ const Product_detail = ({route}) => {
       userReview,
     };
 
-    axios.post(`http://192.168.1.24:5000/sql/giveRating`, bodyData);
+    axios.post(`http://192.168.1.4:5000/sql/giveRating`, bodyData);
     setRating(0);
     setUserReview('');
     setModalVisible(!modalVisible);

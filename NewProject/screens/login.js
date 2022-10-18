@@ -14,6 +14,7 @@ const Login = ({ navigation }) => {
   const [password , setPassword] = useState("")
   const dispatch=useDispatch()
   const {isFetching,error,currentUser,loadings}=useSelector((state)=>state.user)
+  console.log(currentUser);
   //console.log();
   const handlePress=()=>{
     

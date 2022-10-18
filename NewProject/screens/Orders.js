@@ -60,7 +60,7 @@ const Orders = ({navigation}) => {
     try {
       if(currentUser){
 
-        const res = await fetch(`http://192.168.1.24:5000/sql/getOrderDetails/${limit}`,{
+        const res = await fetch(`http://192.168.1.4:5000/sql/getOrderDetails/${limit}`,{
           headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
