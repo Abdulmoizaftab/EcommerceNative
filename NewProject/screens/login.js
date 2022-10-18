@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert, TouchableWithoutFeedback,Keyboard,ActivityIndicator } from 'react-native';
 import React , {useState,useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -13,12 +13,12 @@ const Login = ({ navigation }) => {
   const [email , setEmail] = useState("")
   const [password , setPassword] = useState("")
   const dispatch=useDispatch()
-  const {isFetching,error}=useSelector((state)=>state.user)
-
+  const {isFetching,error,currentUser,loadings}=useSelector((state)=>state.user)
+  //console.log();
   const handlePress=()=>{
+    
     if(email && password){
-      login(dispatch,{email,password})
-      //console.log("pressed");
+      login(dispatch,{email,password,navigation})
     }
     else{
       Alert.alert(
@@ -33,6 +33,10 @@ const Login = ({ navigation }) => {
     );
     }
   }
+  // useEffect(() => {
+  //   setLoader(loading)
+  // }, [loader])
+  
   
   return (
 
@@ -64,7 +68,10 @@ const Login = ({ navigation }) => {
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
           </TouchableOpacity>
           <TouchableOpacity style={Style.login_btn} onPress={handlePress}>
+            {loadings===true?
+            <ActivityIndicator size='large' color="white"/>:
             <Text style={Style.login_btn_text}>Login</Text>
+            }
           </TouchableOpacity>
           <TouchableOpacity style={Style.create_account_btn} onPress={() => navigation.navigate('Sign_up')}>
             <Text style={Style.create_account_btn_text}>Create account instead</Text>
@@ -148,10 +155,11 @@ const Style = StyleSheet.create({
     color: "#5A56E9", fontWeight: "bold"
   },
   login_btn: {
-    width: "80%", height: 50, backgroundColor: "#5A56E9", borderRadius: 10, justifyContent: "center", alignItems: "center", alignSelf: "center", marginVertical: 5
+    width: "80%", height: 50, backgroundColor: "#5A56E9", borderRadius: 10, justifyContent: "center", alignItems: "center", alignSelf: "center", marginVertical: 5,
+    flexDirection:"row"
   },
   login_btn_text: {
-    color: "white", fontWeight: "bold"
+    color: "white", fontWeight: "bold",fontSize:17
   },
   create_account_btn: {
     width: "55%", justifyContent: "center", alignItems: "center", alignSelf: "center", marginVertical: 3

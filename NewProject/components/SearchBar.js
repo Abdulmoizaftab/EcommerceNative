@@ -11,6 +11,8 @@ import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native';
+import { useSelector,useDispatch } from 'react-redux';
+import { Logout } from '../redux/LoginRedux';
 
 
 
@@ -65,11 +67,36 @@ const SearchBar = () => {
       check()
       
     }, [searchText])
+
+    const {isFetching,error,currentUser}=useSelector((state)=>state.user)
+    const dispatch=useDispatch()
+
+    const check_session=async()=>{
+      console.log(currentUser)
+      if(currentUser){
+        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id})
+        // console.log("Response",res.data)
+        if(res.data == "Status updated"){
+          dispatch(Logout())
+          console.log("Response is==>",res.data);
+        }
+        else{
+          console.log("Response is==>",res.data);
+        }
+      }
+      else{
+        console.log("Session expired")
+      }
+    }
+
+    useEffect(() => {
+      check_session()
+    }, [])
     
+
   
   const onSearch = () => {
       navigate.navigate('SearchScreen',searchText)
-    
   }
 
 
@@ -107,7 +134,7 @@ const SearchBar = () => {
     return (
         <>
             <View style={styles.container}>
-                <MaterialCommunityIcons name='account-outline' style={styles.accountIcon} onPress={() => navigate.navigate('Profile')}  />
+                <MaterialCommunityIcons name='account-outline' style={styles.accountIcon} onPress={() => navigate.navigate('Login')}  />
                 <View style={styles.searchView}>
                     <Ionicons name='search-outline' style={styles.searchIcon} />
                     <TextInput

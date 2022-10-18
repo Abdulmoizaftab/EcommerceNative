@@ -57,7 +57,16 @@ const App = () => {
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
         <Stack.Screen name="Categories" component={CategoryScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Profile" options={{
+            headerShown: true,
+            title: "My Account",
+            headerStyle: { backgroundColor: "#5A56E9" },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+            headerTitleAlign: "center"
+          }} component={ProfileScreen} />
         <Stack.Screen
           options={{
             headerShown: true,

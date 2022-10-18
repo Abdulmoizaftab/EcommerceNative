@@ -611,13 +611,14 @@ router.post('/setOrderDetails',(req,res)=>{
   })
 })
 
-router.get('/getOrderDetails/:limit',(req,res)=>{
+router.get('/getOrderDetails/:limit',auth.isLogin,(req,res)=>{
   req.app.locals.db.query(`select top(${req.params.limit}) order_items.item_id,order_details.created_at,order_details.total,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on order_items.product_id = product.product_id
   inner join payment_details on order_details.payment_id = payment_details.payment_id
-  where order_items.user_id=2010`, function(err, recordset){
+  where order_items.user_id=${req.session.user_id}
+  order by order_details.created_at desc`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')
@@ -880,8 +881,8 @@ router.post('/updateFavourites',(req,res)=>{
   })
 })
 
-router.get('/getFavourites',(req,res)=>{
-  req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
+router.get('/getFavourites',auth.isLogin,(req,res)=>{
+  req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=${req.session.user_id} and favourites.is_deleted=0`, function(err, recordset){
     if(err){
       console.error(err)
       res.status(500).send('SERVER ERROR')

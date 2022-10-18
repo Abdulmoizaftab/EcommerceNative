@@ -4,15 +4,22 @@ import { addAddress, updateAddress, deleteAddress, errorAddress } from './Addres
 import { deleteProductTest } from './Test_Redux'
 import axios from 'axios';
 import { addFavourite, getFavourite, removeFavourite } from './FavouritesRedux';
+//import { useNavigation } from '@react-navigation/native'
 
-import { useDispatch, useSelector } from 'react-redux';
+//import { useDispatch, useSelector } from 'react-redux';
 
+//export const navigation=useNavigation();
 export const login = async (dispatch, user) => {
-    dispatch(loginStart());
+    
     try {
-        const res = await axios.post("http://192.168.1.24:5000/sql/login", user);
-        dispatch(loginSuccess(res.data));
-        console.log("Data==>", res);
+        dispatch(loginStart());
+        const res = await axios.post("http://192.168.1.24:5000/sql/login", {email:user.email,password:user.password});
+        let obj={
+            load:false,
+            data:res.data
+        }
+        dispatch(loginSuccess(obj));
+        user.navigation.navigate('TabNav')
     } catch (error) {
         dispatch(loginFailure());
         console.log("No data");
@@ -89,7 +96,7 @@ export const addFavouriteDB = async (dispatch, data) => {
 
     try {
 
-        const res = await axios.post("http://192.168.1.17:5000/sql/setFavourites", { favouritedProd: data.product_id });
+        const res = await axios.post("http://192.168.1.24:5000/sql/setFavourites", { favouritedProd: data.product_id });
         // const result=await res.json()
         dispatch(addFavourite(res.data));
         //console.log(res.data);
@@ -106,7 +113,7 @@ export const updateFavouriteDB = async (dispatch, data) => {
 
     try {
 
-        const res = await axios.post("http://192.168.1.17:5000/sql/updateFavourites", { favouritedProd: data.product_id });
+        const res = await axios.post("http://192.168.1.24:5000/sql/updateFavourites", { favouritedProd: data.product_id });
         // const result=await res.json()
         dispatch(addFavourite(res.data));
         console.log(res.data);
@@ -117,12 +124,16 @@ export const updateFavouriteDB = async (dispatch, data) => {
         console.log(error)
     }
 }
-export const getFavouriteDB = async (dispatch) => {
+export const getFavouriteDB = async (dispatch,user) => {
     //dispatch(registerStart());
 
     try {
 
-        const res = await axios.get("http://192.168.1.17:5000/sql/getFavourites");
+        const res = await axios.get("http://192.168.1.24:5000/sql/getFavourites",{
+            headers: {
+              'Authorization': `Bearer ${user.token}` 
+            }
+          });
         // const result=await res.json()
         dispatch(getFavourite(res.data));
         //console.log("==========XXXX===",res.data);
@@ -136,7 +147,7 @@ export const getFavouriteDB = async (dispatch) => {
 
 export const remFavouriteDB = async (dispatch, data) => {
     try {
-        const res = await axios.post("http://192.168.1.17:5000/sql/delFavourites", { favouritedProd: data.product_id });
+        const res = await axios.post("http://192.168.1.24:5000/sql/delFavourites", { favouritedProd: data.product_id });
         // const result=await res.json()
         dispatch(removeFavourite(res.data));
         //  console.log(res.data);

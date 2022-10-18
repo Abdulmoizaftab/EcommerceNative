@@ -45,9 +45,7 @@ const BottomNav = () => {
           tabBarLabel: () => (
             <Text style={{color: "#5A56E9",fontSize:12,flexDirection:"column"}}>Home</Text>
           ),
-          tabBarStyle:{
-            
-          }
+          //unmountOnBlur:true      
         }} />
         <Tab.Screen name="Favourites" component={Favourites} options={{
           tabBarLabel: () => (

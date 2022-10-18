@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import noOrder from '../assets/fonts/images/noOrder.png';
 import loaderGif from '../assets/fonts/images/loader.gif';
 import { NativeBaseProvider,Skeleton } from 'native-base';
+import { useSelector } from 'react-redux';
 
 
 const Orders = ({navigation}) => {
@@ -12,6 +13,9 @@ const Orders = ({navigation}) => {
   const [reload, setReload] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [limit, setlimit] = useState(6);
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
 
   const onRefresh = () => {
     setIsRefreshing(true);  
@@ -54,8 +58,15 @@ const Orders = ({navigation}) => {
 
   const getData = async () => {
     try {
-      const res = await fetch(`http://192.168.1.24:5000/sql/getOrderDetails/${limit}`);
+      if(currentUser){
+
+        const res = await fetch(`http://192.168.1.24:5000/sql/getOrderDetails/${limit}`,{
+          headers: {
+          'Authorization': `Bearer ${currentUser.token}` 
+        }
+      });
       const result = await res.json();
+      //console.log("datatatata==>",result);
       const main_arr = [result[0]];
       var id=result[0].order_id
       for (let i = 1; i < result.length; i++) {
@@ -78,6 +89,12 @@ const Orders = ({navigation}) => {
       }
       setOrdProducts(main_arr)
       setReload(false)
+      setLoading(false)
+    }
+    else{
+      console.log("Session is expireeeee");
+      setLoading(false)
+    }
     } catch (e) {
       console.log('error', e);
     }

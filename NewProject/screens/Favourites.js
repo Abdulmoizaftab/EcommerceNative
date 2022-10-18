@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Alert
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -16,26 +16,38 @@ import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import empty_cart from '../image/empty_cart.png';
 import {NativeBaseProvider} from 'native-base';
-
+import loadingGif from '../assets/fonts/images/loader.gif';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {removeFavourite} from '../redux/FavouritesRedux';
-import { getFavouriteDB, remFavouriteDB } from '../redux/apiCalls';
+import {getFavouriteDB, remFavouriteDB} from '../redux/apiCalls';
 
 const Favorites = ({navigation}) => {
   const dispatch = useDispatch();
 
   const favouriteState = useSelector(state => state.favourite);
   const favArray = favouriteState.favourites;
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
 
   const [favRedux, setFavRedux] = useState([]);
   const [FavProducts, setFavProducts] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(true);
+  const [login, setLogin] = useState(false);
 
   const getData = async () => {
     try {
-      getFavouriteDB(dispatch,"")
+      if (currentUser) {
+        setLogin(true);
+        getFavouriteDB(dispatch, currentUser);
+        setLoader(false);
+      } else {
+        console.log('No current user');
+        setLoader(false);
+      }
       // const jsonValue = await fetch('');
       // const result = JSON.parse(jsonValue);
       // setFavProducts(result);
@@ -71,8 +83,6 @@ const Favorites = ({navigation}) => {
     ) : null;
   };
 
-
-
   // const showAlert = (productDetail) =>
   // Alert.alert(
   //   "",
@@ -91,15 +101,12 @@ const Favorites = ({navigation}) => {
   //   {
   //     cancelable: true,
   //     onDismiss: () =>{}
-        // Alert.alert(
-        //   "This alert was dismissed by tapping outside of the alert dialog."
-        // )
+  // Alert.alert(
+  //   "This alert was dismissed by tapping outside of the alert dialog."
+  // )
   //       ,
   //   }
   // );
-
-
-
 
   const renderItem = ({item}) => {
     const productDetail = {
@@ -109,64 +116,59 @@ const Favorites = ({navigation}) => {
       image: item.imgs,
     };
 
-    return (<>
-
-      {item.is_deleted===false?
-      
-      
-      (<View style={Style.all_item_main2}>
-        <View style={Style.all_item_main3}>
-          <TouchableOpacity
-            style={Style.all_item_main4}
-            onPress={() => navigation.navigate('Product_detail',item)}>
-            {item.discount > 0 ? (
+    return (
+      <>
+        {item.is_deleted === false ? (
+          <View style={Style.all_item_main2}>
+            <View style={Style.all_item_main3}>
+              <TouchableOpacity
+                style={Style.all_item_main4}
+                onPress={() => navigation.navigate('Product_detail', item)}>
+                {item.discount > 0 ? (
+                  <View>
+                    <Text style={Style.discount}>{item.discount}%</Text>
+                  </View>
+                ) : null}
+                <Image
+                  style={Style.all_item_main4_img}
+                  resizeMode="cover"
+                  source={{uri: item.imgs}}
+                />
+              </TouchableOpacity>
               <View>
-                <Text style={Style.discount}>{item.discount}%</Text>
+                <Text style={Style.cardTitle}>
+                  {item.name.split(/\s+/).slice(0, 4).join(' ') + '...'}
+                </Text>
+                <View style={Style.cardBotm}>
+                  <Text style={Style.cardPrice}>{item.price}</Text>
+                  <Text style={Style.rating}>
+                    4.5{' '}
+                    <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
+                  </Text>
+                </View>
               </View>
-            ) : null}
-            <Image
-              style={Style.all_item_main4_img}
-              resizeMode="cover"
-              source={{uri: item.imgs}}
-            />
-          </TouchableOpacity>
-          <View>
-            <Text style={Style.cardTitle}>
-              {item.name.split(/\s+/).slice(0, 4).join(' ') + '...'}
-            </Text>
-            <View style={Style.cardBotm}>
-              <Text style={Style.cardPrice}>{item.price}</Text>
-              <Text style={Style.rating}>
-                4.5 <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-              </Text>
+
+              <TouchableOpacity>
+                {/* <Feather name="home" style={Style.middle2_2_icon} /> */}
+                <MaterialCommunityIcons
+                  name="delete-alert-outline"
+                  style={Style.middle2_2_icon}
+                  onPress={() => {
+                    remFavouriteDB(dispatch, productDetail);
+                  }}
+                />
+              </TouchableOpacity>
             </View>
           </View>
-
-        
-
-          <TouchableOpacity
-           
-            
-            >
-            {/* <Feather name="home" style={Style.middle2_2_icon} /> */}
-            <MaterialCommunityIcons
-              name="delete-alert-outline"
-              style={Style.middle2_2_icon} 
-              
-              onPress={() =>{ remFavouriteDB(dispatch,productDetail)}}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>):(
-        null
+        ) : null
         //  <View style={Style.main_imgIs}>
         //   <Image style={Style.all_item_main4_imgIs} source={empty_cart} />
         // <Text style={{color: 'gray', fontWeight: '400',top:50,}}>
         //   No Favourites Items
         //   </Text>
         // </View>
-        
-      )}</>
+        }
+      </>
     );
   };
 
@@ -184,22 +186,57 @@ const Favorites = ({navigation}) => {
           <Text style={Style.head_text}>Favorites items</Text>
         </View>
       </View>
-      {favArray && favArray.length > 0 ? (
-        <FlatList
-          ListHeaderComponent={<View></View>}
-          data={favArray}
-          keyExtractor={item => item.product_id}
-          numColumns={2}
-          renderItem={renderItem}
-          onEndReached={onEndReached}
-          ListFooterComponent={flatListEnd}
-        />
+      {login ? (
+        loader ? (
+          <View style={Style.imgView}>
+            <Image style={Style.imgStyleGif} source={loadingGif}></Image>
+          </View>
+        ) : favArray && favArray.length > 0 ? (
+          <FlatList
+            ListHeaderComponent={<View></View>}
+            data={favArray}
+            keyExtractor={item => item.product_id}
+            numColumns={2}
+            renderItem={renderItem}
+            onEndReached={onEndReached}
+            ListFooterComponent={flatListEnd}
+          />
+        ) : (
+          <View style={Style.main_img}>
+            <Image style={{width: '70%', height: '35%'}} source={empty_cart} />
+            <Text style={{color: 'gray', fontWeight: '400'}}>
+              No Favourite Items
+            </Text>
+          </View>
+        )
+      ) : loader ? (
+        <View style={Style.imgView}>
+          <Image style={Style.imgStyleGif} source={loadingGif}></Image>
+        </View>
       ) : (
-        <View style={Style.main_img}>
-          <Image style={{width: '70%', height: '35%'}} source={empty_cart} />
-          <Text style={{color: 'gray', fontWeight: '400'}}>
-            No Favourite Items
+        
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{fontSize: 20, color: 'black', marginVertical: '5%'}}>
+            Please login to continue
           </Text>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('Login')}
+            style={{
+              alignItems: 'center',
+              padding: '3%',
+              width: '50%',
+              backgroundColor: '#5A56E9',
+              borderRadius: 5,
+            }}>
+            <Text style={{fontSize: 20, color: '#fff'}}>Login</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -257,9 +294,9 @@ const Style = StyleSheet.create({
   },
   middle2_2_icon: {
     fontSize: 30,
-    alignSelf:'center',
+    alignSelf: 'center',
     // marginRight: 10,
-    color: '#5A56E9'
+    color: '#5A56E9',
   },
   all_item_main: {
     flex: 1,
@@ -289,8 +326,8 @@ const Style = StyleSheet.create({
     width: '80%',
     height: 120,
   },
-   all_item_main4_imgIs: {
-    top:50,
+  all_item_main4_imgIs: {
+    top: 50,
     width: '90%',
     height: 300,
   },
@@ -325,12 +362,12 @@ const Style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-   main_imgIs: {
+  main_imgIs: {
     flex: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    height:700
+    height: 700,
   },
   head_main: {
     display: 'flex',
@@ -353,6 +390,15 @@ const Style = StyleSheet.create({
     fontSize: 19,
     color: 'white',
     fontWeight: 'bold',
+  },
+  imgStyleGif: {
+    width: 50,
+    height: 50,
+  },
+  imgView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
   },
 });
 
