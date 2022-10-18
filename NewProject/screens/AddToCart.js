@@ -21,8 +21,9 @@ const AddToCart = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    axios.get(`http://192.168.1.4:5000/sql/getCartItem`)
-      .then(function (res) {
+    axios.get(`http://192.168.1.17:5000/sql/getCartItem`)
+    .then(function (res) {
+        setDbProds([])
         setDbProds(res.data)
         setLoading(false)
       })
@@ -60,7 +61,7 @@ const AddToCart = ({ route, navigation }) => {
         {
           quantity !== 0 && total !== 0 ? (
             <>
-        <TouchableOpacity activeOpacity={1} onPress={() => refRBSheet.current.open()} style={{ width: "100%", backgroundColor: "white", padding: 10, justifyContent: "center", alignItems: "center", position: "absolute", bottom: 0, borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
+        <TouchableOpacity activeOpacity={1} onPress={() => refRBSheet.current.open()} style={{ width: "100%", backgroundColor: "white", padding: 10, justifyContent: "center", alignItems: "center", position: "absolute", bottom: 0, elevation:20, shadowColor:"black", borderWidth:1, borderColor:'#eee', borderTopLeftRadius: 15, borderTopRightRadius: 15 }}>
           <Text>
             <SimpleLineIcons name='arrow-up' style={{ fontWeight: "bold", color: "black", fontSize: 25 }} />
           </Text>

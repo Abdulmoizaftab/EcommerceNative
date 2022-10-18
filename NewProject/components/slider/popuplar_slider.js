@@ -90,7 +90,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
             <SkeletonJs />
           </View>
         </NativeBaseProvider>
-      ):products?.map((element,key)=>
+      ):(products?.map((element,key)=>
 
 
       
@@ -111,12 +111,9 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                   {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
                 </Text>
                 <View style={Styles.cardBotm}>
-
-                <Text style={Styles.cardPrice}>RS.{element.price} </Text>
-                
-                  <View>
+                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
                   <Text style={Styles.rating}>
-                    4.5{' '}
+                    {element.rating}{' '}
                     <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
                   </Text>
                   </View>
@@ -125,38 +122,11 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
 
 
-                  {/* {isFavourate(element.product_id) ? (
-              <MaterialCommunityIcons
-                name="cards-heart"
-                onPress={() => { 
-                  const productDetail = {
-                  product_id: element.product_id,
-                  name: element.name,
-                  price: element.price,
-                  image: element.imgs
-                };
-                removeFav(productDetail)}}
-                style={Styles.favIcon}
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="cards-heart-outline"
-                onPress={() => {
-                  const productDetail = {
-                    product_id: element.product_id,
-                    name: element.name,
-                    price: element.price,
-                    image: element.imgs
-                  };
-                  addToFav(productDetail)}}
-                style={Styles.favIcon}
-              />
-            )} */}
-                  {/* <Icon style={Styles.favIcon} onPress={()=>{alert("hello g")}} name="md-heart-outline" /> */}
+                 
               </View>
-            </View>
+           {/* / </View> */}
           </TouchableOpacity>
-      ))
+      )))
     }
         </View>
       </ScrollView>
@@ -207,12 +177,7 @@ const Styles = StyleSheet.create({
     color: "gray"
   },
   cardDesc: {
-    display:'flex',
-    width:'100%',
-    paddingHorizontal: 10,
-    justifyContent:'flex-start',
-    // backgroundColor:'pink',
-    left:0
+    paddingHorizontal: "4%",
   },
   ProdCard: {
     alignItems: 'center',
@@ -243,7 +208,7 @@ const Styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
     flexWrap: 'wrap',
-    color: "black"
+    color: "black",
   },
   cardPrice: {
     fontSize: 17,
@@ -261,7 +226,7 @@ const Styles = StyleSheet.create({
   cardBotm: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginVertical: "3%",
   },
   favIcon: {
     color: '#5A56E9',

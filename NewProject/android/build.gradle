@@ -4,6 +4,8 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
     ext {
+        googlePlayServicesVersion = "+" // default: "+"
+        firebaseMessagingVersion = "21.1.0" // default: "21.1.0"
         buildToolsVersion = "31.0.0"
         minSdkVersion = 21
         compileSdkVersion = 31
@@ -25,7 +27,8 @@ buildscript {
     }
     dependencies {
         // ... other dependencies
-    classpath 'com.google.gms:google-services:4.3.13'
+    classpath 'com.google.gms:google-services:4.3.3'
+    //classpath 'com.google.gms:google-services:4.3.13'
     // Add me --- /\
         classpath("com.android.tools.build:gradle:7.0.4")
         classpath("com.facebook.react:react-native-gradle-plugin")
