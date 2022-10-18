@@ -18,7 +18,7 @@ const ProfileScreen = ({navigation}) => {
   const [categories, setCategories] = useState([]);
 
   const getCategories = async () => {
-    const data = await fetch('http://192.168.1.17:5000/sql//allCategories');
+    const data = await fetch('http://192.168.1.4:5000/sql//allCategories');
     const res = await data.json();
     setCategories(res);
   };
@@ -166,7 +166,8 @@ const ProfileScreen = ({navigation}) => {
               activeOpacity={0.9}
               style={{marginVertical: '2%', width: '90%'}}
               onPress={() => {
-                console.log('login');
+                //console.log('login');
+                navigation.navigate('Login')
               }}>
               <Text
                 style={{

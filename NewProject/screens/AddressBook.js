@@ -50,7 +50,7 @@ const AddressBook = ({route}) => {
   useEffect(() => {
     setLoading(true)
     setDbAddress([])
-     axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
+     axios.get(`http://192.168.1.4:5000/sql/getAddress/${user_id}`)
       .then(function (response) {
         setDbAddress(response.data)
         // setSelectedValue[dbAddress[0]]
@@ -71,6 +71,7 @@ const AddressBook = ({route}) => {
           dbAddress?.length !== 0 ? (
             <NativeBaseProvider>
               <Radio.Group
+                
                 name="addressRadioGroup"
                 value={selectedValue}
                 onChange={(nextValue) => {
@@ -78,7 +79,7 @@ const AddressBook = ({route}) => {
                 }}>
                 <ScrollView>
                   {dbAddress?.map((element, index) => (
-                    <Radio style={{ width: "93%", alignSelf: 'center' }} key={element.address_id} value={element} my="10">
+                    <Radio style={{ width: "93%", alignSelf: 'center' }} key={element.address_id} colorScheme={"violet"} value={element} my="10">
                       <View style={styles.elevate}>
                         <View style={styles.addressCard}>
                           <View style={styles.addressDetails}>

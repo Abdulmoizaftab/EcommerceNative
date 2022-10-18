@@ -722,7 +722,8 @@ router.get("/getOrderDetails/:limit", (req, res) => {
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on order_items.product_id = product.product_id
   inner join payment_details on order_details.payment_id = payment_details.payment_id
-  where order_items.user_id=2010`,
+  where order_items.user_id=2010
+  order by order_details.created_at desc`,
     function (err, recordset) {
       if (err) {
         console.error(err);

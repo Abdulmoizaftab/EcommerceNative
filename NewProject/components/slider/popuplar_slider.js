@@ -76,7 +76,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
         <View style={Styles.middle2_1}>
           <Text style={Styles.middle2_1_text1}>Popular Items</Text>
         </View>
-        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.6} onPress={()=>navigate.navigate('SeeAllPopular')}>
+        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.5} onPress={()=>navigate.navigate('SeeAllPopular')}>
           <Text style={Styles.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Styles.middle2_2_icon} />
         </TouchableOpacity>
@@ -96,7 +96,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
       
       
       (
-        <TouchableOpacity key={key} onPress={() => navigate.navigate('Product_detail',element)}>
+        <TouchableOpacity key={key} activeOpacity={0} onPress={() => navigate.navigate('Product_detail',element)}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image
@@ -137,7 +137,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 const Styles = StyleSheet.create({
   main: {
     width: '100%',
-    backgroundColor: "#e8e7e6"
+    backgroundColor: "#f7f7f7"
   },
   middle2: {
     flexDirection: 'row',
@@ -185,8 +185,8 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     borderRadius: 10,
-    elevation: 3.5,
-    shadowColor: '#52006A',
+    elevation: 3,
+    shadowColor: '#555',
     width: 160,
     height: 190,
     marginLeft: 10,

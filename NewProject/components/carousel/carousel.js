@@ -40,7 +40,7 @@ const Carousel = ({ data }) => {
 
     if (data && data.length) {
         return (
-            <View style={{backgroundColor:"#e8e7e6"}}>
+            <View style={{backgroundColor:"#f7f7f7"}}>
                 <FlatList data={data}
                 ref = {(flatList) => {this.flatList = flatList}}
                     keyExtractor={(item, index) => 'key' + index}

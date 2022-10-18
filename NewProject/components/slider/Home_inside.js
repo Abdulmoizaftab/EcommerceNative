@@ -334,7 +334,7 @@ const Style = StyleSheet.create({
   all_item_main: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#e8e7e6",
+    backgroundColor: "#f7f7f7",
   },
   all_item_main2: {
     width: '50%',
@@ -349,9 +349,9 @@ const Style = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     elevation: 3.5,
-    shadowColor: '#52006A',
+    shadowColor: '#555',
     zIndex:-997,
-    elevation:-998
+    elevation:3
   },
   all_item_main4: {
     justifyContent: 'center',

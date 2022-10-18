@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert,TouchableWithoutFeedback } from 'react-native';
 import React , {useState,useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
