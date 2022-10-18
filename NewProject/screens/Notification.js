@@ -1,67 +1,82 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView,RefreshControl } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, RefreshControl } from 'react-native'
+import React,{useState} from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-const arr = [1, 2, 3, 4, 5, 6, 7, 89,2,3,4,2]
+const arr = [1, 2, 3, 4, 5, 6, 7, 89, 2, 3, 4, 2]
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
 
-const Notification = ({navigation}) => {
+const Notification = ({ navigation }) => {
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+  const [login, setLogin] = useState(false);
   return (
-    <View style={styles.all_item_main}>
-      
-      <View style={styles.head_main}>
-        <View>
-        <AntDesign name='arrowleft' style={styles.head_icon} onPress={()=>navigation.goBack()}/>
-        </View>
-        <View style={styles.head_text_view}>
-          <Text style={styles.head_text}>Notifications</Text>
-        </View>
-      </View>
-      <ScrollView  refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-          
-        } showsVerticalScrollIndicator={false}>
-          <View style={{borderBottomWidth:1,width:"92%",borderColor:"#b3b1b1",alignSelf:"center"}}>
-        <Text style={{color:"gray",fontSize:16,width:"95%"}}>All</Text>
-      </View>
-        {arr.map((item, index) => (
+    <>
+      {
+        <View style={styles.all_item_main}>
 
-          <View style={styles.ParentNotification} key={index}>
-            <View style={styles.Notification}>
-              <View style={styles.innerLeft}>
-                
-                <View style={styles.TextContainer}>
-                  <Text style={{color:"gray",fontWeight:"bold"}}>Your order status has been changed. You can get your order in 3-4 working days</Text>
-                  <Text style={{color:"#c7c6c5",fontSize:11,marginTop:5}}>12 Hours Ago</Text>
-                </View>
-              </View>
-              <View style={styles.NotificationIcons}>
-                <AntDesign name='closecircle' color={'red'} style={{opacity:0.6}} size={30} />
-              </View>
+          <View style={styles.head_main}>
+            <View>
+              <AntDesign name='arrowleft' style={styles.head_icon} onPress={() => navigation.goBack()} />
+            </View>
+            <View style={styles.head_text_view}>
+              <Text style={styles.head_text}>Notifications</Text>
             </View>
           </View>
-          
-        ))}
-      </ScrollView>
+          {
+            login ? <ScrollView refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+
+            } showsVerticalScrollIndicator={false}>
+              <View style={{ borderBottomWidth: 1, width: "92%", borderColor: "#b3b1b1", alignSelf: "center" }}>
+                <Text style={{ color: "gray", fontSize: 16, width: "95%" }}>All</Text>
+              </View>
+              {arr.map((item, index) => (
+
+                <View style={styles.ParentNotification} key={index}>
+                  <View style={styles.Notification}>
+                    <View style={styles.innerLeft}>
+
+                      <View style={styles.TextContainer}>
+                        <Text style={{ color: "gray", fontWeight: "bold" }}>Your order status has been changed. You can get your order in 3-4 working days</Text>
+                        <Text style={{ color: "#c7c6c5", fontSize: 11, marginTop: 5 }}>12 Hours Ago</Text>
+                      </View>
+                    </View>
+                    <View style={styles.NotificationIcons}>
+                      <AntDesign name='closecircle' color={'red'} style={{ opacity: 0.6 }} size={30} />
+                    </View>
+                  </View>
+                </View>
+
+              ))}
+            </ScrollView> : <>
+              <View style={{ flex: 1, backgroundColor: "#fff", alignItems: "center", justifyContent: "center" }}>
+                <Text style={{ fontSize: 20, color: "black", marginVertical: "5%" }}>Please login to continue</Text>
+                <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Login')} style={{ alignItems: "center", padding: "3%", width: "50%", backgroundColor: "#5A56E9", borderRadius: 5 }}>
+                  <Text style={{ fontSize: 20, color: "#fff" }}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          }
 
 
 
-    </View>
+        </View>
+      }
+    </>
+
   )
 }
 
@@ -73,29 +88,29 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#e8e7e6",
   },
-  
-  head_main:{
-    display:"flex",
-    flexDirection:"row",
-    alignItems:"center",
-    width:"100%",
-    padding:"3%",
-    backgroundColor:"#5A56E9"
+
+  head_main: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    padding: "3%",
+    backgroundColor: "#5A56E9"
   },
-  head_icon:{
-    fontSize:20,
-    color:"white"
+  head_icon: {
+    fontSize: 20,
+    color: "white"
   },
-  head_text_view:{
-    width:"95%",
-    justifyContent:"center",
-    alignItems:"center"
+  head_text_view: {
+    width: "95%",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  head_text:{
-    fontSize:19,color:"white",fontWeight:"bold"
+  head_text: {
+    fontSize: 19, color: "white", fontWeight: "bold"
   },
-  
-  
+
+
 
   timeElaspe: {
     borderBottomWidth: 2,
@@ -147,7 +162,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     shadowColor: '#aaa',
     borderRadius: 10,
-  //  marginBottom:10
+    //  marginBottom:10
 
   },
   innerLeft: {
@@ -162,11 +177,11 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 50,
     height: 50,
-    
+
   },
   TextContainer: {
 
-    
+
     width: '100%',
     justifyContent: 'center',
     paddingTop: '2%',

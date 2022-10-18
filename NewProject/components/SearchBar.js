@@ -1,5 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import axios from 'axios';
+
 import {
 
   StyleSheet,
@@ -121,7 +122,7 @@ const SearchBar = () => {
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
             {searchText ?
-              <SearchDropdown dataSource={filterData} navigate={navigate}/> :
+              <SearchDropdown dataSource={filterData} navigate={navigate} /> :
               null
             }
         </>

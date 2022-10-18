@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator,TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import noOrder from '../assets/fonts/images/noOrder.png';
@@ -12,6 +12,7 @@ const Orders = ({navigation}) => {
   const [reload, setReload] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [limit, setlimit] = useState(6);
+  const [login, setLogin] = useState(false);
 
   const onRefresh = () => {
     setIsRefreshing(true);  
@@ -151,28 +152,37 @@ const Orders = ({navigation}) => {
         </View>
       </View>
 
-      {OrdProducts && OrdProducts.length > 0 ? (
-        <FlatList
-          ListHeaderComponent={<View></View>}
-          data={OrdProducts}
-          keyExtractor={item => item.item_id}
-          renderItem={renderItem}
-          onEndReached={onEndReached}
-          ListFooterComponent={flatListEnd}
-          refreshing={IsRefreshing} onRefresh={onRefresh}
-        />
-      ) : (
-        isLoading?(
-        <View style={Style.main_img}>
-          <Image style={{width: 50, height: 50}} source={loaderGif} />
+      {
+        login ? <>
+          {OrdProducts && OrdProducts.length > 0 ? (
+          <FlatList
+            ListHeaderComponent={<View></View>}
+            data={OrdProducts}
+            keyExtractor={item => item.item_id}
+            renderItem={renderItem}
+            onEndReached={onEndReached}
+            ListFooterComponent={flatListEnd}
+            refreshing={IsRefreshing} onRefresh={onRefresh}
+          />
+        ) : (
+          isLoading?(
+          <View style={Style.main_img}>
+            <Image style={{width: 50, height: 50}} source={loaderGif} />
+          </View>
+          ):(
+          <View style={Style.main_img}>
+            <Image style={{width: '70%', height: '35%'}} source={noOrder} />
+            <Text style={{color: 'gray', fontWeight: '400'}}>You haven't ordered anything yet.</Text>
+          </View>
+          )
+        )}
+        </> : <View style={{flex:1,backgroundColor:"#fff",alignItems:"center",justifyContent:"center"}}>
+        <Text style={{fontSize:20,color:"black",marginVertical:"5%"}}>Please login to continue</Text>
+        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Login')} style={{alignItems:"center",padding:"3%",width:"50%",backgroundColor:"#5A56E9",borderRadius:5}}>
+          <Text style={{fontSize:20,color:"#fff"}}>Login</Text>
+        </TouchableOpacity>
         </View>
-        ):(
-        <View style={Style.main_img}>
-          <Image style={{width: '70%', height: '35%'}} source={noOrder} />
-          <Text style={{color: 'gray', fontWeight: '400'}}>You haven't ordered anything yet.</Text>
-        </View>
-        )
-      )}
+      }
     </View>
   );
 };
