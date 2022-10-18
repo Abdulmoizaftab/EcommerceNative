@@ -253,7 +253,7 @@ const Style = StyleSheet.create({
   },
   all_item_main: {
     width: '100%',
-    backgroundColor: '#e8e7e6',
+    backgroundColor: '#f7f7f7',
     height: '100%',
     marginBottom: -110,
   },

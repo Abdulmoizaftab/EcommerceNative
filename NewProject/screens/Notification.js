@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   all_item_main: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#e8e7e6",
+    backgroundColor: "#f7f7f7",
   },
   
   head_main:{

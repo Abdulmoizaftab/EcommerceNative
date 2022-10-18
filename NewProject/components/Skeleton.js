@@ -48,7 +48,7 @@ const Style = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         width: "100%",
-        backgroundColor: "#e8e7e6",
+        backgroundColor: "#f7f7f7",
     },
     all_item_main2: {
         width: '50%',

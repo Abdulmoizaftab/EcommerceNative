@@ -71,6 +71,7 @@ const AddressBook = ({route}) => {
           dbAddress?.length !== 0 ? (
             <NativeBaseProvider>
               <Radio.Group
+                
                 name="addressRadioGroup"
                 value={selectedValue}
                 onChange={(nextValue) => {
@@ -78,7 +79,7 @@ const AddressBook = ({route}) => {
                 }}>
                 <ScrollView>
                   {dbAddress?.map((element, index) => (
-                    <Radio style={{ width: "93%", alignSelf: 'center' }} key={element.address_id} value={element} my="10">
+                    <Radio style={{ width: "93%", alignSelf: 'center' }} key={element.address_id} colorScheme={"violet"} value={element} my="10">
                       <View style={styles.elevate}>
                         <View style={styles.addressCard}>
                           <View style={styles.addressDetails}>
