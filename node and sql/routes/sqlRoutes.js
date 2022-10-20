@@ -204,6 +204,19 @@ router.post("/login", (req, res) => {
 
 
 
+router.put('/UpdateOrder', (req, res) => {
+  const { orderStatus, order_id } = req.body;
+  req.app.locals.db.query(`update order_details set orderStatus = '${orderStatus}' where order_id = ${order_id}`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).send('Order Updated');
+  })
+})
+
+
 
 
 
