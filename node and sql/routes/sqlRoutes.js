@@ -102,7 +102,7 @@ router.get('/getOrdersAdminPortal', (req, res) => {
   })
 })
 
-router.get('/productAdminPortal', (req, res) => {
+router.get('/getProductAdminPortal', (req, res) => {
   req.app.locals.db.query(`
   select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
   from product
