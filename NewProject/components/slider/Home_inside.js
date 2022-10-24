@@ -12,12 +12,16 @@ import Categories from '../Categories';
 import VendorSlider from '../VendorSlider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider } from 'native-base';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
+// import PushNotification , {Importance} from "react-native-push-notification";
 
 const Home_inside = ({ navigate }) => {
+
+
+  
+
 
 
   const favouriteState = useSelector(state => state.favourite)
@@ -43,6 +47,23 @@ const Home_inside = ({ navigate }) => {
 
   useEffect(() => {
     getdata()
+    
+    // PushNotification.createChannel(
+    //   {
+    //     channelId: "test1", // (required)
+    //     channelName: "My channel", // (required)
+    //     channelDescription: "A channel to test your notifications", // (optional) default: undefined.
+    //     playSound: false, // (optional) default: true
+    //     soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+    //     importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+    //     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    //   },
+    //   (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    // );
+
+    // PushNotification.channelExists("test1", function (exists) {
+    //   console.log(exists); // true/false
+    // });
   }, [limit]);
 
   const flatlistEnd = () => {

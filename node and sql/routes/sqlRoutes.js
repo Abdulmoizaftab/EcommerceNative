@@ -693,6 +693,20 @@ router.get("/hasUserRated", (req, res) => {
   })
 })
 
+router.post("/updateNotifyToken", (req,res)=>{
+  const {user_id , token} = req.body
+  req.app.locals.db.query(`update users set Notification_Token = '${token}' where user_id = ${user_id}`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }else{
+      res.status(200).send('Done')
+    }
+  })
+
+})
+
 /*========================================================================================================*/
 
 //VENDOR PORTAL//
