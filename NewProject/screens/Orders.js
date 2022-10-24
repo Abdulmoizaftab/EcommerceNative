@@ -1,10 +1,12 @@
-import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator,TouchableOpacity,Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import noOrder from '../assets/fonts/images/noOrder.png';
 import loaderGif from '../assets/fonts/images/loader.gif';
 import { NativeBaseProvider,Skeleton } from 'native-base';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { Logout } from '../redux/LoginRedux';
+import axios from 'axios';
 
 
 const Orders = ({navigation}) => {
@@ -13,9 +15,11 @@ const Orders = ({navigation}) => {
   const [reload, setReload] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [limit, setlimit] = useState(6);
+  const [login,setLogin]=useState(false)
   const {isFetching, error, currentUser, loadings} = useSelector(
     state => state.user,
   );
+  const dispatch=useDispatch()
 
   const onRefresh = () => {
     setIsRefreshing(true);  
@@ -59,13 +63,15 @@ const Orders = ({navigation}) => {
   const getData = async () => {
     try {
       if(currentUser){
-
-        const res = await fetch(`http://192.168.1.24:5000/sql/getOrderDetails/${limit}`,{
+        setLogin(true)
+        const res = await axios.post(`http://192.168.1.24:5000/sql/getOrderDetails/${limit}`,{user_id:currentUser.user[0].user_id},{
           headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
+        
       });
-      const result = await res.json();
+      setLoading(false)
+      const result = res.data
       //console.log("datatatata==>",result);
       const main_arr = [result[0]];
       var id=result[0].order_id
@@ -94,9 +100,50 @@ const Orders = ({navigation}) => {
     else{
       console.log("Session is expireeeee");
       setLoading(false)
+      setLogin(false)
     }
     } catch (e) {
       console.log('error', e);
+      //console.log("eeee",e)
+        if(e == "AxiosError: Request failed with status code 401"){
+            Alert.alert(
+                "Attention",
+                "Your session is expired. Please login again",
+                [
+              {
+                text: "Ok",
+                onPress: async () => {
+                    try {
+                        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                            headers: {
+                                'Authorization': `Bearer ${currentUser.token}` 
+                            }
+                        })
+                        navigation.navigate('Profile')
+                } catch (e) {
+                    console.log("Something went wrong");
+                }
+            
+            },
+              }
+            ]
+            );
+            dispatch(Logout());
+        }
+        else if(e == "AxiosError: Network Error"){
+            console.log("Something 2");
+            Alert.alert(
+                "Network Error",
+                "Please check your network connection.",
+                [
+              {
+                text: "Ok",
+                onPress: () => console.log("Ok"),
+              }
+            ]
+            );
+            
+        }
     }
   };
 
@@ -167,8 +214,13 @@ const Orders = ({navigation}) => {
           <Text style={Style.head_text}>Your Orders</Text>
         </View>
       </View>
-
-      {OrdProducts && OrdProducts.length > 0 ? (
+      {login ? (
+        isLoading ? (
+          <View style={Style.main_img}>
+          <Image style={{width: 50, height: 50}} source={loaderGif} />
+        </View>
+        ) :
+      OrdProducts && OrdProducts.length > 0 ? (
         <FlatList
           ListHeaderComponent={<View></View>}
           data={OrdProducts}
@@ -189,7 +241,15 @@ const Orders = ({navigation}) => {
           <Text style={{color: 'gray', fontWeight: '400'}}>You haven't ordered anything yet.</Text>
         </View>
         )
-      )}
+      )):(
+        <View style={{flex:1,backgroundColor:"#fff",alignItems:"center",justifyContent:"center"}}>
+        <Text style={{fontSize:20,color:"black",marginVertical:"5%"}}>Please login to continue</Text>
+        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Profile')} style={{alignItems:"center",padding:"3%",width:"50%",backgroundColor:"#5A56E9",borderRadius:5}}>
+          <Text style={{fontSize:20,color:"#fff"}}>Login</Text>
+        </TouchableOpacity>
+        </View>
+      )
+      }
     </View>
   );
 };

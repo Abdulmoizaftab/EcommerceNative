@@ -73,9 +73,14 @@ const SearchBar = () => {
 
     const check_session=async()=>{
       console.log(currentUser)
+      try {
       if(currentUser){
-        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id})
-        // console.log("Response",res.data)
+        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+          headers: {
+            'Authorization': `Bearer ${currentUser.token}` 
+          }
+        })
+        
         if(res.data == "Status updated"){
           dispatch(Logout())
           console.log("Response is==>",res.data);
@@ -87,7 +92,23 @@ const SearchBar = () => {
       else{
         console.log("Session expired")
       }
+    } catch (error) {
+      if(error == "AxiosError: Network Error"){
+        console.log("Something 2");
+        Alert.alert(
+            "Network Error",
+            "Please check your network connection.",
+            [
+          {
+            text: "Ok",
+            onPress: () => console.log("Ok"),
+          }
+        ]
+        );
+        
     }
+    }
+  }
 
     useEffect(() => {
       check_session()

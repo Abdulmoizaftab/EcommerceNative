@@ -5,31 +5,81 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  BackHandler,
+  ActivityIndicator
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import SearchBar from '../components/SearchBar';
 import LinearGradient from 'react-native-linear-gradient';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { useDispatch, useSelector } from 'react-redux';
+import { Logout,loginStart } from '../redux/LoginRedux';
+import axios from 'axios';
+
+
 
 const ProfileScreen = ({navigation}) => {
-  const [categories, setCategories] = useState([]);
+  const [login, setLogin] = useState(false);
+  const [user,setUser]=useState([])
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
+  const dispatch=useDispatch();
 
-  const getCategories = async () => {
-    const data = await fetch('http://192.168.1.24:5000/sql//allCategories');
-    const res = await data.json();
-    setCategories(res);
+  const getData = () => {
+    if(currentUser){
+      setUser(currentUser.user)
+      setLogin(true)
+    }
+    else{
+      setLogin(false)
+    }
   };
+  
+  
 
   useEffect(() => {
-    getCategories();
+    getData();
   }, []);
 
+  const back=()=>{
+    //console.log("Pressss");
+    navigation.navigate('Favourites')
+    //BackHandler.exitApp()
+  }
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", back);
+    return () => BackHandler.removeEventListener("hardwareBackPress", back);
+
+  }, []);
+  
+
+  
+
   return (
+    
     <>
-      {false ? (
+    <View style={styles.head_main}>
+        <View>
+          <AntDesign
+            name="arrowleft"
+            style={styles.head_icon}
+            onPress={() => {
+              navigation.navigate('Home');
+             //BackHandler.addEventListener('hardwareBackPress',()=>back())
+             
+            }
+            }
+          />
+        </View>
+        <View style={styles.head_text_view}>
+          <Text style={styles.head_text}>My Account</Text>
+        </View>
+      </View>
+      {login ? (
+        
         <View
           style={{
             alignItems: 'center',
@@ -52,17 +102,50 @@ const ProfileScreen = ({navigation}) => {
               style={styles.editIcon}
             />
 
-            <Text style={styles.userName}>Profile user text text text</Text>
-            <Text style={styles.userEmail}>user@gmail.com</Text>
-            <Text style={styles.userEmail}>0310 xxxxxx67</Text>
-            {/* <Image
-             style={styles.logo}
-             source={{
-                 uri: 'https://freepngimg.com/thumb/technology/32333-4-technology-transparent.png',width: 150, height: 100,
-                }}
-                
-              /> */}
+            <Text style={styles.userName}>{user[0].first_name} {user[0].last_name}</Text>
+            <Text style={styles.userEmail}>{user[0].email}</Text>
+            <Text style={styles.userEmail}>{user[0].telephone}</Text>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              style={{marginVertical: '2%', width: '30%',backgroundColor: '#5A56E9',borderRadius: 10,alignSelf: 'center',
+              padding:"2%",alignItems:"center"}}
+              onPress={async() => {
+                console.log('logout');
+                dispatch(loginStart())
+                try {
+                  const res= await axios.post('http://192.168.1.24:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
+                    headers: {
+                      'Authorization': `Bearer ${currentUser.token}` 
+                    }
+                  })
+                  console.log("log res==>",res.data)
+                  dispatch(Logout())
+                  navigation.navigate('TabNav')
+                } catch (error) {
+                  Alert.alert(
+                    "Logout failed",
+                    "Something went wrong",
+                    [
+                  {
+                    text: "Ok",
+                    onPress: () => console.log("Ok"),
+                  }
+                ]
+                );
+                }
+              }}>
+                {loadings === true?<ActivityIndicator size='small' color='white'/>:
+              <Text
+                style={{
+                  color: '#ffff',
+                  fontWeight:'bold',
+                }}>Logout
+              </Text>}
+              
+            </TouchableOpacity>
           </LinearGradient>
+                 <ScrollView showsVerticalScrollIndicator={false}>
+<View style={{alignItems:"center"}}>
 
           <TouchableOpacity
             activeOpacity={0.9}
@@ -79,7 +162,7 @@ const ProfileScreen = ({navigation}) => {
                 <MaterialCommunityIcons
                   name="shopping-outline"
                   style={styles.buttonIcon}
-                />
+                  />
                 {'  '}
                 My Orders
               </Text>
@@ -100,7 +183,7 @@ const ProfileScreen = ({navigation}) => {
                 <MaterialCommunityIcons
                   name="heart-outline"
                   style={styles.buttonIcon}
-                />
+                  />
                 {'  '}
                 Favourites
               </Text>
@@ -144,6 +227,8 @@ const ProfileScreen = ({navigation}) => {
               </Text>
             </LinearGradient>
           </TouchableOpacity>
+                </View>
+          </ScrollView>
         </View>
       ) : (
         <View
@@ -160,7 +245,7 @@ const ProfileScreen = ({navigation}) => {
             start={{x: 0, y: 0}}
             end={{x: 1.2, y: 0}}
             colors={['#fff', '#D1D1ED']}>
-            <Text style={styles.userNameDisable}>Please Log in to access all features</Text>
+            <Text style={styles.userNameDisable}>Please log in to access all features</Text>
 
             <TouchableOpacity
               activeOpacity={0.9}
@@ -189,15 +274,9 @@ const ProfileScreen = ({navigation}) => {
               </Text>
             </TouchableOpacity>
 
-            {/* <Text style={styles.userEmail}>0310 xxxxxx67</Text> */}
-            {/* <Image
-         style={styles.logo}
-         source={{
-             uri: 'https://freepngimg.com/thumb/technology/32333-4-technology-transparent.png',width: 150, height: 100,
-            }}
-            
-          /> */}
           </LinearGradient>
+            <ScrollView showsVerticalScrollIndicator={false}>
+<View style={{alignItems:"center"}}>
 
           <TouchableOpacity
             activeOpacity={0.9}
@@ -270,6 +349,9 @@ const ProfileScreen = ({navigation}) => {
               </Text>
             </LinearGradient>
           </TouchableOpacity>
+          
+          </View>
+          </ScrollView>
         </View>
       )}
     </>
@@ -277,6 +359,28 @@ const ProfileScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  head_main: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    padding: '3%',
+    backgroundColor: '#5A56E9',
+  },
+  head_icon: {
+    fontSize: 20,
+    color: 'white',
+  },
+  head_text_view: {
+    width: '95%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  head_text: {
+    fontSize: 19,
+    color: 'white',
+    fontWeight: 'bold',
+  },
   icon: {
     fontSize: 35,
     color: '#5A56E9',
@@ -323,7 +427,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: '5%',
-    marginTop: '10%',
+    marginTop: '5%',
     borderColor: '#5D59EE',
     borderWidth: 2,
   },

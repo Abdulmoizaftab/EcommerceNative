@@ -15,16 +15,13 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
   const [error, setError] = useState(false)
   const [dbProduct, setDbProduct] = useState([])
   const [swipeClose, setSwipeClose] = useState(true)
+  
   const reduxData = useSelector(state => state.cart.products);
   const reduxDataTest = useSelector(state => state.test.products);
   const TestreduxDataTotal = useSelector(state => state.test.total);
   const TestreduxDataTotalTest = useSelector(state => state.cart.total);
   const testreduxDataquantity = useSelector(state => state.test.quantity);
-  // console.log("🚀 ~ file: addToCart_Comp.js ~ line 20 ~ TestreduxDataquantity", TestreduxDataTotal,TestreduxDataTotalTest)
-
-  // const getData = () => {
-  //   console.log("🚀 ~ ", reduxDataTest)
-  // }
+  
 
   useEffect(() => {
    dispatch(resetCartTest())
@@ -144,11 +141,11 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
 
   return (
 
-    products && products.length !== 0 ? (
+    
+    
+    (products && products.length !== 0 ? (
 
       <View style={Style.item}>
-        {/* <Button style={{marginTop:2}} title='Select All' onPress={getData}></Button> */}
-        
         {
           error ? (
             //<Text style={{alignSelf:"center" , color:'red' , marginVertical:'2%' }}>Please deselect the item and then delete it from the cart. </Text>
@@ -157,26 +154,7 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
             null
           )
         }
-
-
         <ScrollView showsVerticalScrollIndicator={false}>
-
-          {/* for debuging */}
-          {/* <Button title='hello je' onPress={clearData}></Button>
-          <Button title='lao gee' onPress={getData}></Button> */}
-
-          {/* select all feature */}
-          {/* {reduxData
-            ?
-            <Button title='select all' onPress={SelectAll}></Button>
-            :
-            null
-          } */}
-
-        
-
-
-
 
           {products && products.map((element, index) => {
             return (
@@ -248,6 +226,7 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading}) => {
           
             }
         </View> 
+    )
     )
 
 

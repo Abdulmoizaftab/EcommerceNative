@@ -42,7 +42,7 @@ const Favorites = ({navigation}) => {
     try {
       if (currentUser) {
         setLogin(true);
-        getFavouriteDB(dispatch, currentUser);
+        getFavouriteDB(dispatch, currentUser,navigation);
         setLoader(false);
       } else {
         console.log('No current user');
@@ -154,7 +154,23 @@ const Favorites = ({navigation}) => {
                   name="delete-alert-outline"
                   style={Style.middle2_2_icon}
                   onPress={() => {
-                    remFavouriteDB(dispatch, productDetail);
+                    if(currentUser){
+                      remFavouriteDB(dispatch, productDetail);
+                    }
+                    else{
+                      Alert.alert(
+                        "Attention",
+                        "Your session is expired. Please login again",
+                        [
+                      {
+                        text: "Ok",
+                        onPress:() => {
+                        navigation.navigate('Profile')
+                    },
+                      }
+                    ]
+                    );
+                    }
                   }}
                 />
               </TouchableOpacity>
@@ -227,7 +243,7 @@ const Favorites = ({navigation}) => {
           </Text>
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate('Profile')}
             style={{
               alignItems: 'center',
               padding: '3%',

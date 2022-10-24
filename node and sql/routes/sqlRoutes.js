@@ -374,12 +374,13 @@ router.post("/addCartItem", (req, res) => {
     }
   );
 });
-router.get("/getCartItem", (req, res) => {
+router.post("/getCartItem", auth.isLogin,(req, res) => {
+  const {user_id}=req.body
   req.app.locals.db.query(
     `select product.* , cart_item.user_id , cart_item.quantity
   from product
   inner join cart_item on product.product_id = cart_item.product_id
-  where user_id=2010 and is_deleted=0`,
+  where user_id=${user_id} and is_deleted=0`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -578,7 +579,7 @@ router.put("/updateAddress/:address_id", (req, res) => {
 // })
 
 
-router.post('/session',auth.isLogout,(req,res)=>{
+router.post('/session',auth.isLogoutSession,(req,res)=>{
   const {user_id}=req.body
   req.app.locals.db.query(`update shopping_session set status='disable' where user_id=${user_id}`, function(err, recordset){
     if(err){
@@ -586,8 +587,24 @@ router.post('/session',auth.isLogout,(req,res)=>{
       res.status(500).send('SERVER ERROR')
       return
     }
+    else{
+      res.status(201).send("Status updated")
+    }
   })
   });
+  router.post('/logout',auth.isLogout,(req,res)=>{
+    const {user_id}=req.body
+    req.app.locals.db.query(`update shopping_session set status='disable' where user_id=${user_id}`, function(err, recordset){
+      if(err){
+        console.error(err)
+        res.status(500).send('SERVER ERROR')
+        return
+      }
+      else{
+        res.status(201).send("Status updated")
+      }
+    })
+    });
 
 // router.get('/getFavourites',(req,res)=>{
 //   req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
@@ -708,13 +725,14 @@ router.post("/setOrderDetails", (req, res) => {
   );
 });
 
-router.get('/getOrderDetails/:limit',auth.isLogin,(req,res)=>{
+router.post('/getOrderDetails/:limit',auth.isLogin,(req,res)=>{
+  const {user_id}=req.body
   req.app.locals.db.query(`select top(${req.params.limit}) order_items.item_id,order_details.created_at,order_details.total,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on order_items.product_id = product.product_id
   inner join payment_details on order_details.payment_id = payment_details.payment_id
-  where order_items.user_id=${req.session.user_id}
+  where order_items.user_id=${user_id}
   order by order_details.created_at desc`, function(err, recordset){
     if(err){
       console.error(err)
@@ -1057,12 +1075,13 @@ router.post("/updateFavourites", (req, res) => {
   );
 });
 
-router.get("/getFavourites", (req, res) => {
+router.post("/getFavourites", auth.isLogin,(req, res) => {
+  const {user_id}=req.body
   req.app.locals.db.query(
     `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id,discount.discount_percent from product
     inner join favourites on product.product_id=favourites.favouritedProd 
     left join discount  on product.discount_id = discount.discount_id
-    where favourites.userId=2010 and favourites.is_deleted=0`,
+    where favourites.userId=${user_id} and favourites.is_deleted=0`,
     function (err, recordset) {
       if (err) {
         console.error(err);

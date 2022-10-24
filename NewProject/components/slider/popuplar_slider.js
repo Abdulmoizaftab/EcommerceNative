@@ -96,7 +96,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
       
       
       (
-        <TouchableOpacity key={key} activeOpacity={0} onPress={() => navigate.navigate('Product_detail',element)}>
+        <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => navigate.navigate('Product_detail',element)}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image

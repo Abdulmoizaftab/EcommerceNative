@@ -57,6 +57,9 @@ const Product_detail = ({route}) => {
 
   const favouriteState = useSelector(state => state.favourite);
   const favArray = favouriteState.favourites;
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
   const dispatch = useDispatch();
 
   const renderSize = ({item}) => (
@@ -74,7 +77,9 @@ const Product_detail = ({route}) => {
 
   useEffect(() => {
     setImgArr([paramData.imgs, paramData.imgs]);
-    getFavouriteDB(dispatch);
+    if(currentUser){
+      getFavouriteDB(dispatch);
+    }
     setPrdRating(paramData.rating);
   }, [paramData]);
 
@@ -120,8 +125,8 @@ const Product_detail = ({route}) => {
             name="arrow-back-circle"
             onPress={() => navigate.goBack()}
           />
-
-          {favArray.filter(item => item.product_id === proId).length > 0 ? (
+          {currentUser ? (
+          favArray.filter(item => item.product_id === proId).length > 0 ? (
             //*======================================================== Check point to flip the heart buttons
             addingToFav ? (
               <ActivityIndicator
@@ -167,6 +172,27 @@ const Product_detail = ({route}) => {
                   image: paramData.imgs,
                 };
                 addToFav(productDetail);
+              }}
+              style={Style.heartBtn}
+            />
+          )):(
+            <MaterialCommunityIcons
+              name="cards-heart-outline"
+              onPress={() => {
+                Alert.alert(
+                  "Attention",
+                  "Please login to continue",
+                  [
+                {
+                  text: "Ok",
+                  onPress: async () => {
+                     
+                    navigate.navigate('Profile')
+
+              },
+                }
+              ]
+              );
               }}
               style={Style.heartBtn}
             />
@@ -251,7 +277,8 @@ const Product_detail = ({route}) => {
 
                   <TouchableOpacity
                     style={{width: '60%', alignItems: 'center'}}
-                    onPress={postReview}>
+                    onPress={postReview}
+                    >
                     <View
                       style={{
                         width: '100%',
@@ -292,7 +319,26 @@ const Product_detail = ({route}) => {
             <View>
               <TouchableOpacity
                 style={Style.button}
-                onPress={() => setModalVisible(true)}>
+                onPress={() =>{ 
+                  if(currentUser){
+                    setModalVisible(true)
+                  }
+                  else{
+                    Alert.alert(
+                      "Attention",
+                      "Please login to continue",
+                      [
+                    {
+                      text: "Ok",
+                      onPress:  () => {
+                        //navigation.navigate('Profile')
+                        navigate.navigate('Profile')
+                  },
+                    }
+                  ]
+                  );
+                  }
+                  }}>
                 <Text style={{fontSize: 12}}>WRITE A REVIEW</Text>
               </TouchableOpacity>
             </View>

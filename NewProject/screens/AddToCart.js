@@ -1,12 +1,14 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,Image,Alert } from 'react-native';
 import React, { useRef, useEffect,useState } from 'react';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import { useNavigation } from '@react-navigation/native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import CheckoutBottomSheet from '../components/CheckoutBottomSheet';
 import AddToCart_Comp from '../components/addToCart_Comp'
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import axios from 'axios';
+import loadingGif from '../assets/fonts/images/loader.gif';
+import { Logout } from '../redux/LoginRedux';
 
 const AddToCart = ({ route, navigation }) => {
   const products = useSelector(state => state.test.products)
@@ -17,19 +19,80 @@ const AddToCart = ({ route, navigation }) => {
   const [dbProds, setDbProds] = useState([])
   const [trigger, setTrigger] = useState(true)
   const [loading, setLoading] = useState(true)
+  const [login, setLogin] = useState(false);
+  const [loader, setLoader] = useState(true);
+  const {isFetching, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
+  const dispatch=useDispatch();
 
 
 
   useEffect(() => {
-    axios.get(`http://192.168.1.24:5000/sql/getCartItem`)
-    .then(function (res) {
+
+    
+    if(currentUser){
+      setLogin(true)
+      axios.post(`http://192.168.1.24:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}` 
+        }
+      })
+      .then(function (res) {
         setDbProds([])
         setDbProds(res.data)
         setLoading(false)
+        setLoader(false)
       })
       .catch(function (err) {
         console.log(err);
+        console.log("hello",err)
+        if(err == "AxiosError: Request failed with status code 401"){
+            Alert.alert(
+                "Attention",
+                "Your session is expired. Please login again",
+                [
+              {
+                text: "Ok",
+                onPress: async () => {
+                    try {
+                        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                            headers: {
+                                'Authorization': `Bearer ${currentUser.token}` 
+                            }
+                        })
+                        navigation.navigate('Profile')
+                } catch (error) {
+                    console.log("Something went wrong");
+                }
+            
+            },
+              }
+            ]
+            );
+            dispatch(Logout());
+        }
+        else if(err == "AxiosError: Network Error"){
+            console.log("Something 2");
+            Alert.alert(
+                "Network Error",
+                "Please check your network connection.",
+                [
+              {
+                text: "Ok",
+                onPress: () => console.log("Ok"),
+              }
+            ]
+            );
+            //dispatch(getFavourite(null))
+        }
       })
+    }
+    else{
+      setLogin(false)
+      setLoader(false)
+    }
+  
   }, [trigger])
 
 
@@ -39,7 +102,14 @@ const AddToCart = ({ route, navigation }) => {
   const navigate = useNavigation();
 
   return (
-    dbProds.length !== 0 ? (
+    <View style={{flex:1}}>
+    {login ?
+      (loader ? (
+        <View style={Style.imgView}>
+          <Image style={Style.imgStyleGif} source={loadingGif}></Image>
+        </View>
+      ) : 
+      dbProds.length !== 0 ? (
       <View style={Style.main}>
         <View style={Style.topHeader}>
           <View style={Style.topHeader_inside}>
@@ -98,7 +168,7 @@ const AddToCart = ({ route, navigation }) => {
           ) : (
             null
           )
-        }
+          }
 
         
       </View>
@@ -109,7 +179,18 @@ const AddToCart = ({ route, navigation }) => {
         {/* <Text>hello</Text> */}
       </View>
     )
-
+    ):(loader ? (
+      <View style={Style.imgView}>
+        <Image style={Style.imgStyleGif} source={loadingGif}></Image>
+      </View>
+    ):<View style={{flex:1,backgroundColor:"#fff",alignItems:"center",justifyContent:"center"}}>
+    <Text style={{fontSize:20,color:"black",marginVertical:"5%"}}>Please login to continue</Text>
+    <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate('Profile')} style={{alignItems:"center",padding:"3%",width:"50%",backgroundColor:"#5A56E9",borderRadius:5}}>
+      <Text style={{fontSize:20,color:"#fff"}}>Login</Text>
+    </TouchableOpacity>
+    </View>)
+  }
+</View>
   )
 }
 const Style = StyleSheet.create({
@@ -143,6 +224,15 @@ const Style = StyleSheet.create({
   topHeader_inside_text2: {
     color: "black",
     fontWeight: "bold"
+  },
+  imgStyleGif: {
+    width: 50,
+    height: 50,
+  },
+  imgView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
   },
 })
 
