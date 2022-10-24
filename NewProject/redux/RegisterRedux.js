@@ -5,19 +5,25 @@ const registerSlice = createSlice({
     initialState:{
         currentUser:null,
         isFetching:false,
-        error:false
+        error:false,
+        loadings:false
     },
     reducers:{
         registerStart:(state)=>{
-            state.isFetching=true
+            state.isFetching=true;
+            state.loadings=true;
+            state.error=false
         },
         registerSuccess:(state,action)=>{
-            state.isFetching=false;
-            state.currentUser=action.payload
+            state.isFetching=false
+            state.currentUser=action.payload.data
+            state.error=false;
+            state.loadings=action.payload.load
         },
-        registerFailure:(state)=>{
+        registerFailure:(state,action)=>{
             state.isFetching=false;
-            state.error=true;
+            state.error=action.payload
+            state.loadings=false
         }
     }
 })

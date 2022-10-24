@@ -39,7 +39,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.24:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -190,7 +190,7 @@ const Home_inside = ({ navigate }) => {
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)}>
+          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)} activeOpacity={0.7}>
             <View style={{borderBottomWidth: 1, paddingVertical:"3%",width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
 
             <Image style={Style.all_item_main4_img}
@@ -286,7 +286,7 @@ const Home_inside = ({ navigate }) => {
 
           
           {/* //?Slider Carosel============================================== */}
-        <Carousel data={dummyData} />
+        <Carousel  />
 
         
           {/* //?Categories buttons============================================== */}
@@ -355,7 +355,7 @@ const Style = StyleSheet.create({
   all_item_main: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#e8e7e6",
+    backgroundColor: "#f7f7f7",
   },
   all_item_main2: {
     width: '50%',
@@ -370,9 +370,9 @@ const Style = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     elevation: 3.5,
-    shadowColor: '#52006A',
+    shadowColor: '#555',
     zIndex:-997,
-    elevation:-998
+    elevation:3
   },
   all_item_main4: {
     justifyContent: 'center',

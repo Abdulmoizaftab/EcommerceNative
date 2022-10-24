@@ -28,7 +28,7 @@ const Subcategory = ({navigation, route}) => {
     if (!id) {
       setProducts([]);
       await fetch(
-        `http://192.168.1.17:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+        `http://192.168.1.24:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -45,7 +45,7 @@ const Subcategory = ({navigation, route}) => {
     } else {
       setProducts([]);
       await fetch(
-        `http://192.168.1.17:5000/sql/subCategoryProducts/${limit}/${id}`,
+        `http://192.168.1.24:5000/sql/subCategoryProducts/${limit}/${id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -253,7 +253,7 @@ const Style = StyleSheet.create({
   },
   all_item_main: {
     width: '100%',
-    backgroundColor: '#e8e7e6',
+    backgroundColor: '#f7f7f7',
     height: '100%',
     marginBottom: -110,
   },

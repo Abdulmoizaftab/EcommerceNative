@@ -21,7 +21,7 @@ const SearchScreen = ({route}) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/suggest/${searchText}/${limit}`)
+    await fetch(`http://192.168.1.24:5000/sql/suggest/${searchText}/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -186,7 +186,7 @@ const Style = StyleSheet.create({
   all_item_main: {
     flex: 1,
     width: "100%",
-    backgroundColor: "#e8e7e6",
+    backgroundColor: "#f7f7f7",
   },
   all_item_main2: {
     width: '50%',

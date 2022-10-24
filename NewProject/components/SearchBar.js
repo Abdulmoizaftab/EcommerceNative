@@ -11,6 +11,8 @@ import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native';
+import { useSelector,useDispatch } from 'react-redux';
+import { Logout } from '../redux/LoginRedux';
 
 
 
@@ -45,7 +47,7 @@ const SearchBar = () => {
     const check =async ()=>{
         try{
           if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.17:5000/sql/suggest/${searchText}/5`);
+            const result= await axios.get(`http://192.168.1.24:5000/sql/suggest/${searchText}/5`);
           if (result.data) {
             result.data.map(item => {
               return arr.push(item);
@@ -65,11 +67,57 @@ const SearchBar = () => {
       check()
       
     }, [searchText])
+
+    const {isFetching,error,currentUser}=useSelector((state)=>state.user)
+    const dispatch=useDispatch()
+
+    const check_session=async()=>{
+      console.log(currentUser)
+      try {
+      if(currentUser){
+        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+          headers: {
+            'Authorization': `Bearer ${currentUser.token}` 
+          }
+        })
+        
+        if(res.data == "Status updated"){
+          dispatch(Logout())
+          console.log("Response is==>",res.data);
+        }
+        else{
+          console.log("Response is==>",res.data);
+        }
+      }
+      else{
+        console.log("Session expired")
+      }
+    } catch (error) {
+      if(error == "AxiosError: Network Error"){
+        console.log("Something 2");
+        Alert.alert(
+            "Network Error",
+            "Please check your network connection.",
+            [
+          {
+            text: "Ok",
+            onPress: () => console.log("Ok"),
+          }
+        ]
+        );
+        
+    }
+    }
+  }
+
+    useEffect(() => {
+      check_session()
+    }, [])
     
+
   
   const onSearch = () => {
       navigate.navigate('SearchScreen',searchText)
-    
   }
 
 

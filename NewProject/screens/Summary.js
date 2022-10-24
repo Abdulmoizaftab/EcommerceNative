@@ -33,7 +33,7 @@ const Summary = ({route,navigation}) => {
       prodArr:testProducts
       
     }
-    await axios.post('http://192.168.1.17:5000/sql/setOrderDetails', obj)
+    await axios.post('http://192.168.1.24:5000/sql/setOrderDetails', obj)
     console.log("Data inserted successfully");
     // const obj={
     //   prodArr:testProducts

@@ -31,7 +31,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.24:5000/sql/popular/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) 
         setIsloading(false)})
@@ -76,7 +76,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
         <View style={Styles.middle2_1}>
           <Text style={Styles.middle2_1_text1}>Popular Items</Text>
         </View>
-        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.6} onPress={()=>navigate.navigate('SeeAllPopular')}>
+        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.5} onPress={()=>navigate.navigate('SeeAllPopular')}>
           <Text style={Styles.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Styles.middle2_2_icon} />
         </TouchableOpacity>
@@ -90,13 +90,13 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
             <SkeletonJs />
           </View>
         </NativeBaseProvider>
-      ):products?.map((element,key)=>
+      ):(products?.map((element,key)=>
 
 
       
       
       (
-        <TouchableOpacity key={key} onPress={() => navigate.navigate('Product_detail',element)}>
+        <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => navigate.navigate('Product_detail',element)}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image
@@ -105,6 +105,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                     uri: element.imgs,
                   }}></Image>
               </View>
+
               <View style={Styles.cardDesc}>
                 <Text style={Styles.cardTitle}>
                   {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
@@ -115,43 +116,17 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                     {element.rating}{' '}
                     <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
                   </Text>
+                  </View>
+                  </View>
 
 
 
 
-                  {/* {isFavourate(element.product_id) ? (
-              <MaterialCommunityIcons
-                name="cards-heart"
-                onPress={() => { 
-                  const productDetail = {
-                  product_id: element.product_id,
-                  name: element.name,
-                  price: element.price,
-                  image: element.imgs
-                };
-                removeFav(productDetail)}}
-                style={Styles.favIcon}
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="cards-heart-outline"
-                onPress={() => {
-                  const productDetail = {
-                    product_id: element.product_id,
-                    name: element.name,
-                    price: element.price,
-                    image: element.imgs
-                  };
-                  addToFav(productDetail)}}
-                style={Styles.favIcon}
-              />
-            )} */}
-                  {/* <Icon style={Styles.favIcon} onPress={()=>{alert("hello g")}} name="md-heart-outline" /> */}
-                </View>
+                 
               </View>
-            </View>
+           {/* / </View> */}
           </TouchableOpacity>
-      ))
+      )))
     }
         </View>
       </ScrollView>
@@ -162,7 +137,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 const Styles = StyleSheet.create({
   main: {
     width: '100%',
-    backgroundColor: "#e8e7e6"
+    backgroundColor: "#f7f7f7"
   },
   middle2: {
     flexDirection: 'row',
@@ -210,12 +185,14 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     borderRadius: 10,
-    elevation: 3.5,
-    shadowColor: '#52006A',
+    elevation: 3,
+    shadowColor: '#555',
     width: 160,
     height: 190,
     marginLeft: 10,
     marginVertical: 5,
+    
+    // backgroundColor:'green',
   },
   imgContainer: {
     borderBottomWidth: 1,
