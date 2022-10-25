@@ -63,7 +63,7 @@ app.use(session({
     secret:'I am a boy',
     resave:false,
     saveUninitialized:false,
-    rolling:true,
+    //rolling:true,
     cookie: {
     // Session expires after 1 min of inactivity.
     expires: 180000,
