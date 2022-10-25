@@ -86,7 +86,7 @@ const SearchBar = () => {
           console.log("Response is==>",res.data);
         }
         else{
-          console.log("Response is==>",res.data);
+          console.log("Response2 is==>",res.data);
         }
       }
       else{

@@ -170,6 +170,7 @@ export const getFavouriteDB = async (dispatch,user,navigation) => {
                                 'Authorization': `Bearer ${user.token}` 
                             }
                         })
+                        console.log("res of fav",res.data);
                         navigation.navigate('Profile')
                 } catch (error) {
                     console.log("Something went wrong");
