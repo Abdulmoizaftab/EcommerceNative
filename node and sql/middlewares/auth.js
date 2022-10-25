@@ -13,7 +13,7 @@ const isLogin=(req,res,next)=>{
                 next();
             }
             else{
-                res.status(401).send("Unauthorized user")
+                res.status(404).send("Unauthorized user")
             }
             
         }
@@ -53,7 +53,8 @@ const isLogoutSession=async(req,res,next)=>{
 }
 const isLogout=async(req,res,next)=>{
     try {
-        
+        console.log("session==>",req.session)
+        if(req.session.user_id){
             let token=req.headers.authorization;
             console.log("gfgfgfg",token);
             if(token){
@@ -66,13 +67,16 @@ const isLogout=async(req,res,next)=>{
             else{
                 res.status(401).json({message:"Unauthorized user"})
             }
-        
-        
+        }
+        else{
+            res.status(200).send("You are logged in")
+        }
         
     } catch (error) {
         console.log(error);
     }
 }
+
 
 module.exports={
     isLogin,

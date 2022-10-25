@@ -59,11 +59,14 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(session({
+    name:'ecomm_session',
     secret:'I am a boy',
     cookie: {
     // Session expires after 1 min of inactivity.
-    expires: 60000,
+    expires: 180000,
     },
+    resave: false,
+    saveUninitialized: false,
 }))
 app.set("view engine","hbs")
 app.use('/sql', sqlRoutes)

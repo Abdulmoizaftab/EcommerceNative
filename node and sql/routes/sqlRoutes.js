@@ -593,6 +593,9 @@ router.post('/session',auth.isLogoutSession,(req,res)=>{
   })
   });
   router.post('/logout',auth.isLogout,(req,res)=>{
+    req.session.destroy();
+    res.clearCookie('ecomm_session')
+    console.log("session==>",req.session)
     const {user_id}=req.body
     req.app.locals.db.query(`update shopping_session set status='disable' where user_id=${user_id}`, function(err, recordset){
       if(err){
@@ -604,7 +607,7 @@ router.post('/session',auth.isLogoutSession,(req,res)=>{
         res.status(201).send("Status updated")
       }
     })
-    });
+  });
 
 // router.get('/getFavourites',(req,res)=>{
 //   req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
