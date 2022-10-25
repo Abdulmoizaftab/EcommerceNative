@@ -4,12 +4,25 @@ import { SliderBox } from 'react-native-image-slider-box';
 import pic1 from '../../assets/fonts/images/pic1.png'
 import pic2 from '../../assets/fonts/images/pic2.png'
 import pic3 from '../../assets/fonts/images/pic3.png'
+import {requestUserPermission , NotificationListener} from '../../src/utils/pushNotification_helper'
+import { useSelector } from 'react-redux';
 
 
 //const { width, heigth } = Dimensions.get('window')
 
 
+
 const Carousel = () => {
+
+  // const {currentUser} = useSelector(state=>state.user)
+
+
+  // useEffect(() => {
+  //   if (currentUser !== null) {
+  //     requestUserPermission(currentUser);
+  //     NotificationListener();
+  //   }
+  // }, [])
     // const scrollX = new Animated.Value(0)
     // let position = Animated.divide(scrollX, width)
     // const [dataList, setDataList] = useState(data)

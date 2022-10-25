@@ -29,6 +29,7 @@ const isLogin=(req,res,next)=>{
 
 const isLogoutSession=async(req,res,next)=>{
     try {
+        console.log("SESSION CHECK",req.session.user_id);
         if(!req.session.user_id){
             let token=req.headers.authorization;
             console.log("gfgfgfg",token);

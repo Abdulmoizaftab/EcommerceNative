@@ -22,7 +22,7 @@ const CheckOutScreenNew = ({ route }) => {
   const user_id =2010;
 
   useEffect(() => {
-    axios.get(`http://192.168.1.24:5000/sql/getAddress/${user_id}`)
+    axios.get(`http://192.168.1.17:5000/sql/getAddress/${user_id}`)
      .then(function (response) {
        setDbAddress(response.data)
        setLoading(false)

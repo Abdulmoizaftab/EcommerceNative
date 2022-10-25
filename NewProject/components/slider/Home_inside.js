@@ -15,12 +15,18 @@ import { NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
+import {requestUserPermission , NotificationListener} from '../../src/utils/pushNotification_helper'
+
 // import PushNotification , {Importance} from "react-native-push-notification";
 
 const Home_inside = ({ navigate }) => {
 
+  const {currentUser} = useSelector(state=>state.user)
 
-  
+  if (currentUser !== null) {
+    requestUserPermission(currentUser);
+    NotificationListener();
+  }
 
 
 
@@ -39,7 +45,7 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.24:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.17:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -65,6 +71,7 @@ const Home_inside = ({ navigate }) => {
     //   console.log(exists); // true/false
     // });
   }, [limit]);
+
 
   const flatlistEnd = () => {
     return (

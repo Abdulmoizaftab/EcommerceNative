@@ -23,14 +23,11 @@ import SeeAllProducts from './screens/SeeAllProducts';
 import { View,Text } from 'react-native';
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
 import ProfileScreen from './screens/profileScreen';
-import {requestUserPermission , NotificationListener} from './src/utils/pushNotification_helper'
 
 const Stack=createNativeStackNavigator();
 const App = () => {
   useEffect(() => {
     SplashScreen.hide();
-    requestUserPermission();
-    NotificationListener();
   }, [])
   
   return (

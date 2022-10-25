@@ -2,9 +2,9 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
-const user_id = 2010;
 
-export async function requestUserPermission() {
+export async function requestUserPermission(currentUser) {
+  console.log("USER ======>>>>",currentUser);
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -12,11 +12,11 @@ export async function requestUserPermission() {
 
   if (enabled) {
     console.log('Authorization status:', authStatus);
-    GetFCMToken()
+      GetFCMToken(currentUser)
   }
 }
 
-const GetFCMToken = async () => {
+const GetFCMToken = async (currentUser) => {
 
     let fcmtoken = await AsyncStorage.getItem('fcmtoken')
     console.log(fcmtoken, 'oldToken')
@@ -28,7 +28,7 @@ const GetFCMToken = async () => {
             const fcmtoken = await messaging().getToken()
             if (fcmtoken) {
                 const payload = {
-                  user_id,
+                  user_id:currentUser.user[0].user_id,
                   token:fcmtoken
                 }
                 console.log(fcmtoken, 'newtoken')

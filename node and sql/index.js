@@ -60,9 +60,12 @@ app.use(express.json())
 app.use(cors())
 app.use(session({
     secret:'I am a boy',
+    resave:false,
+    saveUninitialized:false,
+    rolling:true,
     cookie: {
     // Session expires after 1 min of inactivity.
-    expires: 60000,
+    expires: 180000,
     },
 }))
 app.set("view engine","hbs")
