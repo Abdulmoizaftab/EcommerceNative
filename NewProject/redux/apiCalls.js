@@ -84,7 +84,8 @@ export const addressUpdate = async (dispatch, addressObj) => {
 }
 export const addToCart = async (dispatch, prod) => {
     try {
-        await axios.post('http://192.168.1.17:5000/sql/addCartItem', prod)
+        const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${prod.token}` } }
+        await axios.post('http://192.168.1.17:5000/sql/addCartItem', prod,config)
     } catch (error) {
         console.log(error);
     }
@@ -92,7 +93,8 @@ export const addToCart = async (dispatch, prod) => {
 
 export const cartModificationDecrease = async (dispatch, prod) => {
     try {
-        await axios.post('http://192.168.1.17:5000/sql/delCartItem', prod)
+        const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${prod.token}` } }
+        await axios.post('http://192.168.1.17:5000/sql/delCartItem', prod,config)
     } catch (error) {
         console.log(error);
     }
@@ -100,7 +102,8 @@ export const cartModificationDecrease = async (dispatch, prod) => {
 
 export const cartModificationIncrease = async (dispatch, prod) => {
     try {
-        await axios.post('http://192.168.1.17:5000/sql/addCartItem', prod)
+        const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${prod.token}` } }
+        await axios.post('http://192.168.1.17:5000/sql/addCartItem', prod,config)
     } catch (error) {
         console.log(error);
     }
@@ -116,8 +119,8 @@ export const addFavouriteDB = async (dispatch, data) => {
     //dispatch(registerStart());
 
     try {
-
-        const res = await axios.post("http://192.168.1.17:5000/sql/setFavourites", { favouritedProd: data.product_id });
+        const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${data.token}` } }
+        const res = await axios.post("http://192.168.1.17:5000/sql/setFavourites", { favouritedProd: data.product_id , user_id:data.user_id } , config);
         // const result=await res.json()
         dispatch(addFavourite(res.data));
         //console.log(res.data);
@@ -129,22 +132,7 @@ export const addFavouriteDB = async (dispatch, data) => {
     }
 }
 
-export const updateFavouriteDB = async (dispatch, data) => {
-    //dispatch(registerStart());
 
-    try {
-
-        const res = await axios.post("http://192.168.1.17:5000/sql/updateFavourites", { favouritedProd: data.product_id });
-        // const result=await res.json()
-        dispatch(addFavourite(res.data));
-        console.log(res.data);
-
-        // console.log("db");
-
-    } catch (error) {
-        console.log(error)
-    }
-}
 export const getFavouriteDB = async (dispatch,user,navigation) => {
     //dispatch(registerStart());
 
@@ -201,7 +189,8 @@ export const getFavouriteDB = async (dispatch,user,navigation) => {
 
 export const remFavouriteDB = async (dispatch, data) => {
     try {
-        const res = await axios.post("http://192.168.1.17:5000/sql/delFavourites", { favouritedProd: data.product_id });
+        const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${data.token}` } }
+        const res = await axios.post("http://192.168.1.17:5000/sql/delFavourites", { favouritedProd: data.product_id , user_id:data.user_id} , config);
         // const result=await res.json()
         dispatch(removeFavourite(res.data));
         //  console.log(res.data);

@@ -321,10 +321,10 @@ router.get("/subCategoryProducts/:limit/:hierId", (req, res) => {
   );
 });
 
-router.post("/addCartItem", (req, res) => {
-  const { product_id, quantity } = req.body;
+router.post("/addCartItem", auth.isLogin, (req, res) => {
+  const { product_id, quantity,user_id } = req.body;
   req.app.locals.db.query(
-    `select * from cart_item where product_id=${product_id} and user_id=2010`,
+    `select * from cart_item where product_id=${product_id} and user_id=${user_id}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -334,7 +334,7 @@ router.post("/addCartItem", (req, res) => {
         if (Object.keys(recordset.recordset).length !== 0) {
           if (recordset.recordset[0].is_deleted === true) {
             req.app.locals.db.query(
-              `update cart_item set quantity=${quantity} , is_deleted = 0 where product_id=${product_id} and user_id=2010`,
+              `update cart_item set quantity=${quantity} , is_deleted = 0 where product_id=${product_id} and user_id=${user_id}`,
               function (err, recordset) {
                 if (err) {
                   console.error(err);
@@ -346,7 +346,7 @@ router.post("/addCartItem", (req, res) => {
             );
           } else {
             req.app.locals.db.query(
-              `update cart_item set quantity=${quantity}+${recordset.recordset[0].quantity} where product_id=${product_id} and user_id=2010`,
+              `update cart_item set quantity=${quantity}+${recordset.recordset[0].quantity} where product_id=${product_id} and user_id=${user_id}`,
               function (err, recordset) {
                 if (err) {
                   console.error(err);
@@ -359,7 +359,7 @@ router.post("/addCartItem", (req, res) => {
           }
         } else {
           req.app.locals.db.query(
-            `insert into cart_item (product_id,quantity,user_id,is_deleted) values (${product_id},${quantity},2010,0)`,
+            `insert into cart_item (product_id,quantity,user_id,is_deleted) values (${product_id},${quantity},${user_id},0)`,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -400,9 +400,9 @@ router.post("/getCartItem", auth.isLogin,(req, res) => {
 });
 
 router.post("/delCartItem", (req, res) => {
-  const { product_id } = req.body;
+  const { product_id,user_id } = req.body;
   req.app.locals.db.query(
-    `select * from cart_item where product_id=${product_id} and user_id=2010`,
+    `select * from cart_item where product_id=${product_id} and user_id=${user_id}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -412,7 +412,7 @@ router.post("/delCartItem", (req, res) => {
         if (Object.keys(recordset.recordset).length !== 0) {
           if (recordset.recordset[0].quantity > 1) {
             req.app.locals.db.query(
-              `update cart_item set quantity=(${recordset.recordset[0].quantity} - 1) where product_id=${product_id} and user_id=2010`,
+              `update cart_item set quantity=(${recordset.recordset[0].quantity} - 1) where product_id=${product_id} and user_id=${user_id}`,
               function (err, recordset) {
                 if (err) {
                   console.error(err);
@@ -434,9 +434,9 @@ router.post("/delCartItem", (req, res) => {
 });
 
 router.post("/deleteFromCart", (req, res) => {
-  const { product_id } = req.body;
+  const { product_id,user_id } = req.body;
   req.app.locals.db.query(
-    `update cart_item set is_deleted = 1 where product_id=${product_id} and user_id=2010`,
+    `update cart_item set is_deleted = 1 where product_id=${product_id} and user_id=${user_id}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -447,24 +447,6 @@ router.post("/deleteFromCart", (req, res) => {
   );
 });
 
-router.post("/deleteOnCheckout", (req, res) => {
-  const toRemoveArr = req.body;
-
-  toRemoveArr.forEach((element) => {
-    req.app.locals.db.query(
-      `update cart_item set is_deleted = 1 where product_id=${element.product_id} and user_id=2010`,
-      function (err, recordset) {
-        if (err) {
-          console.error(err);
-          res.status(500).send("SERVER ERROR");
-          return;
-        }
-      }
-    );
-  });
-
-  res.status(200).send("Done");
-});
 
 router.get("/filterAllByPrice/:ascDesc/:limit", (req, res) => {
   req.app.locals.db.query(
@@ -533,7 +515,7 @@ router.get("/filterPopularByRating/:ascDesc/:limit", (req, res) => {
 router.post("/addAddress", (req, res) => {
   const address = req.body;
   req.app.locals.db.query(
-    `insert into user_address (user_id,address_line,city,country,mobile,recipent,address_title) values(2010,'${address.address}','Karachi','Pakistan','${address.phone}','${address.recipent}','${address.title}')`,
+    `insert into user_address (user_id,address_line,city,country,mobile,recipent,address_title) values(${address.user_id},'${address.address}','Karachi','Pakistan','${address.phone}','${address.recipent}','${address.title}')`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -611,56 +593,11 @@ router.post('/session',auth.isLogoutSession,(req,res)=>{
     })
   });
 
-// router.get('/getFavourites',(req,res)=>{
-//   req.app.locals.db.query(`select * from favourites where userId=2010`, function(err, recordset){
-//     if(err){
-//       console.error(err)
-//       res.status(500).send('SERVER ERROR')
-//       return
-//     }
-//     res.status(200).json(recordset.recordset);
-//   })
-// })
-
-// router.post('/setFavourites',(req,res)=>{
-//   const {favouritedProd}=req.body
-//   req.app.locals.db.query(`insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},2010,0)`, function(err, recordset){
-//     if(err){
-//       console.error(err)
-//       res.status(500).send('SERVER ERROR')
-//       return
-//     }
-//     else{
-//       req.app.locals.db.query(`select product.imgs,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010`, function(err, recordset){
-//         if(err){
-//           console.error(err)
-//           res.status(500).send('SERVER ERROR')
-//           return
-//         }
-//         else{
-//           res.status(201).json(recordset.recordset)
-//         }
-//       })
-//     }
-//   })
-// })
-
-// router.post('/delFavourites',(req,res)=>{
-//   const {favouritedProd}=req.body
-//   req.app.locals.db.query(`update favourites set is_deleted=1 where userId=2010 and favouritedProd=${favouritedProd}`, function(err, recordset){
-//     if(err){
-//       console.error(err)
-//       res.status(500).send('SERVER ERROR')
-//       return
-//     }
-//     res.status(200).send("Data deleted");
-//   })
-// })
 
 router.post("/setOrderDetails", (req, res) => {
-  const { amount, prodArr } = req.body;
+  const { amount, prodArr,user_id } = req.body;
   req.app.locals.db.query(
-    `insert into payment_details (amount,provider,status,user_id) values (${amount},'Cash On Delivery',0,2010)`,
+    `insert into payment_details (amount,provider,status,user_id) values (${amount},'Cash On Delivery',0,${user_id})`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -668,7 +605,7 @@ router.post("/setOrderDetails", (req, res) => {
         return;
       } else {
         req.app.locals.db.query(
-          `select top(1) * from payment_details where USER_ID=2010 order by created_at desc`,
+          `select top(1) * from payment_details where USER_ID=${user_id} order by created_at desc`,
           function (err, recordset) {
             if (err) {
               console.error(err);
@@ -684,7 +621,7 @@ router.post("/setOrderDetails", (req, res) => {
                     return;
                   } else {
                     req.app.locals.db.query(
-                      `select top(1) * from order_details where USER_ID=2010 order by created_at desc`,
+                      `select top(1) * from order_details where USER_ID=${user_id} order by created_at desc`,
                       function (err, recordset) {
                         if (err) {
                           console.error(err);
@@ -693,7 +630,7 @@ router.post("/setOrderDetails", (req, res) => {
                         } else {
                           for (let index = 0; index < prodArr.length; index++) {
                             req.app.locals.db.query(
-                              `insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},${prodArr[index].product_id},${prodArr[index].quantity},2010);`,
+                              `insert into order_items (order_id,product_id,quantity,user_id) values (${recordset.recordset[0].order_id},${prodArr[index].product_id},${prodArr[index].quantity},${user_id});`,
                               function (err, recordset) {
                                 if (err) {
                                   console.error(err);
@@ -705,7 +642,7 @@ router.post("/setOrderDetails", (req, res) => {
                           }
                           prodArr.forEach((element) => {
                             req.app.locals.db.query(
-                              `update cart_item set is_deleted = 1 where product_id=${element.product_id} and user_id=2010`,
+                              `update cart_item set is_deleted = 1 where product_id=${element.product_id} and user_id=${user_id}`,
                               function (err, recordset) {
                                 if (err) {
                                   console.error(err);
@@ -871,7 +808,7 @@ router.post("/updateNotifyToken", (req,res)=>{
 
 //VENDOR PORTAL//
 router.post("/registerVendor", (req, res) => {
-  const { username, email, password, first_name, last_name, vendorId } =
+  const { username, email, password, mobile,first_name, last_name, vendorId } =
     req.body;
   req.app.locals.db.query(
     `select * from users where email='${email}'`,
@@ -886,7 +823,7 @@ router.post("/registerVendor", (req, res) => {
           const verify = 0;
           const encrypt_pswd = await bcrypt.hash(password, 10);
           req.app.locals.db.query(
-            `insert into users (username , password,first_name,last_name,email,vendor_id,isVerified) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}',${vendorId},${verify})`,
+            `insert into users (username , password,first_name,last_name,telephone,email,vendor_id,isVerified) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${phone}','${email}',${vendorId},${verify})`,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -963,10 +900,10 @@ router.post("/loginVendor", (req, res) => {
 /*========================================================================================================*/
 
 //======================================================================
-router.post("/setFavourites", (req, res) => {
-  const { favouritedProd } = req.body;
+router.post("/setFavourites",auth.isLogin, (req, res) => {
+  const { favouritedProd,user_id } = req.body;
   req.app.locals.db.query(
-    `select * from favourites where userId = 2010 and favouritedProd = ${favouritedProd}`,
+    `select * from favourites where userId = ${user_id} and favouritedProd = ${favouritedProd}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -975,7 +912,7 @@ router.post("/setFavourites", (req, res) => {
       } else {
         if (Object.keys(recordset.recordset).length !== 0) {
           req.app.locals.db.query(
-            `update favourites set is_deleted=0 where userId=2010 and favouritedProd=${favouritedProd}`,
+            `update favourites set is_deleted=0 where userId=${user_id} and favouritedProd=${favouritedProd}`,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -986,7 +923,7 @@ router.post("/setFavourites", (req, res) => {
                   `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id,discount.discount_percent from product
                   inner join favourites on product.product_id=favourites.favouritedProd 
                   left join discount  on product.discount_id = discount.discount_id
-                  where favourites.userId=2010 and favourites.is_deleted=0`,
+                  where favourites.userId=${user_id} and favourites.is_deleted=0`,
                   function (err, recordset) {
                     if (err) {
                       console.error(err);
@@ -1002,7 +939,7 @@ router.post("/setFavourites", (req, res) => {
           );
         } else {
           req.app.locals.db.query(
-            `insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},2010,0)`,
+            `insert into favourites (favouritedProd,userId,is_deleted) values (${favouritedProd},${user_id},0)`,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -1013,7 +950,7 @@ router.post("/setFavourites", (req, res) => {
                   `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id,discount.discount_percent from product
                   inner join favourites on product.product_id=favourites.favouritedProd 
                   left join discount  on product.discount_id = discount.discount_id
-                  where favourites.userId=2010 and favourites.is_deleted=0`,
+                  where favourites.userId=${user_id} and favourites.is_deleted=0`,
                   function (err, recordset) {
                     if (err) {
                       console.error(err);
@@ -1034,10 +971,10 @@ router.post("/setFavourites", (req, res) => {
 });
 //======================================================================
 
-router.post("/delFavourites", (req, res) => {
-  const { favouritedProd } = req.body;
+router.post("/delFavourites", auth.isLogin,(req, res) => {
+  const { favouritedProd , user_id } = req.body;
   req.app.locals.db.query(
-    `update favourites set is_deleted=1 where userId=2010 and favouritedProd=${favouritedProd}`,
+    `update favourites set is_deleted=1 where userId=${user_id} and favouritedProd=${favouritedProd}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -1048,7 +985,7 @@ router.post("/delFavourites", (req, res) => {
           `  select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id,discount.discount_percent from product
           inner join favourites on product.product_id=favourites.favouritedProd 
           left join discount  on product.discount_id = discount.discount_id
-          where favourites.userId=2010 and favourites.is_deleted=0`,
+          where favourites.userId=${user_id} and favourites.is_deleted=0`,
           function (err, recordset) {
             if (err) {
               console.error(err);
@@ -1064,35 +1001,6 @@ router.post("/delFavourites", (req, res) => {
   );
 });
 
-router.post("/updateFavourites", (req, res) => {
-  const { favouritedProd } = req.body;
-  req.app.locals.db.query(
-    `update favourites set is_deleted=0 where userId=2010 and favouritedProd=${favouritedProd}`,
-    function (err, recordset) {
-      if (err) {
-        console.error(err);
-        res.status(500).send("SERVER ERROR");
-        return;
-      } else {
-        req.app.locals.db.query(
-          `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id,discount.discount_percent from product
-          inner join favourites on product.product_id=favourites.favouritedProd 
-          left join discount  on product.discount_id = discount.discount_id
-          where favourites.userId=2010 and favourites.is_deleted=0`,
-          function (err, recordset) {
-            if (err) {
-              console.error(err);
-              res.status(500).send("SERVER ERROR");
-              return;
-            } else {
-              res.status(201).json(recordset.recordset);
-            }
-          }
-        );
-      }
-    }
-  );
-});
 
 router.post("/getFavourites", auth.isLogin,(req, res) => {
   const {user_id}=req.body
@@ -1109,18 +1017,7 @@ router.post("/getFavourites", auth.isLogin,(req, res) => {
       } else {
         res.status(201).json(recordset.recordset);
       }
-      // else{
-      //   req.app.locals.db.query(`select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id from product inner join favourites on product.product_id=favourites.favouritedProd where favourites.userId=2010 and favourites.is_deleted=0`, function(err, recordset){
-      //     if(err){
-      //       console.error(err)
-      //       res.status(500).send('SERVER ERROR')
-      //       return
-      //     }
-      //     else{
-      //       res.status(201).json(recordset.recordset)
-      //     }
-      //   })
-      // }
+      
     }
   );
 });

@@ -10,12 +10,14 @@ const AddressBottomSheet = ({reference,trigger,setTrigger}) => {
     const [recipent, setRecipent] = useState("")
     const [address, setAddress] = useState("")
     const [phoneInput, setPhoneInput] = useState("")
+    const {currentUser} = useSelector(state=>state.user)
 
     const handlePress = () => {
         reference.current.close();
         // const phone = parseInt(phoneInput)
         const phone = phoneInput
         const addressPayload = {
+            user_id:currentUser.user[0].user_id,
             address,
             phone,
             recipent,

@@ -127,7 +127,7 @@ const AddToCart = ({ route, navigation }) => {
           </View>
         </View>
 
-        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} />
+        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} user_id={currentUser.user[0].user_id} token={currentUser.token}/>
         {
           quantity !== 0 && total !== 0 ? (
             <>
@@ -175,7 +175,7 @@ const AddToCart = ({ route, navigation }) => {
     ) : (
       <View style={Style.main}>
 
-        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} />
+        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} user_id={currentUser.user[0].user_id} token={currentUser.token}/>
         {/* <Text>hello</Text> */}
       </View>
     )

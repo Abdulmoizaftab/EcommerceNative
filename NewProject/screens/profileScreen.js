@@ -14,6 +14,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Logout,loginStart } from '../redux/LoginRedux';
 import axios from 'axios';
@@ -151,7 +152,7 @@ const ProfileScreen = ({navigation}) => {
             activeOpacity={0.9}
             style={{marginVertical: '2%', width: '90%'}}
             onPress={() => {
-              console.log('pressed');
+              navigation.navigate('Orders')
             }}>
             <LinearGradient
               style={styles.profileButton}
@@ -172,7 +173,7 @@ const ProfileScreen = ({navigation}) => {
             activeOpacity={0.9}
             style={{marginVertical: '2%', width: '90%'}}
             onPress={() => {
-              console.log('pressed');
+              navigation.navigate('Favourites')
             }}>
             <LinearGradient
               style={styles.profileButton}
@@ -201,9 +202,9 @@ const ProfileScreen = ({navigation}) => {
               end={{x: 1.2, y: 0}}
               colors={['#fff', '#dfdff7']}>
               <Text style={styles.cardText}>
-                <Entypo name="location" style={styles.buttonIcon} />
+                <Ionicons name="cart-outline" style={styles.buttonIcon} />
                 {'  '}
-                My Addresses
+                My Cart
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -323,9 +324,9 @@ const ProfileScreen = ({navigation}) => {
               end={{x: 1.2, y: 0}}
               colors={['#fff', '#e1e1e6']}>
               <Text style={styles.cardTextDisable}>
-                <Entypo name="location" style={styles.buttonIconDisable} />
+                <Ionicons name="cart-outline" style={styles.buttonIconDisable} />
                 {'  '}
-                My Addresses
+                My Cart
               </Text>
             </LinearGradient>
           </TouchableOpacity>

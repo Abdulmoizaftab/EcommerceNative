@@ -15,6 +15,7 @@ const Sign_up = ({navigation}) => {
   const [first_name , setFirstName] = useState("")
   const [last_name , setLastName] = useState("")
   const [username , setUsername] = useState("")
+  const [mobile , setMobile] = useState("")
   const [email , setEmail] = useState("")
   const [password , setPswd] = useState("")
   const [confirmPswd , setConfirmPswd] = useState("")
@@ -24,12 +25,13 @@ const Sign_up = ({navigation}) => {
 
   const handlePress = ()=>{
     
-    if(first_name && last_name && username && email && password && confirmPswd){
+    if(first_name && last_name && username && mobile && email && password && confirmPswd){
       if(password === confirmPswd){
         let payload={
           username,
           email,
           password,
+          mobile,
           first_name,
           last_name,
           navigation
@@ -126,6 +128,10 @@ const Sign_up = ({navigation}) => {
             <Text style={Style.email_view_text}><AntDesign name='user'/>  Username</Text>
             <TextInput value={username} selectionColor="black" style={Style.email_view_textinput} onChangeText={setUsername}/>
           </View>
+          <View style={Style.email_view}>
+            <Text style={Style.email_view_text}><AntDesign name='phone'/>  Mobile #</Text>
+            <TextInput value={mobile} selectionColor="black" keyboardType='numeric' style={Style.email_view_textinput} onChangeText={setMobile}/>
+          </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Password</Text>
             <TextInput value={password} selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPswd}/>
@@ -134,9 +140,6 @@ const Sign_up = ({navigation}) => {
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Confirm password</Text>
             <TextInput value={confirmPswd} selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setConfirmPswd}/>
           </View>
-          <TouchableOpacity style={Style.forgot_btn}>
-            <Text style={Style.forgot_btn_text}>Forgot password?</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={Style.signup_btn} onPress={handlePress}>
             {loadings?<ActivityIndicator size='large' color='white'/>:
             <Text style={Style.signup_btn_text}>Sign up</Text>}

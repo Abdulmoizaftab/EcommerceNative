@@ -17,8 +17,13 @@ const BottomSheet = ({ reference, prodData }) => {
   const [product, setProduct] = useState(prodData);
   const reduxDataProd = useSelector(state => state.cart.products);
   const reduxDataQty = useSelector(state => state.cart.quantity);
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
 
+  console.log("check=========>>>>",currentUser.user[0].user_id);
 
+  
   // useEffect(()=>{
 
   //   axios.post('http://192.168.1.17:5000/addCartItem', data={})
@@ -31,6 +36,8 @@ const BottomSheet = ({ reference, prodData }) => {
   const onAddCart = () => {
     reference.current.close();
     const payload = {
+      token:currentUser.token,
+      user_id:currentUser.user[0].user_id,
       product_id: product.product_id,
       quantity:qty
     }
@@ -41,9 +48,6 @@ const BottomSheet = ({ reference, prodData }) => {
       //  dispatch(addProduct(payload))
       addToCart(dispatch,payload)
   }
-  const {isFetching, error, currentUser, loadings} = useSelector(
-    state => state.user,
-  );
 
   return (
     <ScrollView>

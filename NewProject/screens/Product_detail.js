@@ -29,7 +29,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addFavouriteDB,
   remFavouriteDB,
-  updateFavouriteDB,
   getFavouriteDB,
 } from '../redux/apiCalls';
 
@@ -53,7 +52,6 @@ const Product_detail = ({route}) => {
   const [addingToFav, setAddingToFav] = useState(false);
 
   const refRBSheet = useRef();
-  const user_id = 2010;
 
   const favouriteState = useSelector(state => state.favourite);
   const favArray = favouriteState.favourites;
@@ -88,7 +86,7 @@ const Product_detail = ({route}) => {
 
   const postReview = () => {
     const bodyData = {
-      user_id,
+      user_id:currentUser.user[0].user_id,
       product_id: paramData.product_id,
       userRating: rating,
       userReview,
@@ -143,6 +141,8 @@ const Product_detail = ({route}) => {
                     name: prdName,
                     price: price,
                     image: paramData.imgs,
+                    user_id:currentUser.user[0].user_id,
+                    token:currentUser.token
                   };
                   setAddingToFav(true);
 
@@ -170,6 +170,8 @@ const Product_detail = ({route}) => {
                   name: prdName,
                   price: price,
                   image: paramData.imgs,
+                  user_id:currentUser.user[0].user_id,
+                  token:currentUser.token
                 };
                 addToFav(productDetail);
               }}
