@@ -21,7 +21,6 @@ const BottomSheet = ({ reference, prodData }) => {
     state => state.user,
   );
 
-  console.log("check=========>>>>",currentUser.user[0].user_id);
 
   
   // useEffect(()=>{

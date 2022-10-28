@@ -5,32 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-const SearchDropdown = ({ dataSource, searchTextInSearch }) => {
+const SearchDropdown = ({ dataSource }) => {
 
   const navigate = useNavigation();
   const [asyncStorageData, setAsyncStorageData] = useState([])
   console.log(dataSource);
 
-  const addSuggestionWord = async (paramData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@searchItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        cartItem.push(searchTextInSearch);
-        let uniqueChars = [...new Set(cartItem)];
-        await AsyncStorage.setItem('@searchItems', JSON.stringify(uniqueChars));
-      }
-      else {
-        let cartItem = [];
-        cartItem.push(searchTextInSearch);
-        await AsyncStorage.setItem('@searchItems', JSON.stringify(cartItem));
-      }
+  const navigateToDetails = async (paramData) => {
       navigate.navigate("Product_detail",paramData)
-
-    } catch (error) {
-      alert('Something went wrong');
-    }
   }
 
   const getData = async () => {
@@ -57,7 +39,7 @@ const SearchDropdown = ({ dataSource, searchTextInSearch }) => {
 
             <View style={{backgroundColor:'#fff'}}>
 
-              <TouchableOpacity onPress={()=>addSuggestionWord(item)}>
+              <TouchableOpacity onPress={()=>navigate.navigate("Product_detail",item)}>
                 <View key={key}>
                   <Text style={{ borderBottomWidth: 1, borderColor: "grey", marginVertical: 10,color:"black",padding:5 }}>{item.name}</Text>
                 </View>

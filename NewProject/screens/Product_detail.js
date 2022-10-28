@@ -318,7 +318,6 @@ const Product_detail = ({route}) => {
               />
             </View>
 
-            <View>
               <TouchableOpacity
                 style={Style.button}
                 onPress={() =>{ 
@@ -343,7 +342,6 @@ const Product_detail = ({route}) => {
                   }}>
                 <Text style={{fontSize: 12}}>WRITE A REVIEW</Text>
               </TouchableOpacity>
-            </View>
           </View>
 
           <Text style={Style.detailSizeHeading}>Sizes:</Text>

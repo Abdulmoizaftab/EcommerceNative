@@ -823,7 +823,7 @@ router.post("/registerVendor", (req, res) => {
           const verify = 0;
           const encrypt_pswd = await bcrypt.hash(password, 10);
           req.app.locals.db.query(
-            `insert into users (username , password,first_name,last_name,telephone,email,vendor_id,isVerified) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${phone}','${email}',${vendorId},${verify})`,
+            `insert into users (username , password,first_name,last_name,telephone,email,vendor_id,isVerified) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${mobile}','${email}',${vendorId},${verify})`,
             function (err, recordset) {
               if (err) {
                 console.error(err);

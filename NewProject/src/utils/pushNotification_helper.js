@@ -4,7 +4,7 @@ import axios from 'axios'
 
 
 export async function requestUserPermission(currentUser) {
-  //console.log("USER ======>>>>",currentUser);
+  console.log("USER ======>>>>",currentUser);
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||

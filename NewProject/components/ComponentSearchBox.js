@@ -14,6 +14,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from '@react-navigation/native';
 import { IP_ADDRESS } from "@env"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
@@ -23,6 +25,28 @@ const ComponentSearchBox = ({pic}) => {
     const [searchText, setSearchText] = useState("");
     const [filterData, setFilterData] = useState([]);
     const navigate = useNavigation()
+
+
+    const addSuggestionWord = async (text) => {
+        try {
+          let asyncData = await AsyncStorage.getItem('@searchItems');
+          asyncData = JSON.parse(asyncData);
+          if (asyncData) {
+            let cartItem = asyncData;
+            cartItem.push(text);
+            let uniqueChars = [...new Set(cartItem)];
+            await AsyncStorage.setItem('@searchItems', JSON.stringify(uniqueChars));
+          }
+          else {
+            let cartItem = [];
+            cartItem.push(text);
+            await AsyncStorage.setItem('@searchItems', JSON.stringify(cartItem));
+          }
+    
+        } catch (error) {
+          alert('Something went wrong');
+        }
+      }
 
     useEffect(() => {
         // const fetchAndSet = async()=>{
@@ -47,7 +71,7 @@ const ComponentSearchBox = ({pic}) => {
         const check = async () => {
             try {
                 if (searchText.length !== null) {
-                    const result = await axios.get(`http://192.168.1.24:5000/sql/suggest/${searchText}`);
+                    const result = await axios.get(`http://192.168.1.17:5000/sql/suggest/${searchText}`);
                      if (result.data) {
                     //     result.data.map(item => {
                     //         return arr.push(item.name);
@@ -122,14 +146,15 @@ const ComponentSearchBox = ({pic}) => {
                         onChangeText={(e) => onChange(e)}
                         onSubmitEditing={()=>{
                             if(searchText){
-                                navigate.navigate('SearchScreen',searchText)
+                                addSuggestionWord(searchText)
+                                navigate.navigate("SearchScreen",searchText)
                             }
                         }} />
                 </View>
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')} />
             </View>
             {searchText?
-            <SearchDropdown dataSource={filterData} searchTextInSearch={searchText} />:null
+            <SearchDropdown dataSource={filterData} />:null
             }
 
         </>
