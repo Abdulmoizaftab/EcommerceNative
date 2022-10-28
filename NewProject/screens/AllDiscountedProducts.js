@@ -172,9 +172,9 @@ const AllDiscountedProducts = () => {
     <View style={Style.all_item_main}>
       <FlatList
         ListHeaderComponent={
-          <View>
-            <SearchBar navigate={navigate} />
-            <Text style={Style.mainHead}>All Discounts</Text>
+          <View style={{paddingTop:5}}>
+            {/* <SearchBar navigate={navigate} /> */}
+            
           </View>
         }
         data={products}

@@ -23,6 +23,7 @@
     "@react-navigation/native-stack": "^6.7.0",
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
+    "deprecated-react-native-prop-types": "^2.3.0",
     "native-base": "^3.4.9",
     "react": "17.0.2",
     "react-native": "0.68.2",
