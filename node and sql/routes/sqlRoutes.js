@@ -5,9 +5,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
-router.get("/suggest/:prod/:limit", (req, res) => {
+router.get("/suggest/:prod", (req, res) => {
   req.app.locals.db.query(
-    `select top(${req.params.limit}) * from product WHERE name LIKE '%${req.params.prod}%'`,
+    `select top(5) * from product WHERE name LIKE '%${req.params.prod}%'`,
     function (err, recordset) {
       if (err) {
         console.error(err);
