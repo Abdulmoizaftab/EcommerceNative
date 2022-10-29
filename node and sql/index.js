@@ -66,7 +66,7 @@ app.use(session({
     //rolling:true,
     cookie: {
     // Session expires after 1 min of inactivity.
-    expires: 86400000,
+    expires: 60000,
     },
     resave: false,
     saveUninitialized: false,
