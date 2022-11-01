@@ -22,6 +22,7 @@ export const login = async (dispatch, user) => {
         }
         dispatch(loginSuccess(obj));
         user.navigation.navigate('Home')
+        
     } catch (error) {
         dispatch(loginFailure(true));
         console.log("No data");

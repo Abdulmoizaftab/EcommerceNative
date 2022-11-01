@@ -53,7 +53,6 @@ const Home_inside = ({ navigate }) => {
 
   useEffect(() => {
     getdata()
-    
     // PushNotification.createChannel(
     //   {
     //     channelId: "test1", // (required)
