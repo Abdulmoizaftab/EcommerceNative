@@ -68,7 +68,7 @@ const sendMail = (email, name, user_id) => {
 router.post("/register", (req, res) => {
   const { username, email, password, first_name, last_name } = req.body;
   req.app.locals.db.query(
-    `select * from users where email='${email}'`,
+    `EXEC LoginSpUsersSelect @email='${email}'`,
     async function (err, recordset) {
       if (err) {
         console.error(err);
@@ -80,7 +80,7 @@ router.post("/register", (req, res) => {
           const verify = 0;
           const encrypt_pswd = await bcrypt.hash(password, 10);
           req.app.locals.db.query(
-            `insert into users (username , password,first_name,last_name,email,isVerified) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${email}',${verify})`,
+            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify}`,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -88,7 +88,7 @@ router.post("/register", (req, res) => {
                 return;
               } else {
                 req.app.locals.db.query(
-                  `select user_id, username from users where email = '${email}'`,
+                  `EXEC RegisterGetUsernameAndId @email = '${email}'`,
                   function (err, recordset) {
                     if (err) {
                       console.error(err);
@@ -138,7 +138,7 @@ const auth = require("../middlewares/auth");
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
   req.app.locals.db.query(
-    `select * from users where email='${email}'`,
+    `EXEC LoginSpUsersSelect @email='${email}'`,
     async function (err, recordset) {
       if (err) {
         console.error(err);
@@ -159,7 +159,7 @@ router.post("/login", (req, res) => {
             );
             req.session.user_id = recordset.recordset[0].user_id;
             req.app.locals.db.query(
-              `select * from shopping_session where user_id=${req.session.user_id}`,
+              `EXEC LoginSpSessionSelect @id=${req.session.user_id}`,
               function (err, recordset) {
                 if (err) {
                   console.error(err);
@@ -168,7 +168,7 @@ router.post("/login", (req, res) => {
                 } else {
                   if (Object.keys(recordset.recordset).length !== 0) {
                     req.app.locals.db.query(
-                      `update shopping_session set status='active' where user_id=${req.session.user_id}`,
+                      `EXEC LoginSpSessionUpdate @id =${req.session.user_id}`,
                       function (err, recordset) {
                         if (err) {
                           console.error(err);
@@ -179,7 +179,7 @@ router.post("/login", (req, res) => {
                     );
                   } else {
                     req.app.locals.db.query(
-                      `insert into shopping_session (user_id,status) values (${req.session.user_id},'active')`,
+                      `EXEC LoginSpSessionInsert @id =${req.session.user_id}`,
                       function (err, recordset) {
                         if (err) {
                           console.error(err);
@@ -1099,5 +1099,4 @@ router.post("/getFavourites", auth.isLogin, (req, res) => {
     }
   );
 });
-
 module.exports = router;

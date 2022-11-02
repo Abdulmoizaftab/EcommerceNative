@@ -20,7 +20,7 @@ import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
 import SeeAllProducts from './screens/SeeAllProducts';
-import { View,Text } from 'react-native';
+import { View,Text ,LogBox} from 'react-native';
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
 import ProfileScreen from './screens/profileScreen';
 import Search from './screens/Search';
@@ -28,6 +28,8 @@ import Search from './screens/Search';
 
 const Stack=createNativeStackNavigator();
 const App = () => {
+  LogBox.ignoreAllLogs();
+
   useEffect(() => {
     SplashScreen.hide();
   }, [])
