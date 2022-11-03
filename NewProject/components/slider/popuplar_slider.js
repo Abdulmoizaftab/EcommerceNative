@@ -31,11 +31,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   const getdata = async () => {
     setIsloading(true)
-<<<<<<< HEAD
-    await fetch(`http://192.168.1.7:5000/sql/popular/${limit}`)
-=======
     await fetch(`http://192.168.1.17:5000/sql/popular/${limit}`)
->>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
       .then((response) => response.json())
       .then((json) => { setProducts(json) 
         setIsloading(false)})

@@ -42,35 +42,8 @@ const SearchBar = () => {
     //       console.log("error");
     //     }
   
-<<<<<<< HEAD
-      // fetchAndSet();
-      // //console.log("dta is==>",dataSource);
-    var arr=[]
-    const check =async ()=>{
-        try{
-          if(searchText.length >= 1){
-            const result= await axios.get(`http://192.168.1.7:5000/sql/suggest/${searchText}/15`);
-          if (result.data) {
-            result.data.map(item => {
-              return arr.push(item);
-            })
-            setFilterData(arr)
-          }
-          else{
-            console.log("No data");
-          }
-          }
-        }
-        catch(error){
-          console.log("error");
-        }
-  
-      }
-      check()
-=======
     //   }
     //   check()
->>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
       
     // }, [searchText])
     // const removeValue = async () => {
@@ -89,17 +62,12 @@ const SearchBar = () => {
       console.log(currentUser)
       try {
       if(currentUser){
-<<<<<<< HEAD
-        const res= await axios.post('http://192.168.1.7:5000/sql/session',{user_id:currentUser.user[0].user_id})
-        // console.log("Response",res.data)
-=======
         const res= await axios.post('http://192.168.1.17:5000/sql/session',{user_id:currentUser.user[0].user_id},{
           headers: {
             'Authorization': `Bearer ${currentUser.token}` 
           }
         })
         
->>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
         if(res.data == "Status updated"){
           dispatch(Logout())
           console.log("Response is==>",res.data);
