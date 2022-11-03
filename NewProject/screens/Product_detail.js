@@ -29,7 +29,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addFavouriteDB,
   remFavouriteDB,
-  updateFavouriteDB,
   getFavouriteDB,
 } from '../redux/apiCalls';
 
@@ -53,10 +52,12 @@ const Product_detail = ({route}) => {
   const [addingToFav, setAddingToFav] = useState(false);
 
   const refRBSheet = useRef();
-  const user_id = 2010;
 
   const favouriteState = useSelector(state => state.favourite);
   const favArray = favouriteState.favourites;
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
   const dispatch = useDispatch();
 
   const renderSize = ({item}) => (
@@ -74,7 +75,9 @@ const Product_detail = ({route}) => {
 
   useEffect(() => {
     setImgArr([paramData.imgs, paramData.imgs]);
-    getFavouriteDB(dispatch);
+    if(currentUser){
+      getFavouriteDB(dispatch);
+    }
     setPrdRating(paramData.rating);
   }, [paramData]);
 
@@ -83,13 +86,13 @@ const Product_detail = ({route}) => {
 
   const postReview = () => {
     const bodyData = {
-      user_id,
+      user_id:currentUser.user[0].user_id,
       product_id: paramData.product_id,
       userRating: rating,
       userReview,
     };
 
-    axios.post(`http://192.168.1.7:5000/sql/giveRating`, bodyData);
+    axios.post(`http://192.168.1.17:5000/sql/giveRating`, bodyData);
     setRating(0);
     setUserReview('');
     setModalVisible(!modalVisible);
@@ -120,8 +123,8 @@ const Product_detail = ({route}) => {
             name="arrow-back-circle"
             onPress={() => navigate.goBack()}
           />
-
-          {favArray.filter(item => item.product_id === proId).length > 0 ? (
+          {currentUser ? (
+          favArray.filter(item => item.product_id === proId).length > 0 ? (
             //*======================================================== Check point to flip the heart buttons
             addingToFav ? (
               <ActivityIndicator
@@ -138,6 +141,8 @@ const Product_detail = ({route}) => {
                     name: prdName,
                     price: price,
                     image: paramData.imgs,
+                    user_id:currentUser.user[0].user_id,
+                    token:currentUser.token
                   };
                   setAddingToFav(true);
 
@@ -165,8 +170,31 @@ const Product_detail = ({route}) => {
                   name: prdName,
                   price: price,
                   image: paramData.imgs,
+                  user_id:currentUser.user[0].user_id,
+                  token:currentUser.token
                 };
                 addToFav(productDetail);
+              }}
+              style={Style.heartBtn}
+            />
+          )):(
+            <MaterialCommunityIcons
+              name="cards-heart-outline"
+              onPress={() => {
+                Alert.alert(
+                  "Attention",
+                  "Please login to continue",
+                  [
+                {
+                  text: "Ok",
+                  onPress: async () => {
+                     
+                    navigate.navigate('Profile')
+
+              },
+                }
+              ]
+              );
               }}
               style={Style.heartBtn}
             />
@@ -251,7 +279,8 @@ const Product_detail = ({route}) => {
 
                   <TouchableOpacity
                     style={{width: '60%', alignItems: 'center'}}
-                    onPress={postReview}>
+                    onPress={postReview}
+                    >
                     <View
                       style={{
                         width: '100%',
@@ -289,13 +318,30 @@ const Product_detail = ({route}) => {
               />
             </View>
 
-            <View>
               <TouchableOpacity
                 style={Style.button}
-                onPress={() => setModalVisible(true)}>
+                onPress={() =>{ 
+                  if(currentUser){
+                    setModalVisible(true)
+                  }
+                  else{
+                    Alert.alert(
+                      "Attention",
+                      "Please login to continue",
+                      [
+                    {
+                      text: "Ok",
+                      onPress:  () => {
+                        //navigation.navigate('Profile')
+                        navigate.navigate('Profile')
+                  },
+                    }
+                  ]
+                  );
+                  }
+                  }}>
                 <Text style={{fontSize: 12}}>WRITE A REVIEW</Text>
               </TouchableOpacity>
-            </View>
           </View>
 
           <Text style={Style.detailSizeHeading}>Sizes:</Text>

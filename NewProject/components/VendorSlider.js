@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity,Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Skeleton, NativeBaseProvider, Center } from 'native-base'
@@ -16,13 +16,28 @@ const VendorSlider = ({ popular, setPopular }) => {
   const [skeleton, setSkeleton] = useState(false)
   useEffect(() => {
     setSkeleton(true)
+<<<<<<< HEAD
     fetch('http://192.168.1.7:5000/sql/allVenders')
+=======
+    fetch('http://192.168.1.17:5000/sql/allVenders')
+>>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
       .then((response) => response.json())
       .then((json) => {
         setApiData(json)
         setSkeleton(false)
       })
-      .catch((error) => console.error(error))
+      .catch((error) => {console.error(error)
+        Alert.alert(
+          "Network Error",
+          "Please check your network connection.",
+          [
+        {
+          text: "Ok",
+          onPress: () => console.log("Ok"),
+        }
+      ]
+      );
+      })
     setPopular(false)
   }, [popular]);
   const navigation = useNavigation();

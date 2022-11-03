@@ -30,7 +30,7 @@ const AddressBook = ({route}) => {
   const [loading, setLoading] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [selectedValue, setSelectedValue] = useState({});
-  const user_id = 2010
+  const {currentUser} = useSelector(state=>state.user)
 
 
   const modifyAddress = (element) => {
@@ -50,7 +50,7 @@ const AddressBook = ({route}) => {
   useEffect(() => {
     setLoading(true)
     setDbAddress([])
-     axios.get(`http://192.168.1.7:5000/sql/getAddress/${user_id}`)
+     axios.get(`http://192.168.1.17:5000/sql/getAddress/${currentUser.user[0].user_id}`)
       .then(function (response) {
         setDbAddress(response.data)
         // setSelectedValue[dbAddress[0]]

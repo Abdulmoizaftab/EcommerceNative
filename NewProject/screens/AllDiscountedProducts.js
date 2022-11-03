@@ -31,7 +31,7 @@ const AllDiscountedProducts = () => {
 
   const getDisdata = async () => {
     setIsloading(true);
-    await fetch(`http://192.168.1.7:5000/sql/allDiscountProducts/${limit}`)
+    await fetch(`http://192.168.1.17:5000/sql/allDiscountProducts/${limit}`)
       .then(response => response.json())
       .then(json => {
         setProducts(json);
@@ -172,9 +172,9 @@ const AllDiscountedProducts = () => {
     <View style={Style.all_item_main}>
       <FlatList
         ListHeaderComponent={
-          <View>
-            <SearchBar navigate={navigate} />
-            <Text style={Style.mainHead}>All Discounts</Text>
+          <View style={{paddingTop:5}}>
+            {/* <SearchBar navigate={navigate} /> */}
+            
           </View>
         }
         data={products}

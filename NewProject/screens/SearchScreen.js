@@ -21,7 +21,7 @@ const SearchScreen = ({route}) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.7:5000/sql/suggest/${searchText}/${limit}`)
+    await fetch(`http://192.168.1.17:5000/sql/suggest/${searchText}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -55,74 +55,101 @@ const SearchScreen = ({route}) => {
     );
   }
 
-  const addToCart = async (productData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-      else {
-        let cartItem = [];
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const addToCart = async (productData) => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //     else {
+  //       let cartItem = [];
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
   const renderItem = (element) => {
 
     return (
       <View style={Style.all_item_main2}>
-        <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail', element.item)}>
-            <Image style={Style.all_item_main4_img}
-              resizeMode="cover"
-              source={{ uri: element.item.imgs }}
+      <View style={Style.all_item_main3}>
+        <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)} activeOpacity={0.7}>
+          <View style={{borderBottomWidth: 1, paddingVertical:"3%",width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
+
+          <Image style={Style.all_item_main4_img}
+            resizeMode="cover"
+            source={{ uri: element.item.imgs }}
             />
-            <View>
-              <Text style={Style.cardTitle}>
-                {element.item.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
-              </Text>
-              <View style={Style.cardBotm}>
-                <Text
-                  style={Style.cardPrice}>
-                  RS. {element.item.price}
-                </Text>
-                <Text style={Style.rating}>
-                  4.5{' '}
-                  <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
-                </Text>
-              </View>
             </View>
-          </TouchableOpacity>
+        <View>
+          <Text style={Style.cardTitle}>
+            {element.item.name.split(/\s+/).slice(0, 4).join(" ") + "..."}
+          </Text>
+          <View style={Style.cardBotm}>
+            <Text
+              style={Style.cardPrice}>
+              RS. {element.item.price}
+            </Text>
+            <Text style={Style.rating}>
+              {element.item.rating}{' '}
+              <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
+            </Text>
+          </View>
+        </View>
 
-          <TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
 
-          {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
-          </TouchableOpacity>
+        {/* {isFavourate(element.item.product_id) ? (
+          <MaterialCommunityIcons
+          name="cards-heart"
+          onPress={() => {removeFav(productDetail)}}
+          style={Style.middle2_2_icon}
+          />
+          ) : (
+            <MaterialCommunityIcons
+            name="cards-heart-outline"
+            onPress={() => {addToFav(productDetail)}}
+            style={Style.middle2_2_icon}
+            />
+          )} */}
 
+
+
+
+        {/* {
+          favArray.includes(element.item.product_id)?(<TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+          <FontAwesome name="heart" style={Style.middle2_2_icon} />
+          </TouchableOpacity>)
+        :(<TouchableOpacity onPress={() => addToCart(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+        <FontAwesome name="heart-o" style={Style.middle2_2_icon} />
+        </TouchableOpacity>)
+      } */}
+        
+
+        {/* <TouchableOpacity onPress={getData} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+          <FontAwesome name="get-pocket" style={Style.middle2_2_icon} />
+          </TouchableOpacity>
+          
           <TouchableOpacity onPress={removeValue} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <Feather name="delete" style={Style.middle2_2_icon} />
+          <Feather name="delete" style={Style.middle2_2_icon} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => removeSpecificProduct(productDetail)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-            <Feather name="home" style={Style.middle2_2_icon} />
-          </TouchableOpacity> */}
-
-          {/*<TouchableOpacity onPress={() => storeMergeData(product)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
-          <Feather name="flower" style={Style.middle2_2_icon} />
+          <Feather name="home" style={Style.middle2_2_icon} />
         </TouchableOpacity> */}
 
-        </View>
+        {/*<TouchableOpacity onPress={() => storeMergeData(product)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
+        <Feather name="flower" style={Style.middle2_2_icon} />
+      </TouchableOpacity> */}
+
+      </TouchableOpacity>
       </View>
+    </View>
     )
   }
 

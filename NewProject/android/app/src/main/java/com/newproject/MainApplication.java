@@ -10,7 +10,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.ecommercenative.newproject.newarchitecture.MainApplicationReactNativeHost;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;  // <--- Import Package
+//import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;  // <--- Import Package
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

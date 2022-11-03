@@ -7,6 +7,7 @@ import {useDispatch,useSelector} from 'react-redux'
 import { login } from '../redux/apiCalls'
 import Gmail_auth from '../components/Gmail_auth';
 import Facebook_auth from '../components/Facebook_auth';
+import { loginFailure } from '../redux/LoginRedux';
 
 const Login = ({ navigation }) => {
 
@@ -38,7 +39,18 @@ const Login = ({ navigation }) => {
   //   setLoader(loading)
   // }, [loader])
   
-  
+  if(error===true){
+    Alert.alert(
+      "Login failed",
+      "Something went wrong",
+      [
+    {
+      text: "Ok",
+      onPress: () => dispatch(loginFailure(false)),
+    }
+  ]
+  );
+  }
   return (
 
     <TouchableWithoutFeedback onPress={()=>{

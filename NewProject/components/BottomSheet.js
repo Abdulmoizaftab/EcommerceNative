@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, FlatList, ScrollView,Alert } from 'react-native'
 import React, { useState,useEffect } from 'react'
 import NumericInput from 'react-native-numeric-input'
 import FlatButton from './Button';
@@ -6,20 +6,30 @@ import { addProduct } from '../redux/CartRedux'
 import { useDispatch,useSelector } from 'react-redux'
 import axios from 'axios'
 import {addToCart} from '../redux/apiCalls'
+import { useNavigation } from '@react-navigation/native';
 
 
 const BottomSheet = ({ reference, prodData }) => {
-
+  
+  const navigation=useNavigation();
   const dispatch = useDispatch()
   const [qty, setQty] = useState(1);
   const [product, setProduct] = useState(prodData);
   const reduxDataProd = useSelector(state => state.cart.products);
   const reduxDataQty = useSelector(state => state.cart.quantity);
+  const {isFetching, error, currentUser, loadings} = useSelector(
+    state => state.user,
+  );
 
 
+  
   // useEffect(()=>{
 
+<<<<<<< HEAD
   //   axios.post('http://192.168.1.7:5000/addCartItem', data={})
+=======
+  //   axios.post('http://192.168.1.17:5000/addCartItem', data={})
+>>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
   //   .then()
   //   .catch()
   //   console.log('getting fro redux',reduxDataProd,reduxDataQty)
@@ -29,6 +39,8 @@ const BottomSheet = ({ reference, prodData }) => {
   const onAddCart = () => {
     reference.current.close();
     const payload = {
+      token:currentUser.token,
+      user_id:currentUser.user[0].user_id,
       product_id: product.product_id,
       quantity:qty
     }
@@ -58,7 +70,26 @@ const BottomSheet = ({ reference, prodData }) => {
             rightButtonBackgroundColor='#5A56E9'
             leftButtonBackgroundColor='#E9565A' />
         </View>
-        <FlatButton text='Add To Cart' onPress={onAddCart} />
+        <FlatButton text='Add To Cart' onPress={()=>{
+          if(currentUser){
+            onAddCart();
+          }
+          else{
+            Alert.alert(
+              "Attention",
+              "Please login to continue",
+              [
+            {
+              text: "Ok",
+              onPress:  () => {
+                //navigation.navigate('Profile')
+                navigation.navigate('Profile')
+          },
+            }
+          ]
+          );
+          }
+          }} />
       </View>
     </ScrollView>
   )

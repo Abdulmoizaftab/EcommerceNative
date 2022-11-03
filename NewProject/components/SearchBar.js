@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import SearchDropdown from './SearchDropdown';
@@ -14,33 +15,34 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector,useDispatch } from 'react-redux';
 import { Logout } from '../redux/LoginRedux';
 
-
-
-
-
 const SearchBar = () => {
-    //const [isSearching , setIsSearching] = useState(false)
-    const [searchText , setSearchText] = useState("");
-    const [filterData,setFilterData]=useState([]);
-    //const [empty,setEmpty] =useState("")
+    //const [searchText , setSearchText] = useState("");
+    //const [filterData,setFilterData]=useState([]);
+    
     const navigate = useNavigation()
     
-    useEffect(() => {
-      // const fetchAndSet = async()=>{
-      //  var result= await axios.get(`http://10.0.2.2:5000/sql/suggest/women`)
-      // //  result=await result.json();
-      //  //console.log("data..>",result.data);
-      //     .then(response => console.log("hello...",response.json()))
-      //     //.then(result => console.log("hello==>",result.data))
-      //     // .then(dataSource && dataSource.map(item => {
-      //     //   filterData.push(item.name)
-      //     // }))
-      //     // .then(console.log(filterData))
-      //     // .then(setIsSearching(true)
-      //     // )
-      //     .catch(err => console.log(err))
-      // }
+    // useEffect(() => {
+    // var arr=[]
+    // const check =async ()=>{
+    //     try{
+    //       if(searchText.length >= 1){
+    //         const result= await axios.get(`http://192.168.1.17:5000/sql/suggest/${searchText}/5`);
+    //       if (result.data) {
+    //         result.data.map(item => {
+    //           return arr.push(item);
+    //         })
+    //         setFilterData(arr)
+    //       }
+    //       else{
+    //         console.log("No data");
+    //       }
+    //       }
+    //     }
+    //     catch(error){
+    //       console.log("error");
+    //     }
   
+<<<<<<< HEAD
       // fetchAndSet();
       // //console.log("dta is==>",dataSource);
     var arr=[]
@@ -65,29 +67,67 @@ const SearchBar = () => {
   
       }
       check()
+=======
+    //   }
+    //   check()
+>>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
       
-    }, [searchText])
+    // }, [searchText])
+    // const removeValue = async () => {
+    //   try {
+    //     await AsyncStorage.removeItem('@searchItems')
+    //   } catch (e) {
+    //     // remove error
+    //   }
+    //   console.log('Done.')
+    // }
 
     const {isFetching,error,currentUser}=useSelector((state)=>state.user)
     const dispatch=useDispatch()
 
     const check_session=async()=>{
       console.log(currentUser)
+      try {
       if(currentUser){
+<<<<<<< HEAD
         const res= await axios.post('http://192.168.1.7:5000/sql/session',{user_id:currentUser.user[0].user_id})
         // console.log("Response",res.data)
+=======
+        const res= await axios.post('http://192.168.1.17:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+          headers: {
+            'Authorization': `Bearer ${currentUser.token}` 
+          }
+        })
+        
+>>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
         if(res.data == "Status updated"){
           dispatch(Logout())
           console.log("Response is==>",res.data);
         }
         else{
-          console.log("Response is==>",res.data);
+          console.log("Response2 is==>",res.data);
         }
       }
       else{
         console.log("Session expired")
       }
+    } catch (error) {
+      if(error == "AxiosError: Network Error"){
+        console.log("Something 2");
+        Alert.alert(
+            "Network Error",
+            "Please check your network connection.",
+            [
+          {
+            text: "Ok",
+            onPress: () => console.log("Ok"),
+          }
+        ]
+        );
+        
     }
+    }
+  }
 
     useEffect(() => {
       check_session()
@@ -95,62 +135,48 @@ const SearchBar = () => {
     
 
   
-  const onSearch = () => {
-      navigate.navigate('SearchScreen',searchText)
-  }
+  // const onSearch = () => {
+  //     navigate.navigate('SearchScreen',searchText)
+  // }
 
 
-    const onChange = (text)=> {
-      //console.log("value==>",text);
-      // if(text){
-      //   setSearchText(text)
-      //   // const temp = text.toLowerCase()
-      //   // dataSource && dataSource.map(item => {
-      //   //   filterData.push(item)
-      //   // })
-      //   // const tempList = dataSource && dataSource.filter(item => {
-      //   //   if(item.name.match(temp)){
-      //   //     return item.name
-      //   //   }
-      //   // })
-      //   // setFiltered(tempList)
-  
-      //   // console.log(tempList);
-      //   // console.log(filterData)
-      // }
-      // else{
-      //   //setIsSearching(false)
-      //   setFilterData([])
-      // }
-      if(text){
-        setSearchText(text)
-      }
-      else{
-        setFilterData([])
-      }
-    }
+    // const onChange = (text)=> {
+    
+    //   if(text){
+    //     setSearchText(text)
+    //   }
+    //   else{
+    //     setFilterData([])
+    //   }
+    // }
     
   
     return (
         <>
             <View style={styles.container}>
+              {currentUser?
+                <TouchableOpacity style={{borderRadius:200,alignItems:"center",width:"12%",justifyContent:"center",height:42,backgroundColor:"pink"}}onPress={() => navigate.navigate('Profile')}>
+                  <Text style={{fontSize:25,color:"#fff"}}>{currentUser.user[0].first_name.substring(0,1).toUpperCase()}</Text>
+                </TouchableOpacity>:
                 <MaterialCommunityIcons name='account-outline' style={styles.accountIcon} onPress={() => navigate.navigate('Profile')}  />
-                <View style={styles.searchView}>
-                    <Ionicons name='search-outline' style={styles.searchIcon} />
-                    <TextInput
-                        onSubmitEditing={onSearch}
-                        returnKeyType="search"
+                }
+                <TouchableOpacity style={styles.searchView} onPress={() => navigate.navigate('Search')}>
+          <View style={{flexDirection:'row'}}>
+            <Ionicons name='search-outline' style={styles.searchIcon}  />
+            {/* <TextInput
                         style={styles.search}
                         placeholder="Search Here"
                         placeholderTextColor="#EAE9FC"
-                        onChangeText={(e) => onChange(e)} />
-                </View>
+                      onChangeText={(e) => onChange(e)} /> */}
+            <Text style={{ marginLeft: 2, color: 'white' }}>Search Here</Text>
+          </View>
+        </TouchableOpacity>
                 <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')}/>
             </View>
-            {searchText ?
+            {/* {searchText ?
               <SearchDropdown dataSource={filterData} navigate={navigate}/> :
               null
-            }
+            } */}
         </>
     );
   };
@@ -163,7 +189,7 @@ const SearchBar = () => {
       flexDirection:'row',
       justifyContent:'space-around',
       height:65,
-      zIndex:9999
+      zIndex:9999,
     },
     searchView:{
         flexDirection:'row',

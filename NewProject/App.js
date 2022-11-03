@@ -20,13 +20,16 @@ import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
 import SeeAllProducts from './screens/SeeAllProducts';
-import { View,Text } from 'react-native';
+import { View,Text ,LogBox} from 'react-native';
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
 import ProfileScreen from './screens/profileScreen';
+import Search from './screens/Search';
 
 
 const Stack=createNativeStackNavigator();
 const App = () => {
+  LogBox.ignoreAllLogs();
+
   useEffect(() => {
     SplashScreen.hide();
   }, [])
@@ -56,17 +59,16 @@ const App = () => {
          name="AddToCart" component={AddToCart} />
 
         <Stack.Screen name="Product_detail" component={Product_detail} />
-        <Stack.Screen name="Categories" component={CategoryScreen} />
-        <Stack.Screen name="Profile" options={{
-            headerShown: true,
-            title: "My Account",
-            headerStyle: { backgroundColor: "#5A56E9" },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-            headerTitleAlign: "center"
-          }} component={ProfileScreen} />
+        <Stack.Screen name="Categories" component={CategoryScreen}
+        options={{headerShown:true,
+          title:"All categories",
+         headerStyle:{backgroundColor:"#5A56E9"},
+         headerTintColor: '#fff',
+         headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+         headerTitleAlign:"center"}} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen
           options={{
             headerShown: true,
@@ -80,8 +82,16 @@ const App = () => {
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SeeAllProducts" component={SeeAllProducts} />
-        <Stack.Screen name="AllDiscountedProducts" component={AllDiscountedProducts} />
+        <Stack.Screen name="AllDiscountedProducts" options={{headerShown:true,
+            title:"All discounts",
+           headerStyle:{backgroundColor:"#5A56E9"},
+           headerTintColor: '#fff',
+           headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+           headerTitleAlign:"center"}} component={AllDiscountedProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        <Stack.Screen name="Search" component={Search} />
         <Stack.Screen
           options={{headerShown:true,
             title:"Address Book",

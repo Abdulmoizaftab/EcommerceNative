@@ -12,12 +12,22 @@ import Categories from '../Categories';
 import VendorSlider from '../VendorSlider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider } from 'native-base';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
+import {requestUserPermission , NotificationListener} from '../../src/utils/pushNotification_helper'
+
+// import PushNotification , {Importance} from "react-native-push-notification";
 
 const Home_inside = ({ navigate }) => {
+
+  const {currentUser} = useSelector(state=>state.user)
+
+  if (currentUser !== null) {
+    requestUserPermission(currentUser);
+    NotificationListener();
+  }
+
 
 
   const favouriteState = useSelector(state => state.favourite)
@@ -35,7 +45,11 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
+<<<<<<< HEAD
     await fetch(`http://192.168.1.7:5000/sql/all/${limit}`)
+=======
+    await fetch(`http://192.168.1.17:5000/sql/all/${limit}`)
+>>>>>>> 9900784c6e90442354009d7c77d6e8d034ed71ff
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => console.error(error))
@@ -43,7 +57,24 @@ const Home_inside = ({ navigate }) => {
 
   useEffect(() => {
     getdata()
+    // PushNotification.createChannel(
+    //   {
+    //     channelId: "test1", // (required)
+    //     channelName: "My channel", // (required)
+    //     channelDescription: "A channel to test your notifications", // (optional) default: undefined.
+    //     playSound: false, // (optional) default: true
+    //     soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+    //     importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+    //     vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    //   },
+    //   (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    // );
+
+    // PushNotification.channelExists("test1", function (exists) {
+    //   console.log(exists); // true/false
+    // });
   }, [limit]);
+
 
   const flatlistEnd = () => {
     return (
@@ -169,7 +200,7 @@ const Home_inside = ({ navigate }) => {
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)}>
+          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)} activeOpacity={0.7}>
             <View style={{borderBottomWidth: 1, paddingVertical:"3%",width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
 
             <Image style={Style.all_item_main4_img}
@@ -265,7 +296,7 @@ const Home_inside = ({ navigate }) => {
 
           
           {/* //?Slider Carosel============================================== */}
-        <Carousel data={dummyData} />
+        <Carousel  />
 
         
           {/* //?Categories buttons============================================== */}

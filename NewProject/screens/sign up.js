@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet,TextInput, TouchableOpacity,Alert} from 'react-native';
+import {View, Text, StyleSheet,TextInput, TouchableOpacity,Alert, ScrollView,ActivityIndicator} from 'react-native';
 import React, { useState } from 'react';
 import {useDispatch,useSelector} from 'react-redux' 
 import { register } from '../redux/apiCalls';
@@ -8,51 +8,51 @@ import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Gmail_auth from '../components/Gmail_auth';
 import Facebook_auth from '../components/Facebook_auth';
+import { registerFailure } from '../redux/RegisterRedux';
 
 const Sign_up = ({navigation}) => {
 
   const [first_name , setFirstName] = useState("")
   const [last_name , setLastName] = useState("")
   const [username , setUsername] = useState("")
+  const [mobile , setMobile] = useState("")
   const [email , setEmail] = useState("")
   const [password , setPswd] = useState("")
   const [confirmPswd , setConfirmPswd] = useState("")
   const [dataBody , setDataBody] = useState({})
   const dispatch = useDispatch()
+  const {isFetching,error,currentUser,loadings}=useSelector((state)=>state.register)
 
   const handlePress = ()=>{
     
-    if(first_name && last_name && username && email && password && confirmPswd){
+    if(first_name && last_name && username && mobile && email && password && confirmPswd){
       if(password === confirmPswd){
         let payload={
           username,
           email,
           password,
+          mobile,
           first_name,
-          last_name
+          last_name,
+          navigation
         }
-        setDataBody({...payload})
-        register(dispatch,payload)
-        Alert.alert(
-          "Register successfully",
-          "Please verify your mail",
-          [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => {
-          setFirstName("")
-          setLastName("")
-          setUsername("")
-          setEmail("")
-          setPswd("")
-          setConfirmPswd("")     
-          } 
+        if(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)){
+          setDataBody({...payload})
+          register(dispatch,payload)
         }
-      ]
-      );
+        else{
+          Alert.alert(
+            "Registeration failed",
+            "Invalid email",
+            [
+          {
+            text: "Ok",
+            onPress: () => console.log("Ok"),
+          }
+        ]
+        );
+        }
+        
     }
     else{
       Alert.alert(
@@ -80,6 +80,18 @@ const Sign_up = ({navigation}) => {
     );
     }
   }
+  if(error===true){
+    Alert.alert(
+      "Login failed",
+      "Something went wrong",
+      [
+    {
+      text: "Ok",
+      onPress: () => dispatch(registerFailure(false)),
+    }
+  ]
+  );
+  }
 
   return (
     <View style={Style.main}>
@@ -93,6 +105,9 @@ const Sign_up = ({navigation}) => {
       </View>
       <View style={Style.dot3}></View>
       <View style={Style.log_container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          
+        
         <View style={Style.log_container2}>
           <Text style={Style.log_container2_text}>Sign up</Text>
           <View style={Style.fl_name_view}>
@@ -113,6 +128,10 @@ const Sign_up = ({navigation}) => {
             <Text style={Style.email_view_text}><AntDesign name='user'/>  Username</Text>
             <TextInput value={username} selectionColor="black" style={Style.email_view_textinput} onChangeText={setUsername}/>
           </View>
+          <View style={Style.email_view}>
+            <Text style={Style.email_view_text}><AntDesign name='phone'/>  Mobile #</Text>
+            <TextInput value={mobile} selectionColor="black" keyboardType='numeric' style={Style.email_view_textinput} onChangeText={setMobile}/>
+          </View>
           <View>
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Password</Text>
             <TextInput value={password} selectionColor="black"  style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPswd}/>
@@ -121,11 +140,9 @@ const Sign_up = ({navigation}) => {
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline'/>  Confirm password</Text>
             <TextInput value={confirmPswd} selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setConfirmPswd}/>
           </View>
-          <TouchableOpacity style={Style.forgot_btn}>
-            <Text style={Style.forgot_btn_text}>Forgot password?</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={Style.signup_btn} onPress={handlePress}>
-            <Text style={Style.signup_btn_text}>Sign up</Text>
+            {loadings?<ActivityIndicator size='large' color='white'/>:
+            <Text style={Style.signup_btn_text}>Sign up</Text>}
           </TouchableOpacity>
           <TouchableOpacity style={Style.log_in_btn} onPress={()=>navigation.navigate('Login')}>
             <Text style={Style.log_in_btn_text}>Log in instead</Text>
@@ -134,7 +151,8 @@ const Sign_up = ({navigation}) => {
             <AntDesign style={Style.auth_icon} name='google' onPress={Gmail_auth}/>
             <FontAwesome5Pro style={Style.auth_icon} name='facebook' onPress={Facebook_auth}/>
           </View>
-        </View>        
+        </View>
+        </ScrollView>        
       </View>
     </View>
   );

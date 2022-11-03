@@ -274,8 +274,9 @@ dependencies {
     implementation 'com.facebook.fresco:animated-gif:2.5.0'
 
     // FOR PUSH NOTIFICATIONS
+    implementation platform('com.google.firebase:firebase-bom:31.0.1')
     implementation 'com.google.firebase:firebase-analytics:17.3.0'
-    implementation project(':react-native-push-notification')
+    // implementation project(':react-native-push-notification')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'

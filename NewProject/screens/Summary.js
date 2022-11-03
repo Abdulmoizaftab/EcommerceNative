@@ -10,6 +10,7 @@ import React, { useState,useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {Modal,NativeBaseProvider} from 'native-base';
 import axios from 'axios';
+import orderSuccess from '../assets/fonts/images/orderSuccesfull.gif'
 
 
 
@@ -19,6 +20,7 @@ const Summary = ({route,navigation}) => {
   const testProducts = useSelector(state => state.test.products);
   const testquantity = useSelector(state => state.test.quantity);
   const testTotal = useSelector(state => state.test.total);
+  const {currentUser} = useSelector(state => state.user);
   // useEffect(() => {
   //   setProducts()
   // }, [])
@@ -30,10 +32,11 @@ const Summary = ({route,navigation}) => {
     setShowModal(true)
     const obj={
       amount:testTotal,
-      prodArr:testProducts
+      prodArr:testProducts,
+      user_id:currentUser.user[0].user_id
       
     }
-    await axios.post('http://192.168.1.7:5000/sql/setOrderDetails', obj)
+    await axios.post('http://192.168.1.17:5000/sql/setOrderDetails', obj)
     console.log("Data inserted successfully");
     // const obj={
     //   prodArr:testProducts
@@ -175,12 +178,10 @@ const Summary = ({route,navigation}) => {
     }}>
         <Modal.Content maxWidth="400px" >
           <Modal.Header style={{backgroundColor:"#5A56E9"}} width="100%">
-            <Text style={{color:"white",fontSize:18}}>Your order is being proceed!</Text>
+            <Text style={{color:"white",fontSize:18}}>Your order has been confirmed</Text>
             </Modal.Header>
           <Modal.Body style={{backgroundColor:"white"}}>
-            <Image source={{
-                    uri: 'https://nicefuntours.com/wp-content/uploads/2019/12/ShyCautiousAfricanpiedkingfisher-max-1mb.gif',
-                  }} style={{height:120,width:120,alignSelf:"center"}}/>
+            <Image source={orderSuccess} style={{height:120,width:120,alignSelf:"center"}}/>
                   <Text style={{alignSelf:"center",color:"black"}}>Thankyou for order</Text>
           </Modal.Body>
         </Modal.Content>
