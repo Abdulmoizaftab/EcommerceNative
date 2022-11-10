@@ -114,8 +114,8 @@ const Favorites = ({navigation}) => {
       name: item.name,
       price: item.price,
       image: item.imgs,
-      user_id:currentUser.user[0].user_id,
-      token:currentUser.token
+      user_id:currentUser?.user[0].user_id,
+      token:currentUser?.token
     };
 
     return (

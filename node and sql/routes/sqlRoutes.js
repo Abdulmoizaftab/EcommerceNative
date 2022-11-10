@@ -50,7 +50,7 @@ const sendMail = (email, name, user_id) => {
       from:'digevoldevs@gmail.com',
       to:email,
       subject:'For verify your email',
-      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.17:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
+      html:"<p>Hey "+name+" Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id="+user_id+"'>Click here verify your mail</a>"
     
     }
     transporter.sendMail(mailOptions,function(error,info){

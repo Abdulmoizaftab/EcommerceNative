@@ -38,8 +38,8 @@ const sql = require('mssql')
 const session= require('express-session');
 var config = {
     user: "sa", //default is sa
-    password: "DE@2022",
-    server: "192.168.1.101", // for local machine
+    password: "Dev@2022",
+    server: "192.168.1.100", // for local machine
     database: "EcommerceTest", // name of database
     options: {
         encrypt: false //check later izhan
@@ -61,15 +61,14 @@ app.use(cors())
 app.use(session({
     name:'ecomm_session',
     secret:'I am a boy',
-    resave:false,
+    resave:true,
     saveUninitialized:false,
-    //rolling:true,
+    rolling:true,
     cookie: {
     // Session expires after 1 min of inactivity.
     expires: 86400000,
     },
-    resave: false,
-    saveUninitialized: false,
+    
 }))
 app.set("view engine","hbs")
 app.use('/sql', sqlRoutes)
