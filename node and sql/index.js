@@ -37,8 +37,8 @@ const sql = require('mssql')
 const cors = require('cors')
 var config = {
     user: "sa", //default is sa
-    password: "DE@2022",
-    server: "192.168.1.101", // for local machine
+    password: "Dev@2022",
+    server: "192.168.1.100", // for local machine
     database: "EcommerceTest", // name of database
     options: {
         encrypt: false //check later izhan

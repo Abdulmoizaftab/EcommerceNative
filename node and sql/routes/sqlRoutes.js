@@ -87,7 +87,7 @@ router.get('/category', (req, res) => {
 router.get('/getOrdersAdminPortal', (req, res) => {
   req.app.locals.db.query(`select order_items.* , order_details.user_id , order_details.total, order_details.payment_id , order_details.orderStatus, 
   product.vendor_id,product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
-  users.username,users.address,users.email,users.telephone
+  users.username,users.email,users.phone
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on product.product_id = order_items.product_id
@@ -104,10 +104,10 @@ router.get('/getOrdersAdminPortal', (req, res) => {
 
 router.get('/getProductAdminPortal', (req, res) => {
   req.app.locals.db.query(`
-  select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
-  from product
-  left join discount on discount.discount_id = product.discount_id
-  where product.vendor_id = 2`, function (err, recordset) {
+    select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
+    from product
+    left join discount on discount.discount_id = product.discount_id
+    where product.vendor_id = 2`, function (err, recordset) {
     if (err) {
       console.error(err)
       res.status(500).send('SERVER ERROR')
@@ -117,27 +117,10 @@ router.get('/getProductAdminPortal', (req, res) => {
   })
 })
 
-router.get('/getSpecificOrder', (req, res) => {
-  req.app.locals.db.query(`
-  select order_items.* , order_details.total, order_details.payment_id , order_details.orderStatus, 
-  product.vendor_id,product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
-  users.username,users.address,users.email,users.telephone
-  from order_items
-  inner join order_details on order_items.order_id = order_details.order_id
-  inner join product on product.product_id = order_items.product_id
-  inner join users on users.user_id = order_details.user_id 
-  where item_id = 4`, function (err, recordset) {
-    if (err) {
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
-    }
-    res.status(200).json(recordset.recordset)
-  })
-})
+
 
 router.post("/register", (req, res) => {
-  const { username, email, password, first_name, last_name, address, telephone } = req.body
+  const { username, email, password, first_name, last_name, address, phone } = req.body
   req.app.locals.db.query(`select * from users where email='${email}'`, async function (err, recordset) {
     if (err) {
       console.error(err)
@@ -149,7 +132,7 @@ router.post("/register", (req, res) => {
       }
       else {
         const encrypt_pswd = await bcrypt.hash(password, 10);
-        req.app.locals.db.query(`insert into users (username , password,first_name,last_name,address,telephone,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${address}','${telephone}','${email}')`, function (err, recordset) {
+        req.app.locals.db.query(`insert into users (username , password,first_name,last_name,address,phone,email) values('${username}' , '${encrypt_pswd}' , '${first_name}','${last_name}','${address}','${phone}','${email}')`, function (err, recordset) {
           if (err) {
             console.error(err)
             res.status(500).send('SERVER ERROR')
@@ -204,8 +187,9 @@ router.post("/login", (req, res) => {
 
 
 router.put('/UpdateOrder', (req, res) => {
-  const { orderStatus, order_id } = req.body;
-  req.app.locals.db.query(`update order_details set orderStatus = '${orderStatus}' where order_id = ${order_id}`, function (err, recordset) {
+  const { orderStatus, item_id } = req.body;
+  req.app.locals.db.query(`update order_items set orderStatus = '${orderStatus}' where item_id = ${item_id}
+  `, function (err, recordset) {
     if (err) {
       console.error(err)
       res.status(500).send('SERVER ERROR')
@@ -229,9 +213,97 @@ router.post('/addProduct', (req, res) => {
 })
 
 
+router.get('/getSpecificProductAdminPortal/:id', (req, res) => {
+  req.app.locals.db.query(`select product.* ,discount.name as Discount_name, discount.description as discount_description, discount.discount_percent,discount.active
+  from product
+  left join discount on discount.discount_id = product.discount_id
+  where product.vendor_id = 2 and product_id = ${req.params.id}`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
 
 
+router.get('/getSpecificOrder/:id', (req, res) => {
+  req.app.locals.db.query(`
+  select order_items.* , order_details.total, order_details.payment_id , order_details.orderStatus as MainOrderStatus, 
+  product.vendor_id,product.name,product.description,product.price, product.imgs,product.discount_id,product.inventory_id,product.inStock, 
+  users.username,users.email,users.phone
+  from order_items
+  inner join order_details on order_items.order_id = order_details.order_id
+  inner join product on product.product_id = order_items.product_id
+  inner join users on users.user_id = order_details.user_id 
+  where item_id = ${req.params.id}`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
 
+
+router.put('/UpdateProduct', (req, res) => {
+  const { name, description, imgs, price, product_id } = req.body;
+  console.log("🚀 ~ file: sqlRoutes.js ~ line 253 ~ router.put ~ req.body", req.body)
+  req.app.locals.db.query(`UPDATE product
+  SET name='${name}', description='${description}', imgs='https://www.charlesclinkard.co.uk/images/products/1613410518-31690700.jpg',
+  price=${price}
+  WHERE product_id=7`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR update')
+      return
+    }
+    res.status(200).send('Order Updated');
+  })
+})
+
+router.get('/staff', (req, res) => {
+  req.app.locals.db.query(`select * from staff where vendorsId = 5`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+
+router.get('/users', (req, res) => {
+  req.app.locals.db.query(`   select  order_details.user_id,product.vendor_id,sum(order_details.total) as total_of_vendor,users.username,users.email,users.password,users.first_name,users.last_name,users.isVerified,users.phone
+  from order_items
+  inner join order_details on order_items.order_id = order_details.order_id
+  inner join product on product.product_id = order_items.product_id
+  inner join users on users.user_id = order_details.user_id 
+  where product.vendor_id = 2
+  group by order_details.user_id,product.vendor_id,users.username,users.password,users.email,users.first_name,users.last_name,users.isVerified,users.phone`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+
+router.get('/files', (req, res) => {
+  req.app.locals.db.query(`select * from Archive.dbo.Records`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
 
 
 

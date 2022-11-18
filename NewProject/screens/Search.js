@@ -15,8 +15,14 @@ const Search = () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@searchItems')
             const json_parse = JSON.parse(jsonValue)
+            if(json_parse==null){
+
+                setAsyncStorageData([])
+            }
+            else{
+                setAsyncStorageData(json_parse)
+            }
             //console.log("daya==>",json_parse);
-            setAsyncStorageData(json_parse)
             //return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch (error) {
             alert('Something went wrong');
