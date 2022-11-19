@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ToastAndroid,
   View,
 } from 'react-native';
 import SearchDropdown from './SearchDropdown';
@@ -81,17 +82,18 @@ const SearchBar = () => {
       }
     } catch (error) {
       if(error == "AxiosError: Network Error"){
-        console.log("Something 2");
-        Alert.alert(
-            "Network Error",
-            "Please check your network connection.",
-            [
-          {
-            text: "Ok",
-            onPress: () => console.log("Ok"),
-          }
-        ]
-        );
+        // console.log("Something 2");
+        // Alert.alert(
+        //     "Network Error",
+        //     "Please check your network connection.",
+        //     [
+        //   {
+        //     text: "Ok",
+        //     onPress: () => console.log("Ok"),
+        //   }
+        // ]
+        // );
+        ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
         
     }
     }

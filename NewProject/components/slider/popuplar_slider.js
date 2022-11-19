@@ -40,12 +40,12 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
         setIsloading(false)
       })
       .catch((error) => console.error(error))
-
-  }
-
-  useEffect(() => {
-    getdata()
-    setPopular(false)
+      
+    }
+    
+    useEffect(() => {
+      getdata()
+      setPopular(false)
   }, [popular]);
 
 
@@ -101,11 +101,11 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
 
             (
               <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => {
-                setCardLoader(true)
-                //navigate.navigate('Product_detail',element)
-                setTimeout(() => {
-                  setCardLoader(false)
-                }, 2000);
+                navigate.navigate('Product_detail',element)
+                // setCardLoader(true)
+                // setTimeout(() => {
+                //   setCardLoader(false)
+                // }, 2000);
               }}>
                 <View style={Styles.ProdCard}>
                   <View style={Styles.imgContainer}>

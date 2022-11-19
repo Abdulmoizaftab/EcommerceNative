@@ -6,7 +6,8 @@ import {
     TextInput,
     View,
     TouchableOpacity,
-    Alert
+    Alert,
+    ToastAndroid
 } from 'react-native';
 
 import SearchDropdown from './SearchDropdown';
@@ -91,17 +92,18 @@ const ComponentSearchBox = ({pic}) => {
                 console.log("error",error);
                 
                 if(error == "AxiosError: Network Error"){
-                    console.log("Something 2");
-                    Alert.alert(
-                        "Network Error",
-                        "Please check your network connection.",
-                        [
-                      {
-                        text: "Ok",
-                        onPress: () => console.log("Ok"),
-                      }
-                    ]
-                    );
+                    // console.log("Something 2");
+                    // Alert.alert(
+                    //     "Network Error",
+                    //     "Please check your network connection.",
+                    //     [
+                    //   {
+                    //     text: "Ok",
+                    //     onPress: () => console.log("Ok"),
+                    //   }
+                    // ]
+                    // );
+                    ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
                 }
                 else if(error == "TypeError: null is not an object (evaluating 'searchText.length')"){
                     pic(true)
