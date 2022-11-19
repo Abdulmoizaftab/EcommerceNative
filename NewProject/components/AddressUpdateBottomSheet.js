@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     },
     inputLabelStyle: {
         fontSize: 18,
+        color:'#000'
     },
     inputStyle: {
         borderBottomWidth: 1,

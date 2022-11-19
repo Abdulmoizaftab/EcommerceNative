@@ -6,35 +6,39 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
-import React , {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SkeletonJs from '../Skeleton';
 import { NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
 
-const Popuplar_slider = ({ navigate,popular,setPopular }) => {
+const Popuplar_slider = ({ navigate, popular, setPopular }) => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(10);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsloading] = useState(false);
+  const [cardLoader, setCardLoader] = useState(false)
 
-  
+
   const favouriteState = useSelector(state => state.favourite)
-  const favArray=favouriteState.favourites;
-  
-  const dispatch =useDispatch();
+  const favArray = favouriteState.favourites;
+
+  const dispatch = useDispatch();
 
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.26:5000/sql/popular/${limit}`)
       .then((response) => response.json())
-      .then((json) => { setProducts(json) 
-        setIsloading(false)})
+      .then((json) => {
+        setProducts(json)
+        setIsloading(false)
+      })
       .catch((error) => console.error(error))
 
   }
@@ -44,30 +48,30 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
     setPopular(false)
   }, [popular]);
 
-  
-
-  const addToFav = (productDetail) => {
-    try {
-      
-      // alert("added")
-      dispatch(addFavourite(productDetail));
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const removeFav = (productDetail) => {
-    try {
-      // alert("remove")
-      dispatch(removeFavourite(productDetail));
-    } catch (error) {
-      alert(error);
-    }
-  };
 
 
-  const isFavourate = id =>
-  Boolean(favArray.find(item => item.product_id === id));
+  // const addToFav = (productDetail) => {
+  //   try {
+
+  //     // alert("added")
+  //     dispatch(addFavourite(productDetail));
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
+
+  // const removeFav = (productDetail) => {
+  //   try {
+  //     // alert("remove")
+  //     dispatch(removeFavourite(productDetail));
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
+
+
+  // const isFavourate = id =>
+  //   Boolean(favArray.find(item => item.product_id === id));
 
 
   return (
@@ -76,61 +80,76 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
         <View style={Styles.middle2_1}>
           <Text style={Styles.middle2_1_text1}>Popular Items</Text>
         </View>
-        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.5} onPress={()=>navigate.navigate('SeeAllPopular')}>
+        <TouchableOpacity style={Styles.middle2_2} activeOpacity={0.5} onPress={() => navigate.navigate('SeeAllPopular')}>
           <Text style={Styles.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Styles.middle2_2_icon} />
         </TouchableOpacity>
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={{ width: '100%', flexDirection: 'row', }}>
-    {
-      isLoading?(
-        <NativeBaseProvider>
-          <View >
-            <SkeletonJs />
-          </View>
-        </NativeBaseProvider>
-      ):(products?.map((element,key)=>
+          {
+            isLoading ? (
+              <NativeBaseProvider>
+                <View >
+                  <SkeletonJs />
+                </View>
+              </NativeBaseProvider>
+            ) : (products?.map((element, key) =>
 
 
-      
-      
-      (
-        <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => navigate.navigate('Product_detail',element)}>
-            <View style={Styles.ProdCard}>
-              <View style={Styles.imgContainer}>
-                <Image
-                  style={Styles.cardImg}
-                  source={{
-                    uri: element.imgs,
-                  }}></Image>
-              </View>
 
-              <View style={Styles.cardDesc}>
-                <Text style={Styles.cardTitle}>
-                  {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
-                </Text>
-                <View style={Styles.cardBotm}>
-                <Text style={Styles.cardPrice}>RS.{element.price}</Text>
-                  <Text style={Styles.rating}>
-                    {element.rating}{' '}
-                    <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
-                  </Text>
-                  </View>
+
+            (
+              <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => {
+                setCardLoader(true)
+                //navigate.navigate('Product_detail',element)
+                setTimeout(() => {
+                  setCardLoader(false)
+                }, 2000);
+              }}>
+                <View style={Styles.ProdCard}>
+                  <View style={Styles.imgContainer}>
+                    <Image
+                      style={Styles.cardImg}
+                      source={{
+                        uri: element.imgs,
+                      }}></Image>
                   </View>
 
+                  <View style={Styles.cardDesc}>
+                    {
+                      cardLoader ? (
+                        <ActivityIndicator size='large' color="black" />
+                      ) : (
+                        <>
+                          <Text style={Styles.cardTitle}>
+                            {element.name.split(/\s+/).slice(0, 3).join(" ") + "..."}
+                          </Text>
+                          <View style={Styles.cardBotm}>
+                            <Text style={Styles.cardPrice}>RS.{element.price}</Text>
+                            <Text style={Styles.rating}>
+                              {element.rating}{' '}
+                              <Icon style={Styles.ratingIcon} name="md-star-half-sharp" />
+                            </Text>
+                          </View>
+                        </>
+                      )
+                    }
+
+                  </View>
 
 
 
-                 
-              </View>
-           {/* / </View> */}
-          </TouchableOpacity>
-      )))
-    }
+
+
+                </View>
+                {/* / </View> */}
+              </TouchableOpacity>
+            )))
+          }
         </View>
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   );
 };
 
@@ -191,7 +210,7 @@ const Styles = StyleSheet.create({
     height: 190,
     marginLeft: 10,
     marginVertical: 5,
-    
+
     // backgroundColor:'green',
   },
   imgContainer: {

@@ -71,7 +71,7 @@ const ComponentSearchBox = ({pic}) => {
         const check = async () => {
             try {
                 if (searchText.length !== null) {
-                    const result = await axios.get(`http://192.168.1.17:5000/sql/suggest/${searchText}`);
+                    const result = await axios.get(`http://192.168.1.26:5000/sql/suggest/${searchText}`);
                      if (result.data) {
                     //     result.data.map(item => {
                     //         return arr.push(item.name);
@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
         fontWeight: "400",
         borderRadius: 50,
         height: 40,
+        width:"90%"
     },
     searchIcon: {
 

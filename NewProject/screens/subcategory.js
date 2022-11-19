@@ -12,8 +12,9 @@ import Tabs from '../components/tabs';
 import {NativeBaseProvider} from 'native-base';
 import SkeletonJs from '../components/Skeleton';
 import Icon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const Subcategory = ({navigation, route}) => {
@@ -28,7 +29,7 @@ const Subcategory = ({navigation, route}) => {
     if (!id) {
       setProducts([]);
       await fetch(
-        `http://192.168.1.17:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+        `http://192.168.1.26:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -45,7 +46,7 @@ const Subcategory = ({navigation, route}) => {
     } else {
       setProducts([]);
       await fetch(
-        `http://192.168.1.17:5000/sql/subCategoryProducts/${limit}/${id}`,
+        `http://192.168.1.26:5000/sql/subCategoryProducts/${limit}/${id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -185,6 +186,7 @@ const Subcategory = ({navigation, route}) => {
         </View>
         <View style={Style.head_text_view}>
           <Text style={Style.head_text}>{cat}</Text>
+          <FontAwesome5 name='search' style={Style.searchIcon} onPress={() => navigation.navigate('Search')}/>
         </View>
       </View>
 
@@ -232,9 +234,12 @@ const Style = StyleSheet.create({
     color: 'white',
   },
   head_text_view: {
-    width: '95%',
+    width: '88%',
     justifyContent: 'center',
     marginHorizontal: '5%',
+    flexDirection:'row',
+    alignItems:'baseline',
+    justifyContent:'space-between',
   },
   head_text: {
     fontSize: 25,
@@ -309,4 +314,10 @@ const Style = StyleSheet.create({
     alignItems: "center",
     width:'95%'
   },
+  searchIcon: {
+
+    color: "#EAE9FC",
+    fontSize: 20,
+
+}
 });

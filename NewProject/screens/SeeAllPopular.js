@@ -43,19 +43,21 @@ const SeeAllPopular = () => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.26:5000/sql/popular/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
+      .then(check=>  setIsloading(false))
       .catch((error) => console.error(error))
 
   }
 
   const handleFilterPrice = async (asc_desc)=>{
     setIsloading(true)
-    setIsRefreshing(true)
-    await fetch(`http://192.168.1.17:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
+    //setIsRefreshing(true)
+    await fetch(`http://192.168.1.26:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
+    .then(check=>  setIsloading(false))
     .catch((error) => console.error(error))
     
     if (asc_desc==='asc') {
@@ -69,15 +71,17 @@ const SeeAllPopular = () => {
       setFilterRatingAsc(false)
       setFilterRatingDesc(false)
     }    
-    setIsRefreshing(false)
+    //setIsRefreshing(false)
+
   }
   
   const handleFilterRating = async (asc_desc)=>{
     setIsloading(true)
-    setIsRefreshing(true)
-    await fetch(`http://192.168.1.17:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
+    //setIsRefreshing(true)
+    await fetch(`http://192.168.1.26:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
+    .then(check=>  setIsloading(false))
     .catch((error) => console.error(error))
     
     if (asc_desc==='asc') {
@@ -91,7 +95,8 @@ const SeeAllPopular = () => {
       setFilterPriceAsc(false)
       setFilterPriceDesc(false)
     }    
-    setIsRefreshing(false)
+    //setIsRefreshing(false)
+
   }
 
   useEffect(() => {
@@ -338,7 +343,8 @@ const SeeAllPopular = () => {
                     setFilterRatingAsc,
                     setFilterRatingDesc,
                     getdata,
-                    setIsloading
+                    setIsloading,
+                    setProducts
                   }
                 } />
             </RBSheet>

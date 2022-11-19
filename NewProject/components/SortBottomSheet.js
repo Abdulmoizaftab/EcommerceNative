@@ -1,11 +1,18 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React , {useState} from 'react'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 const SortBottomSheet = ({ props }) => {
 
+    const [activity, setActivity] = useState(false);
+
     const handlePrice = () => {
+        setActivity(true)
+        props.setProducts([])
+        setTimeout(() => {
+            setActivity(false)
+        }, 1500);
         if (props.filterPriceAsc) {
             props.handleFilterPrice('desc')
         } else if (props.filterPriceDesc) {
@@ -17,6 +24,11 @@ const SortBottomSheet = ({ props }) => {
     }
 
     const handleRating = () => {
+        setActivity(true)
+        props.setProducts([])
+        setTimeout(() => {
+            setActivity(false)
+        }, 1500);
         if (props.filterRatingAsc) {
             props.handleFilterRating('desc')
         } else if (props.filterRatingDesc) {
@@ -28,6 +40,11 @@ const SortBottomSheet = ({ props }) => {
     }
 
     const handleRemove = () => {
+        setActivity(true)
+        props.setProducts([])
+        setTimeout(() => {
+            setActivity(false)
+        }, 1500);
         props.setFilterPriceAsc(false)
         props.setFilterPriceDesc(false)
         props.setFilterRatingAsc(false)
@@ -37,9 +54,14 @@ const SortBottomSheet = ({ props }) => {
 
 
     return (
+       activity ?(
         <View style={styles.mainView}>
-
+            <ActivityIndicator size='large' color="#5a56e9"/>
+        </View>
+       ):(
+        <View style={styles.mainView}>
             {
+            
                 props.filterPriceAsc || props.filterPriceDesc ? (
                     props.filterPriceAsc ? (
                         <TouchableOpacity style={styles.optionView} activeOpacity={0.7} onPress={handlePrice}>
@@ -98,6 +120,7 @@ const SortBottomSheet = ({ props }) => {
                     </TouchableOpacity>
                 )
             }
+
             {
                 props.filterPriceAsc || props.filterPriceDesc || props.filterRatingAsc || props.filterRatingDesc ? (
                     <TouchableOpacity style={styles.removeFilterView} activeOpacity={0.7} onPress={handleRemove}>
@@ -112,6 +135,8 @@ const SortBottomSheet = ({ props }) => {
             }
 
         </View>
+       )
+        
     )
 }
 

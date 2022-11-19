@@ -51,7 +51,7 @@ const sendMail = (email, name, user_id) => {
       from: 'digevoldevs@gmail.com',
       to: email,
       subject: 'For verify your email',
-      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.17:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
+      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.26:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
 
     }
     transporter.sendMail(mailOptions, function (error, info) {
@@ -66,7 +66,7 @@ const sendMail = (email, name, user_id) => {
   }
 };
 router.post("/register", (req, res) => {
-  const { username, email, password, first_name, last_name } = req.body;
+  const { username, email, password, first_name, last_name, mobile } = req.body;
   req.app.locals.db.query(
     `EXEC LoginSpUsersSelect @email='${email}'`,
     async function (err, recordset) {
@@ -80,7 +80,7 @@ router.post("/register", (req, res) => {
           const verify = 0;
           const encrypt_pswd = await bcrypt.hash(password, 10);
           req.app.locals.db.query(
-            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify}`,
+            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify} , @phone='${mobile}'`,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -235,7 +235,7 @@ router.get("/popular/:limit", (req, res) => {
   FROM order_items
   INNER JOIN product ON order_items.product_id = product.product_id
   GROUP BY order_items.product_id, product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
-  ORDER BY total_Orders desc`,
+  ORDER BY total_Orders desc , rating desc , product_id asc`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -805,7 +805,7 @@ router.post("/updateNotifyToken", (req, res) => {
       } else {
         if (recordset.recordset[0].user_id === user_id) {
           res.status(200).send("old Token and same user")
-        }else{
+        } else {
           req.app.locals.db.query(`update notification_Tokens set user_id=${user_id} where tokenId =${recordset.recordset[0].tokenId}`, function (err, recordset) {
             if (err) {
               console.error(err)
@@ -927,24 +927,24 @@ router.post("/loginVendor", (req, res) => {
 });
 
 
-router.post("/UpdateOrder",  (req, res) => {
+router.post("/UpdateOrder", (req, res) => {
   const { orderStatus, item_id } = req.body;
   req.app.locals.db.query(
-    `update order_items set orderStatus = '${orderStatus}' where item_id = ${item_id}` ,
+    `update order_items set orderStatus = '${orderStatus}' where item_id = ${item_id}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
         res.status(500).send("SERVER ERROR");
         return;
-      }else{
-        req.app.locals.db.query(`select fcmToken from notification_Tokens where user_id = (select user_id from order_items where item_id = ${item_id})`, function(err,recordset){
-          if(err){
+      } else {
+        req.app.locals.db.query(`select fcmToken from notification_Tokens where user_id = (select user_id from order_items where item_id = ${item_id})`, function (err, recordset) {
+          if (err) {
             console.error(err);
             res.status(500).send("SERVER ERROR");
             return;
           }
-          else{
-            recordset.recordset.map(async (element)=>{
+          else {
+            recordset.recordset.map(async (element) => {
               try {
                 const bodyData = {
                   to: element.fcmToken,
@@ -953,7 +953,7 @@ router.post("/UpdateOrder",  (req, res) => {
                     body: `Order Status changed to ${orderStatus}`
                   }
                 }
-                const res = await axios.post('https://fcm.googleapis.com/fcm/send',bodyData,{
+                const res = await axios.post('https://fcm.googleapis.com/fcm/send', bodyData, {
                   headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `key=${process.env.SERVER_KEY}`,
@@ -961,7 +961,7 @@ router.post("/UpdateOrder",  (req, res) => {
                 })
                 //console.log(res);
               } catch (err) {
-                res.status(500).send("SERVER ERROR",err);
+                res.status(500).send("SERVER ERROR", err);
                 return
               }
             })
@@ -972,6 +972,105 @@ router.post("/UpdateOrder",  (req, res) => {
     }
   );
 });
+
+router.post('/createSection', (req, res) => {
+  let sectionHier = 0;
+  // let subSectionHier = 0;
+  let sectionArr ;
+
+  // const { sectionName, sectionDesc, vendorId } = req.body
+  const bodyArr = req.body
+
+  req.app.locals.db.query(`select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 1 order by idMain desc;`, function (err, recordset) {
+    if (err) {
+      console.error(err);
+      res.status(500).send("SERVER ERROR");
+      return;
+    } else {
+      if (recordset.recordset.length === 0) {
+        sectionHier = 0
+      } else {
+        sectionArr = recordset.recordset[0].SectionId.split("/");
+        sectionHier = parseInt(sectionArr[1])
+      }
+      
+      bodyArr.forEach(element => {
+        if (sectionHier === 0) {
+          let subSectionHier=0;
+          sectionHier = 1;
+          req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${element.section_name}' , '${element.description}' , ${element.vendorId})`, function (err, recordset) {
+            if (err) {
+              console.error(err);
+              //res.status(500).send("SERVER ERROR");
+              return;
+            }
+          })
+          
+          element.corners.forEach(subElement => {
+            subSectionHier++
+            req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${subElement.corner_name}' , '${subElement.description}' , ${element.vendorId})`, function (err, recordset) {
+              if (err) {
+                console.error(err);
+                res.status(500).send("SERVER ERROR");
+                return;
+              }
+            })
+          });
+
+        } else {
+          let subSectionHier=0;
+          sectionHier++
+          req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${element.section_name}' , '${element.description}' , ${element.vendorId})`, function (err, recordset) {
+            if (err) {
+              console.error(err);
+              //res.status(500).send("SERVER ERROR");
+              return;
+            }
+          })
+
+          element.corners.forEach(subElement => {
+            subSectionHier++
+            req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${subElement.corner_name}' , '${subElement.description}' , ${element.vendorId})`, function (err, recordset) {
+              if (err) {
+                console.error(err);
+                res.status(500).send("SERVER ERROR");
+                return;
+              }
+            })
+          });
+        }
+      })
+
+
+    }
+  })
+
+  res.status(200).send('Done')
+})
+
+
+router.post('/sectionCheck', (req, res) => {
+  let sectionHier = 0;
+  let subSectionHier;
+  let sectionArr;
+
+  // const { sectionName, sectionDesc, vendorId } = req.body
+  //const bodyArr = req.body
+
+  req.app.locals.db.query(`select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 1 order by idMain desc;
+  select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 2 AND vendor_id=4 order by idMain desc;
+`, function (err, recordset) {
+    if (err) {
+      console.error(err);
+      res.status(500).send("SERVER ERROR");
+      return;
+    }
+    subSectionHier = recordset.recordsets[1][0].SectionId.split("/");
+    console.log(subSectionHier[2]);
+    res.status(200).send(subSectionHier[2])
+  })
+})
+
 
 //VENDOR PORTAL
 
