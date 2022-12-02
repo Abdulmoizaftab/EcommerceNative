@@ -6,9 +6,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
-router.get("/suggest/:prod", (req, res) => {
+router.get("/suggest/:prod/:limit", (req, res) => {
   req.app.locals.db.query(
-    `select top(5) * from product WHERE name LIKE '%${req.params.prod}%'`,
+    `select top(${req.params.limit}) * from product WHERE name LIKE '%${req.params.prod}%'`,
     function (err, recordset) {
       if (err) {
         console.error(err);
@@ -215,9 +215,9 @@ router.get("/allVenders", (req, res) => {
   });
 });
 
-router.get("/venderProduct/:id", (req, res) => {
+router.get("/venderProduct/:id/:limit", (req, res) => {
   req.app.locals.db.query(
-    `select * from product where vendor_id = ${req.params.id}`,
+    `select top(${req.params.limit}) * from product where vendor_id = ${req.params.id}`,
     function (err, recordset) {
       if (err) {
         console.error(err);
