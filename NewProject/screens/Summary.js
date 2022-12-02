@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import {Modal,NativeBaseProvider} from 'native-base';
 import axios from 'axios';
 import orderSuccess from '../assets/fonts/images/orderSuccesfull.gif'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
@@ -21,6 +22,8 @@ const Summary = ({route,navigation}) => {
   const testquantity = useSelector(state => state.test.quantity);
   const testTotal = useSelector(state => state.test.total);
   const {currentUser} = useSelector(state => state.user);
+  const [disable,setDisable]=useState(false)
+  const [overlay,setOverlay]=useState(false)
   // useEffect(() => {
   //   setProducts()
   // }, [])
@@ -29,28 +32,53 @@ const Summary = ({route,navigation}) => {
   console.log("data==>",testProducts,testquantity,testTotal);
 
   const Checkout=async()=>{
-    setShowModal(true)
-    const obj={
-      amount:testTotal,
-      prodArr:testProducts,
-      user_id:currentUser.user[0].user_id
-      
+    try{
+      setDisable(true)
+      setOverlay(true)
+      const obj={
+        amount:testTotal,
+        prodArr:testProducts,
+        user_id:currentUser.user[0].user_id
+        
+      }
+      await axios.post('http://192.168.1.24:5000/sql/setOrderDetails', obj)
+      setOverlay(false)
+      setShowModal(true)
+      console.log("Data inserted successfully");
+      setTimeout(()=>{
+        setShowModal(false)
+        navigation.navigate('TabNav')
+        setDisable(false)
+      }, 2500)
+    }catch(error){
+      console.log("error",error)
+      if(error=="AxiosError: Network Error"){
+        ToastAndroid.showWithGravityAndOffset(  
+          "No network connectivity",  
+          ToastAndroid.LONG,  
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        ); 
+      }
+      else{
+        ToastAndroid.showWithGravityAndOffset(  
+          "Something went wrong",  
+          ToastAndroid.LONG,  
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        ); 
+      }
     }
-    await axios.post('http://192.168.1.24:5000/sql/setOrderDetails', obj)
-    console.log("Data inserted successfully");
-    // const obj={
-    //   prodArr:testProducts
-    // }
-    // console.log("sadsad==>",obj.prodArr);
-    setTimeout(()=>{
-      setShowModal(false)
-      navigation.navigate('TabNav')
-    }, 3000)
   }
 
   return (
     <NativeBaseProvider>
-    <View style={Style.main}>
+    <View style={Style.main} >
+    <Spinner
+          visible={overlay}
+        />
       {/* Header */}
       <View style={Style.topHeader}>
         <View style={Style.topHeader_inside}>
@@ -165,7 +193,7 @@ const Summary = ({route,navigation}) => {
         </View>
       </ScrollView>
       {/* Checkout button */}
-          <TouchableOpacity activeOpacity={1} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4.5%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}
+          <TouchableOpacity disabled={disable} activeOpacity={1} style={{backgroundColor:"#5A56E9",position:"absolute",bottom:"4.5%",width:"100%",height:"8%",alignItems:"center",justifyContent:"center"}}
           onPress={()=>Checkout()}>
           <Text style={{color:"white",fontWeight:"bold",fontSize:17,letterSpacing:3}}>Place Order</Text>
       </TouchableOpacity>

@@ -30,7 +30,7 @@ const SeeAllPopular = () => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(20);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsloading] = useState(false);
   const [IsRefreshing, setIsRefreshing] = useState(false);
   const [filterPriceAsc, setFilterPriceAsc] = useState(false);
   const [filterPriceDesc, setFilterPriceDesc] = useState(false);
@@ -45,7 +45,8 @@ const SeeAllPopular = () => {
     setIsloading(true)
     await fetch(`http://192.168.1.24:5000/sql/popular/${limit}`)
       .then((response) => response.json())
-      .then((json) => { setProducts(json) })
+      .then((json) => { setProducts(json)
+      setIsloading(false) })
       .catch((error) => console.error(error))
 
   }

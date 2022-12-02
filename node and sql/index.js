@@ -68,7 +68,7 @@ app.use(session({
     // Session expires after 1 min of inactivity.
     expires: 86400000,
     },
-    
+
 }))
 app.set("view engine","hbs")
 app.use('/sql', sqlRoutes)

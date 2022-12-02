@@ -31,6 +31,7 @@
     "react-native-fbsdk-next": "^10.0.0",
     "react-native-image-slider-box": "^2.0.7",
     "react-native-linear-gradient": "^2.6.2",
+    "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-modalize": "^2.0.13",
     "react-native-numeric-input": "^1.9.1",
     "react-native-pager-view": "^5.4.25",

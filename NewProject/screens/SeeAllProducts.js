@@ -241,7 +241,6 @@ const SeeAllProducts = () => {
                 draggableIcon: {
                   backgroundColor: "#000",
                   width: 75
-
                 },
                 container: {
                   borderTopLeftRadius: 25,
