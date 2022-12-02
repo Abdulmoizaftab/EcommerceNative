@@ -92,8 +92,8 @@ const Carousel = () => {
                 sliderBoxHeight={150}
                 dotColor="#5A56E9"
                 inactiveDotColor="#90A4AE"  
-                circleLoop
                 autoplay={true}
+                firstItem={0}
                 paginationBoxVerticalPadding={-10}
                 ImageComponentStyle={{
                   borderRadius:10,

@@ -208,6 +208,7 @@ const Product_detail = ({route}) => {
           {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={() => setIsFav(!isFav)} /> : <Icon style={Style.heartBtn} name='heart-outline' onPress={() => setIsFav(!isFav)} />} */}
 
           <SliderBox
+            disableOnPress={true}
             images={imgArr}
             sliderBoxHeight={SCREEN_HEIGHT / 2}
             ImageComponentStyle={{

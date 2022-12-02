@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import {
     StyleSheet,
@@ -7,7 +7,9 @@ import {
     View,
     TouchableOpacity,
     Alert,
-    ToastAndroid
+    ToastAndroid,
+    TouchableWithoutFeedback,
+    Keyboard
 } from 'react-native';
 
 import SearchDropdown from './SearchDropdown';
@@ -23,10 +25,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ComponentSearchBox = ({pic}) => {
     //const [isSearching , setIsSearching] = useState(false)
+    const textInputRef = useRef()
     const [searchText, setSearchText] = useState("");
     const [filterData, setFilterData] = useState([]);
     const navigate = useNavigation()
 
+
+  
 
     const addSuggestionWord = async (text) => {
         try {
@@ -67,6 +72,7 @@ const ComponentSearchBox = ({pic}) => {
 
         // fetchAndSet();
         //console.log("dta is==>",dataSource);
+        textInputRef.current.focus();
         var arr = []
         console.log("Search",searchText);
         const check = async () => {
@@ -142,6 +148,7 @@ const ComponentSearchBox = ({pic}) => {
                 <View style={styles.searchView}>
                     <Ionicons name='search-outline' style={styles.searchIcon} />
                     <TextInput
+                        ref={textInputRef}
                         style={styles.search}
                         placeholder="Search Here"
                         placeholderTextColor="#EAE9FC"
