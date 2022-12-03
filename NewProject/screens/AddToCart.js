@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity,Image,Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,ToastAndroid,Image,Alert } from 'react-native';
 import React, { useRef, useEffect,useState } from 'react';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import { useNavigation } from '@react-navigation/native';
@@ -33,7 +33,7 @@ const AddToCart = ({ route, navigation }) => {
     
     if(currentUser){
       setLogin(true)
-      axios.post(`http://192.168.1.17:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+      axios.post(`http://192.168.1.26:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
         headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
@@ -56,7 +56,7 @@ const AddToCart = ({ route, navigation }) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.17:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.26:5000/sql/session',{user_id:currentUser.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${currentUser.token}` 
                             }
@@ -73,18 +73,19 @@ const AddToCart = ({ route, navigation }) => {
             dispatch(Logout());
         }
         else if(err == "AxiosError: Network Error"){
-            console.log("Something 2");
-            Alert.alert(
-                "Network Error",
-                "Please check your network connection.",
-                [
-              {
-                text: "Ok",
-                onPress: () => console.log("Ok"),
-              }
-            ]
-            );
+            // console.log("Something 2");
+            // Alert.alert(
+            //     "Network Error",
+            //     "Please check your network connection.",
+            //     [
+            //   {
+            //     text: "Ok",
+            //     onPress: () => console.log("Ok"),
+            //   }
+            // ]
+            // );
             //dispatch(getFavourite(null))
+            ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
         }
       })
     }

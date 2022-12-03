@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator,TouchableOpacity,Alert} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator,TouchableOpacity,Alert,ToastAndroid} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import noOrder from '../assets/fonts/images/noOrder.png';
@@ -64,7 +64,7 @@ const Orders = ({navigation}) => {
     try {
       if(currentUser){
         setLogin(true)
-        const res = await axios.post(`http://192.168.1.17:5000/sql/getOrderDetails/${limit}`,{user_id:currentUser.user[0].user_id},{
+        const res = await axios.post(`http://192.168.1.26:5000/sql/getOrderDetails/${limit}`,{user_id:currentUser.user[0].user_id},{
           headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
@@ -114,7 +114,7 @@ const Orders = ({navigation}) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.17:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.26:5000/sql/session',{user_id:currentUser.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${currentUser.token}` 
                             }
@@ -131,18 +131,18 @@ const Orders = ({navigation}) => {
             dispatch(Logout());
         }
         else if(e == "AxiosError: Network Error"){
-            console.log("Something 2");
-            Alert.alert(
-                "Network Error",
-                "Please check your network connection.",
-                [
-              {
-                text: "Ok",
-                onPress: () => console.log("Ok"),
-              }
-            ]
-            );
-            
+            // console.log("Something 2");
+            // Alert.alert(
+            //     "Network Error",
+            //     "Please check your network connection.",
+            //     [
+            //   {
+            //     text: "Ok",
+            //     onPress: () => console.log("Ok"),
+            //   }
+            // ]
+            // );
+            ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
         }
     }
   };

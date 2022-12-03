@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator,ToastAndroid } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -38,6 +38,7 @@ const Home_inside = ({ navigate }) => {
   const [products, setProducts] = useState([]);
   // console.log(products)
   const [limit, setlimit] = useState(6);
+  const [toastErr, setToastErr] = useState(false);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
   const [head_comp,setHead_Comp] = useState(false)
@@ -45,10 +46,14 @@ const Home_inside = ({ navigate }) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.26:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
-      .catch((error) => console.error(error))
+      .catch((error) => {console.error(error)
+        if(error == "TypeError: Network request failed"){
+          ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
+        }}
+      )
   }
 
   useEffect(() => {
@@ -69,7 +74,7 @@ const Home_inside = ({ navigate }) => {
     // PushNotification.channelExists("test1", function (exists) {
     //   console.log(exists); // true/false
     // });
-  }, [limit]);
+  }, [limit,toastErr]);
 
 
   const flatlistEnd = () => {
@@ -279,6 +284,7 @@ const Home_inside = ({ navigate }) => {
     setHead_Comp(true);
     setlimit(4);
     setIsRefreshing(false)
+    setToastErr(!toastErr)
   }
   
   return (

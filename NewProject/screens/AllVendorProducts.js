@@ -10,18 +10,32 @@ import SearchBar from '../components/SearchBar';
 const AllVendorProducts = ({ route }) => {
     const vendorObj = route.params;
     const navigate = useNavigation();
-    const [VendorId, setVendorId] = useState([]);
+    const [products, setProducts] = useState([]);
     const [limit, setlimit] = useState(20);
     const [IsRefreshing, setIsRefreshing] = useState(false);
     const [isLoading, setIsloading] = useState(true);
 
-    useEffect(() => {
-        fetch(`http://192.168.1.17:5000/sql/venderProduct/${vendorObj.vendorId}`)
-            .then((response) => response.json())
-            .then((json) => setVendorId(json))
-            .catch((error) => console.error(error))
 
-    }, []);
+    const getdata = async () => {
+        setIsloading(true)
+        await fetch(`http://192.168.1.26:5000/sql/venderProduct/${vendorObj.vendorId}/${limit}`)
+          .then((response) => response.json())
+          .then((json) => { setProducts(json) })
+          .then(check=>  setIsloading(false))
+          .catch((error) => console.error(error))
+    
+      }
+
+    useEffect(() => {
+        // setIsloading(true);
+        // fetch(`http://192.168.1.26:5000/sql/venderProduct/${vendorObj.vendorId}/${limit}`)
+        //     .then((response) => response.json())
+        //     .then((json) => setProducts(json))
+        //     .then(e=>setIsloading(false))
+        //     .catch((error) => console.error(error))
+        getdata();
+
+    }, [limit]);
     const flatlistEnd = () => {
         return (
             isLoading ?
@@ -91,7 +105,7 @@ const AllVendorProducts = ({ route }) => {
                         <Text style={Style.mainHead}>Products for: {vendorObj.vendorName}</Text>
                     </View>
                 }
-                data={VendorId} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
+                data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
                 ListFooterComponent={flatlistEnd}
                 onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
         </View>

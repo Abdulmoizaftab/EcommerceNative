@@ -105,7 +105,7 @@ const ProfileScreen = ({navigation}) => {
 
             <Text style={styles.userName}>{user[0].first_name} {user[0].last_name}</Text>
             <Text style={styles.userEmail}>{user[0].email}</Text>
-            <Text style={styles.userEmail}>{user[0].telephone}</Text>
+            <Text style={styles.userEmail}>{user[0].phone}</Text>
             <TouchableOpacity
               activeOpacity={0.9}
               style={{marginVertical: '2%', width: '30%',backgroundColor: '#5A56E9',borderRadius: 10,alignSelf: 'center',
@@ -114,7 +114,7 @@ const ProfileScreen = ({navigation}) => {
                 console.log('logout');
                 dispatch(loginStart())
                 try {
-                  const res= await axios.post('http://192.168.1.17:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
+                  const res= await axios.post('http://192.168.1.26:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
                     headers: {
                       'Authorization': `Bearer ${currentUser.token}` 
                     }

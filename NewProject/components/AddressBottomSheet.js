@@ -10,37 +10,77 @@ const AddressBottomSheet = ({reference,trigger,setTrigger}) => {
     const [recipent, setRecipent] = useState("")
     const [address, setAddress] = useState("")
     const [phoneInput, setPhoneInput] = useState("")
+    const [invalidChar, setInvalidChar] = useState(false)
     const {currentUser} = useSelector(state=>state.user)
 
     const handlePress = () => {
-        reference.current.close();
-        // const phone = parseInt(phoneInput)
-        const phone = phoneInput
-        const addressPayload = {
-            user_id:currentUser.user[0].user_id,
-            address,
-            phone,
-            recipent,
-            title,
+
+        let regex1 = "[0-9*#+]+"
+        let regex2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        if(recipent.match(regex1) !== null){
+            setInvalidChar(true)
+            console.log('regexwork IF');
+        }else if(recipent.match(regex2) !== null){
+            setInvalidChar(true)
+            console.log('regexwork ELSE IF');
         }
-        //console.log('btmSheet ==> ',addressPayload);
-        addressAdd(dispatch,addressPayload)
-        setTrigger(!trigger)
+        else{
+            setInvalidChar(false)
+            reference.current.close();
+            // const phone = parseInt(phoneInput)
+            const phone = phoneInput
+            const addressPayload = {
+                user_id:currentUser.user[0].user_id,
+                address,
+                phone,
+                recipent,
+                title,
+            }
+            //console.log('btmSheet ==> ',addressPayload);
+            addressAdd(dispatch,addressPayload)
+            setTrigger(!trigger)
+        }
+
+
+    }
+
+    const alphaNumericNameCheck = () =>{
+        let regex1 = "[0-9*#+]+"
+        let regex2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        if(recipent.match(regex1) !== null){
+            setInvalidChar(true)
+            console.log('regexwork IF');
+        }else if(recipent.match(regex2) !== null){
+            setInvalidChar(true)
+            console.log('regexwork ELSE IF');
+        }
+        else{
+            setInvalidChar(false)
+            console.log('regexwork else');
+        }
     }
 
     return (
         <View style={styles.main}>
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='card-text-outline' color='gray' size={20} /> Address Title</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setTttle} value={title} />
+            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setTttle} value={title} maxLength={25}/>
 
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='account-outline' color='gray' size={20} /> Recipent Name</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setRecipent} value={recipent} />
+            {
+                invalidChar ? (
+                    <Text style={{color:"red"}}>Name cannot containe any number or special character</Text>
+
+                ):(
+                    null
+                )
+            }
+            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setRecipent} value={recipent} maxLength={25} />
 
             <Text style={styles.inputLabelStyle}><MaterialCommunityIcons name='map-marker-outline' color='gray' size={20} /> Address</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setAddress} value={address}/>
+            <TextInput selectionColor='black' style={styles.inputStyle} onChangeText={setAddress} value={address} maxLength={25}/>
 
             <Text style={styles.inputLabelStyle} ><MaterialCommunityIcons name='phone-outline' color='gray' size={20} /> Phone #</Text>
-            <TextInput selectionColor='black' style={styles.inputStyle} keyboardType='numeric' onChangeText={setPhoneInput} value={phoneInput}/>
+            <TextInput selectionColor='black' style={styles.inputStyle} keyboardType="phone-pad" maxLength={11} onChangeText={setPhoneInput} value={phoneInput}/>
 
             <TouchableOpacity style={styles.btnStyle} onPress={handlePress}>
                 <Text style={styles.btnText}>Add Address</Text>
@@ -58,6 +98,7 @@ const styles = StyleSheet.create({
     },
     inputLabelStyle: {
         fontSize: 18,
+        color:'#000'
     },
     inputStyle: {
         borderBottomWidth: 1,

@@ -82,7 +82,7 @@ const App = () => {
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SeeAllProducts" component={SeeAllProducts} />
-        <Stack.Screen name="AllDiscountedProducts" options={{headerShown:true,
+        <Stack.Screen name="AllDiscountedProducts" options={{headerShown:false,
             title:"All discounts",
            headerStyle:{backgroundColor:"#5A56E9"},
            headerTintColor: '#fff',

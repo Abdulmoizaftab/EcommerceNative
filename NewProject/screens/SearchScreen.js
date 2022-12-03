@@ -21,9 +21,10 @@ const SearchScreen = ({route}) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.17:5000/sql/suggest/${searchText}`)
+    await fetch(`http://192.168.1.26:5000/sql/suggest/${searchText}/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
+      .then(check=>  setIsloading(false))
       .catch((error) => console.error(error))
 
   }
