@@ -114,7 +114,7 @@ const ProfileScreen = ({navigation}) => {
                 console.log('logout');
                 dispatch(loginStart())
                 try {
-                  const res= await axios.post('http://192.168.1.26:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
+                  const res= await axios.post('http://192.168.1.18:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
                     headers: {
                       'Authorization': `Bearer ${currentUser.token}` 
                     }

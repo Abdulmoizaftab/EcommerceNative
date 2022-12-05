@@ -38,22 +38,26 @@ router.get("/all/:limit", (req, res) => {
 const sendMail = (email, name, user_id) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: "smtp.gmail.com",
       port: 587,
       secure: false,
       requireTLS: true,
       auth: {
-        user: 'digevoldevs@gmail.com',
-        pass: 'vrrrakdeevotsepa'
-      }
-    })
+        user: "digevoldevs@gmail.com",
+        pass: "vrrrakdeevotsepa",
+      },
+    });
     const mailOptions = {
-      from: 'digevoldevs@gmail.com',
+      from: "digevoldevs@gmail.com",
       to: email,
-      subject: 'For verify your email',
-      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.26:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
-
-    }
+      subject: "For verify your email",
+      html:
+        "<p>Hey " +
+        name +
+        " Please verify you mail.</p> <a href='http://192.168.1.18:5000/sql/verify?id=" +
+        user_id +
+        "'>Click here verify your mail</a>",
+    };
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
@@ -66,7 +70,7 @@ const sendMail = (email, name, user_id) => {
   }
 };
 router.post("/register", (req, res) => {
-  const { username, email, password, first_name, last_name, mobile } = req.body;
+  const { username, email, password, first_name, last_name } = req.body;
   req.app.locals.db.query(
     `EXEC LoginSpUsersSelect @email='${email}'`,
     async function (err, recordset) {
@@ -80,7 +84,7 @@ router.post("/register", (req, res) => {
           const verify = 0;
           const encrypt_pswd = await bcrypt.hash(password, 10);
           req.app.locals.db.query(
-            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify} , @phone='${mobile}'`,
+            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify} `,
             function (err, recordset) {
               if (err) {
                 console.error(err);
@@ -376,7 +380,7 @@ router.post("/addCartItem", auth.isLogin, (req, res) => {
   );
 });
 router.post("/getCartItem", auth.isLogin, (req, res) => {
-  const { user_id } = req.body
+  const { user_id } = req.body;
   req.app.locals.db.query(
     `select product.* , cart_item.user_id , cart_item.quantity
   from product
@@ -447,7 +451,6 @@ router.post("/deleteFromCart", (req, res) => {
     }
   );
 });
-
 
 router.get("/filterAllByPrice/:ascDesc/:limit", (req, res) => {
   req.app.locals.db.query(
@@ -561,39 +564,40 @@ router.put("/updateAddress/:address_id", (req, res) => {
 //   res.send(req.user_id)
 // })
 
-
-router.post('/session', auth.isLogoutSession, (req, res) => {
-  const { user_id } = req.body
-  req.app.locals.db.query(`update shopping_session set status='disable' where user_id=${user_id}`, function (err, recordset) {
-    if (err) {
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
+router.post("/session", auth.isLogoutSession, (req, res) => {
+  const { user_id } = req.body;
+  req.app.locals.db.query(
+    `update shopping_session set status='disable' where user_id=${user_id}`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      } else {
+        res.status(201).send("Status updated");
+      }
     }
-    else {
-      res.status(201).send("Status updated")
-    }
-  })
+  );
 });
 
-
-router.post('/logout', auth.isLogout, (req, res) => {
+router.post("/logout", auth.isLogout, (req, res) => {
   req.session.destroy();
-  res.clearCookie('ecomm_session')
-  console.log("session==>", req.session)
-  const { user_id } = req.body
-  req.app.locals.db.query(`update shopping_session set status='disable' where user_id=${user_id}`, function (err, recordset) {
-    if (err) {
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
+  res.clearCookie("ecomm_session");
+  console.log("session==>", req.session);
+  const { user_id } = req.body;
+  req.app.locals.db.query(
+    `update shopping_session set status='disable' where user_id=${user_id}`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      } else {
+        res.status(201).send("Status updated");
+      }
     }
-    else {
-      res.status(201).send("Status updated")
-    }
-  })
+  );
 });
-
 
 router.post("/setOrderDetails", (req, res) => {
   const { amount, prodArr, user_id } = req.body;
@@ -668,36 +672,40 @@ router.post("/setOrderDetails", (req, res) => {
   );
 });
 
-router.post('/getOrderDetails/:limit', auth.isLogin, (req, res) => {
-  const { user_id } = req.body
-  req.app.locals.db.query(`select top(${req.params.limit}) order_items.item_id,order_details.created_at,order_details.total,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
+router.post("/getOrderDetails/:limit", auth.isLogin, (req, res) => {
+  const { user_id } = req.body;
+  req.app.locals.db.query(
+    `select top(${req.params.limit}) order_items.item_id,order_details.created_at,order_details.total,order_items.order_id,order_items.product_id,order_items.quantity,product.imgs,product.name,product.price,order_items.quantity*product.price AS total_item_price,order_details.orderStatus,payment_details.status
   from order_items
   inner join order_details on order_items.order_id = order_details.order_id
   inner join product on order_items.product_id = product.product_id
   inner join payment_details on order_details.payment_id = payment_details.payment_id
   where order_items.user_id=${user_id}
-  order by order_details.created_at desc`, function (err, recordset) {
-    if (err) {
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
+  order by order_details.created_at desc`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      } else {
+        res.status(201).json(recordset.recordset);
+      }
     }
-    else {
-      res.status(201).json(recordset.recordset)
-    }
-  })
-})
+  );
+});
 
 router.get("/getAddress/:user_id", (req, res) => {
-  req.app.locals.db.query(`select * from user_address where user_id = ${req.params.user_id} and isDeleted = 0`, function (err, recordset) {
-    if (err) {
-      console.error(err);
-      res.status(500).send("SERVER ERROR");
-      return;
-    } else {
-      res.status(201).json(recordset.recordset);
+  req.app.locals.db.query(
+    `select * from user_address where user_id = ${req.params.user_id} and isDeleted = 0`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      } else {
+        res.status(201).json(recordset.recordset);
+      }
     }
-  }
   );
 });
 
@@ -736,23 +744,29 @@ router.post("/giveRating", (req, res) => {
   ];
   const bodyData = req.body;
   req.app.locals.db.query(
-    `insert into user_reviews values(${bodyData.user_id},${bodyData.product_id
+    `insert into user_reviews values(${bodyData.user_id},${
+      bodyData.product_id
     },'${bodyData.userReview}' , ${bodyData.userRating})
-  update product set ${ratingColumnNames[bodyData.userRating - 1]} = (${ratingColumnNames[bodyData.userRating - 1]
-    } + 1) , numberOfRatings=(numberOfRatings+1) where product_id = ${bodyData.product_id
+  update product set ${ratingColumnNames[bodyData.userRating - 1]} = (${
+      ratingColumnNames[bodyData.userRating - 1]
+    } + 1) , numberOfRatings=(numberOfRatings+1) where product_id = ${
+      bodyData.product_id
     }
   DECLARE @isRatingNull float
-  select @isRatingNull =  rating from product where product_id = ${bodyData.product_id
-    }
+  select @isRatingNull =  rating from product where product_id = ${
+    bodyData.product_id
+  }
   if @isRatingNull is not null
   BEGIN
-    update product set rating = ( ((1*one_star_ratings)+(2*two_star_ratings)+(3*three_star_ratings)+(4*four_star_ratings)+(5*five_star_ratings))/(numberOfRatings) ) where product_id=${bodyData.product_id
+    update product set rating = ( ((1*one_star_ratings)+(2*two_star_ratings)+(3*three_star_ratings)+(4*four_star_ratings)+(5*five_star_ratings))/(numberOfRatings) ) where product_id=${
+      bodyData.product_id
     }
   END
   
   ELSE
   BEGIN
-    update product set rating = ${bodyData.userRating} where product_id=${bodyData.product_id
+    update product set rating = ${bodyData.userRating} where product_id=${
+      bodyData.product_id
     }
   END`,
     function (err, recordset) {
@@ -786,41 +800,48 @@ router.get("/hasUserRated", (req, res) => {
 });
 
 router.post("/updateNotifyToken", (req, res) => {
-  const { user_id, token } = req.body
-  req.app.locals.db.query(`select * from notification_Tokens where fcmToken='${token}'`, function (err, recordset) {
-    if (err) {
-      console.error(err)
-      res.status(500).send('SERVER ERROR')
-      return
-    } else {
-      if (Object.keys(recordset.recordset).length === 0) {
-        req.app.locals.db.query(`insert into notification_Tokens (fcmToken , user_id) values('${token}' , ${user_id})`, function (err, recordset) {
-          if (err) {
-            console.error(err)
-            res.status(500).send('SERVER ERROR')
-            return
-          }
-          res.status(200).send('inserted');
-        })
+  const { user_id, token } = req.body;
+  req.app.locals.db.query(
+    `select * from notification_Tokens where fcmToken='${token}'`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
       } else {
-        if (recordset.recordset[0].user_id === user_id) {
-          res.status(200).send("old Token and same user")
-        } else {
-          req.app.locals.db.query(`update notification_Tokens set user_id=${user_id} where tokenId =${recordset.recordset[0].tokenId}`, function (err, recordset) {
-            if (err) {
-              console.error(err)
-              res.status(500).send('SERVER ERROR')
-              return
+        if (Object.keys(recordset.recordset).length === 0) {
+          req.app.locals.db.query(
+            `insert into notification_Tokens (fcmToken , user_id) values('${token}' , ${user_id})`,
+            function (err, recordset) {
+              if (err) {
+                console.error(err);
+                res.status(500).send("SERVER ERROR");
+                return;
+              }
+              res.status(200).send("inserted");
             }
-            res.status(200).send('updated user');
-
-          })
+          );
+        } else {
+          if (recordset.recordset[0].user_id === user_id) {
+            res.status(200).send("old Token and same user");
+          } else {
+            req.app.locals.db.query(
+              `update notification_Tokens set user_id=${user_id} where tokenId =${recordset.recordset[0].tokenId}`,
+              function (err, recordset) {
+                if (err) {
+                  console.error(err);
+                  res.status(500).send("SERVER ERROR");
+                  return;
+                }
+                res.status(200).send("updated user");
+              }
+            );
+          }
         }
       }
     }
-  })
-
-})
+  );
+});
 // router.post("/updateNotifyToken", (req,res)=>{
 //   const {user_id , token} = req.body
 //   req.app.locals.db.query(`update users set Notification_Token = '${token}' where user_id = ${user_id}`, function (err, recordset) {
@@ -926,7 +947,6 @@ router.post("/loginVendor", (req, res) => {
   );
 });
 
-
 router.post("/UpdateOrder", (req, res) => {
   const { orderStatus, item_id } = req.body;
   req.app.locals.db.query(
@@ -937,119 +957,144 @@ router.post("/UpdateOrder", (req, res) => {
         res.status(500).send("SERVER ERROR");
         return;
       } else {
-        req.app.locals.db.query(`select fcmToken from notification_Tokens where user_id = (select user_id from order_items where item_id = ${item_id})`, function (err, recordset) {
-          if (err) {
-            console.error(err);
-            res.status(500).send("SERVER ERROR");
-            return;
-          }
-          else {
-            recordset.recordset.map(async (element) => {
-              try {
-                const bodyData = {
-                  to: element.fcmToken,
-                  notification: {
-                    title: "Status Updated",
-                    body: `Order Status changed to ${orderStatus}`
-                  }
+        req.app.locals.db.query(
+          `select fcmToken from notification_Tokens where user_id = (select user_id from order_items where item_id = ${item_id})`,
+          function (err, recordset) {
+            if (err) {
+              console.error(err);
+              res.status(500).send("SERVER ERROR");
+              return;
+            } else {
+              recordset.recordset.map(async (element) => {
+                try {
+                  const bodyData = {
+                    to: element.fcmToken,
+                    notification: {
+                      title: "Status Updated",
+                      body: `Order Status changed to ${orderStatus}`,
+                    },
+                  };
+                  const res = await axios.post(
+                    "https://fcm.googleapis.com/fcm/send",
+                    bodyData,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `key=${process.env.SERVER_KEY}`,
+                      },
+                    }
+                  );
+                  //console.log(res);
+                } catch (err) {
+                  res.status(500).send("SERVER ERROR", err);
+                  return;
                 }
-                const res = await axios.post('https://fcm.googleapis.com/fcm/send', bodyData, {
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `key=${process.env.SERVER_KEY}`,
-                  }
-                })
-                //console.log(res);
-              } catch (err) {
-                res.status(500).send("SERVER ERROR", err);
-                return
-              }
-            })
-            res.status(200).send('allDone')
+              });
+              res.status(200).send("allDone");
+            }
           }
-        })
+        );
       }
     }
   );
 });
 
-router.post('/createSection', (req, res) => {
+router.post("/createSection", (req, res) => {
   let sectionHier = 0;
   // let subSectionHier = 0;
-  let sectionArr ;
+  let sectionArr;
 
   // const { sectionName, sectionDesc, vendorId } = req.body
-  const bodyArr = req.body
+  const bodyArr = req.body;
 
-  req.app.locals.db.query(`select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 1 order by idMain desc;`, function (err, recordset) {
-    if (err) {
-      console.error(err);
-      res.status(500).send("SERVER ERROR");
-      return;
-    } else {
-      if (recordset.recordset.length === 0) {
-        sectionHier = 0
+  req.app.locals.db.query(
+    `select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 1 order by idMain desc;`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
       } else {
-        sectionArr = recordset.recordset[0].SectionId.split("/");
-        sectionHier = parseInt(sectionArr[1])
-      }
-      
-      bodyArr.forEach(element => {
-        if (sectionHier === 0) {
-          let subSectionHier=0;
-          sectionHier = 1;
-          req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${element.section_name}' , '${element.description}' , ${element.vendorId})`, function (err, recordset) {
-            if (err) {
-              console.error(err);
-              //res.status(500).send("SERVER ERROR");
-              return;
-            }
-          })
-          
-          element.corners.forEach(subElement => {
-            subSectionHier++
-            req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${subElement.corner_name}' , '${subElement.description}' , ${element.vendorId})`, function (err, recordset) {
-              if (err) {
-                console.error(err);
-                res.status(500).send("SERVER ERROR");
-                return;
-              }
-            })
-          });
-
+        if (recordset.recordset.length === 0) {
+          sectionHier = 0;
         } else {
-          let subSectionHier=0;
-          sectionHier++
-          req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${element.section_name}' , '${element.description}' , ${element.vendorId})`, function (err, recordset) {
-            if (err) {
-              console.error(err);
-              //res.status(500).send("SERVER ERROR");
-              return;
-            }
-          })
-
-          element.corners.forEach(subElement => {
-            subSectionHier++
-            req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${subElement.corner_name}' , '${subElement.description}' , ${element.vendorId})`, function (err, recordset) {
-              if (err) {
-                console.error(err);
-                res.status(500).send("SERVER ERROR");
-                return;
-              }
-            })
-          });
+          sectionArr = recordset.recordset[0].SectionId.split("/");
+          sectionHier = parseInt(sectionArr[1]);
         }
-      })
 
+        bodyArr.forEach((element) => {
+          if (sectionHier === 0) {
+            let subSectionHier = 0;
+            sectionHier = 1;
+            req.app.locals.db.query(
+              `insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${
+                element.section_name
+              }' , '${element.description}' , ${element.vendorId})`,
+              function (err, recordset) {
+                if (err) {
+                  console.error(err);
+                  //res.status(500).send("SERVER ERROR");
+                  return;
+                }
+              }
+            );
 
+            element.corners.forEach((subElement) => {
+              subSectionHier++;
+              req.app.locals.db.query(
+                `insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${
+                  subElement.corner_name
+                }' , '${subElement.description}' , ${element.vendorId})`,
+                function (err, recordset) {
+                  if (err) {
+                    console.error(err);
+                    res.status(500).send("SERVER ERROR");
+                    return;
+                  }
+                }
+              );
+            });
+          } else {
+            let subSectionHier = 0;
+            sectionHier++;
+            req.app.locals.db.query(
+              `insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${
+                element.section_name
+              }' , '${element.description}' , ${element.vendorId})`,
+              function (err, recordset) {
+                if (err) {
+                  console.error(err);
+                  //res.status(500).send("SERVER ERROR");
+                  return;
+                }
+              }
+            );
+
+            element.corners.forEach((subElement) => {
+              subSectionHier++;
+              req.app.locals.db.query(
+                `insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${
+                  subElement.corner_name
+                }' , '${subElement.description}' , ${element.vendorId})`,
+                function (err, recordset) {
+                  if (err) {
+                    console.error(err);
+                    res.status(500).send("SERVER ERROR");
+                    return;
+                  }
+                }
+              );
+            });
+          }
+        });
+      }
     }
-  })
+  );
 
-  res.status(200).send('Done')
-})
+  res.status(200).send("Done");
+});
 
-
-router.post('/sectionCheck', (req, res) => {
+router.post("/sectionCheck", (req, res) => {
   let sectionHier = 0;
   let subSectionHier;
   let sectionArr;
@@ -1057,20 +1102,22 @@ router.post('/sectionCheck', (req, res) => {
   // const { sectionName, sectionDesc, vendorId } = req.body
   //const bodyArr = req.body
 
-  req.app.locals.db.query(`select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 1 order by idMain desc;
+  req.app.locals.db.query(
+    `select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 1 order by idMain desc;
   select top(1) idMain, sectionName , SectionId.ToString() as SectionId , SectionId.GetLevel() as level , vendor_id from SectionTest where SectionId.GetLevel() = 2 AND vendor_id=4 order by idMain desc;
-`, function (err, recordset) {
-    if (err) {
-      console.error(err);
-      res.status(500).send("SERVER ERROR");
-      return;
+`,
+    function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      }
+      subSectionHier = recordset.recordsets[1][0].SectionId.split("/");
+      console.log(subSectionHier[2]);
+      res.status(200).send(subSectionHier[2]);
     }
-    subSectionHier = recordset.recordsets[1][0].SectionId.split("/");
-    console.log(subSectionHier[2]);
-    res.status(200).send(subSectionHier[2])
-  })
-})
-
+  );
+});
 
 //VENDOR PORTAL
 
@@ -1178,9 +1225,8 @@ router.post("/delFavourites", auth.isLogin, (req, res) => {
   );
 });
 
-
 router.post("/getFavourites", auth.isLogin, (req, res) => {
-  const { user_id } = req.body
+  const { user_id } = req.body;
   req.app.locals.db.query(
     `select product.imgs,favourites.is_deleted,product.name,product.numberOfRatings,product.price,product.product_id,product.discount_id,discount.discount_percent from product
     inner join favourites on product.product_id=favourites.favouritedProd 
@@ -1194,7 +1240,6 @@ router.post("/getFavourites", auth.isLogin, (req, res) => {
       } else {
         res.status(201).json(recordset.recordset);
       }
-
     }
   );
 });

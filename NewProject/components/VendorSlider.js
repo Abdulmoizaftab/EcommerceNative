@@ -16,7 +16,7 @@ const VendorSlider = ({ popular, setPopular }) => {
   const [skeleton, setSkeleton] = useState(false)
   useEffect(() => {
     setSkeleton(true)
-    fetch('http://192.168.1.26:5000/sql/allVenders')
+    fetch('http://192.168.1.18:5000/sql/allVenders')
       .then((response) => response.json())
       .then((json) => {
         setApiData(json)
