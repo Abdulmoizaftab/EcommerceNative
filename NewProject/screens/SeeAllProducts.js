@@ -25,6 +25,7 @@ const SeeAllProducts = () => {
   const [filterPriceDesc, setFilterPriceDesc] = useState(false);
   const [filterRatingAsc, setFilterRatingAsc] = useState(false);
   const [filterRatingDesc, setFilterRatingDesc] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
   const refRBSheet = useRef();
 
 
@@ -98,7 +99,7 @@ const SeeAllProducts = () => {
     }else {
       getdata()
     }
-  }, [limit]);
+  }, [limit,refreshTrigger]);
 
   const onEndReached = () => {
     setlimit(limit + 4);
@@ -108,7 +109,8 @@ const SeeAllProducts = () => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    setlimit(6);
+    // setlimit(6);
+    setRefreshTrigger(!refreshTrigger);
     setIsRefreshing(false)
   }
 
@@ -288,7 +290,7 @@ const SeeAllProducts = () => {
         }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
         ListFooterComponent={flatlistEnd}
-        onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
+        onEndReached={onEndReached} onEndReachedThreshold={2} refreshing={IsRefreshing} onRefresh={onRefresh} />
     </View>
   )
 }

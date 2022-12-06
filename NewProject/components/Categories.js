@@ -5,7 +5,7 @@ import image from '../image/image-removebg-preview.png'
 const Categories = ({navigate}) => {
   return (
     
-        <View style={{ flexDirection: "row", justifyContent: "space-around", backgroundColor:"#f7f7f7", paddingVertical:10 }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-around", backgroundColor:"#f7f7f7", paddingVertical:"3%" }}>
 
            
           <TouchableOpacity style={styles.feature1} activeOpacity={0.7} onPress={()=>navigate.navigate('Categories')}>

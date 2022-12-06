@@ -41,7 +41,8 @@ const SearchScreen = ({route}) => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    setlimit(6);
+    // setlimit(6);
+    getdata();
     setIsRefreshing(false)
   }
 
@@ -165,7 +166,7 @@ const SearchScreen = ({route}) => {
       }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
         ListFooterComponent={flatlistEnd}
-        onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
+        onEndReached={onEndReached} onEndReachedThreshold={2} refreshing={IsRefreshing} onRefresh={onRefresh} />
   </View>
   )
 }

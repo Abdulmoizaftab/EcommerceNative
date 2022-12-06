@@ -52,7 +52,8 @@ const AllDiscountedProducts = () => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    setlimit(6);
+    // setlimit(6);
+    getDisdata()
     setIsRefreshing(false);
   };
 
@@ -195,7 +196,7 @@ const AllDiscountedProducts = () => {
         numColumns={2}
         ListFooterComponent={flatlistEnd}
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={2}
         refreshing={IsRefreshing}
         onRefresh={onRefresh}
       />
