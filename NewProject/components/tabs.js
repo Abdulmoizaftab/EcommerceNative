@@ -1,12 +1,16 @@
 import {View, Text, ScrollView,TouchableOpacity,StyleSheet} from 'react-native';
 import React,{useState,useEffect} from 'react';
 import { Skeleton,NativeBaseProvider } from 'native-base';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const Tabs = ({cat_id,setHeading,setId}) => {
   const [data, setData] = useState([{name:"All"}]);
   const [num,setNum]=useState(0);
   const [skeleton,setSkeleton]=useState(false)
+
+  const [overlay,setOverlay]=useState(false);
+  const [disable,setDisable]=useState(false);
 
   const getTab=async(value,index,hierId)=>{
     setNum(index)
@@ -37,9 +41,21 @@ const Tabs = ({cat_id,setHeading,setId}) => {
         style={{
           width: '100%',flexDirection: 'row', padding: 7
         }}>
+          <Spinner
+          visible={overlay}
+          />
           {data.map((v, i) => {
             return (
-              <TouchableOpacity key={i} activeOpacity={0.9} style={num == i ? Style.tabs : Style.tabs2} onPress={()=>getTab(v.name,i,v.HierId)}>
+              <TouchableOpacity key={i} disabled={disable} activeOpacity={0.9} style={num == i ? Style.tabs : Style.tabs2} onPress={()=>{
+                
+                setOverlay(true)
+              setTimeout(() => {
+                getTab(v.name,i,v.HierId)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+                
+                }}>
                 <Text style={num == i ? Style.text : Style.text2}>{v.name}</Text>
               </TouchableOpacity>
             );

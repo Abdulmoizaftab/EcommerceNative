@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  ToastAndroid
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -75,7 +76,8 @@ const AllDiscountedProducts = () => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    setlimit(6);
+    //setlimit(6);
+    getDisdata()
     setIsRefreshing(false);
   };
 

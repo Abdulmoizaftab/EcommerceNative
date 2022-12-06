@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
+  ToastAndroid
 } from 'react-native';
 import React , {useState,useEffect} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
@@ -15,12 +16,16 @@ import { NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(10);
   const [isLoading, setIsloading] = useState(true);
+
+  const [overlay,setOverlay]=useState(false);
+  const [disable,setDisable]=useState(false);
 
   
   const favouriteState = useSelector(state => state.favourite)
@@ -35,7 +40,26 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
       .then((response) => response.json())
       .then((json) => { setProducts(json) 
         setIsloading(false)})
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        console.error(error)
+        if(error=="AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+        else{
+          ToastAndroid.showWithGravityAndOffset(  
+            "Something went wrong",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }})
 
   }
 
@@ -72,6 +96,9 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
 
   return (
     <View style={Styles.main}>
+      <Spinner
+          visible={overlay}
+        />
       <View style={Styles.middle2}>
         <View style={Styles.middle2_1}>
           <Text style={Styles.middle2_1_text1}>Popular Items</Text>
@@ -96,7 +123,15 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
       
       
       (
-        <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => navigate.navigate('Product_detail',element)}>
+        <TouchableOpacity key={key} disabled={disable} activeOpacity={0.7} onPress={() => {
+          setDisable(true)
+          setOverlay(true)
+          setTimeout(() => {
+            navigate.navigate('Product_detail', element)
+            setOverlay(false)
+            setDisable(false)
+          }, 1000);
+          }}>
             <View style={Styles.ProdCard}>
               <View style={Styles.imgContainer}>
                 <Image
@@ -118,11 +153,6 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
                   </Text>
                   </View>
                   </View>
-
-
-
-
-                 
               </View>
            {/* / </View> */}
           </TouchableOpacity>

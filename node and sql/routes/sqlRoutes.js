@@ -51,7 +51,7 @@ const sendMail = (email, name, user_id) => {
       from: 'digevoldevs@gmail.com',
       to: email,
       subject: 'For verify your email',
-      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.26:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
+      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
 
     }
     transporter.sendMail(mailOptions, function (error, info) {
@@ -233,7 +233,7 @@ router.get("/popular/:limit", (req, res) => {
   req.app.locals.db.query(
     `SELECT top(${req.params.limit}) SUM(order_items.quantity) as total_Orders, order_items.product_id,product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
   FROM order_items
-  INNER JOIN product ON order_items.product_id = product.product_id where isDeleted=0
+  INNER JOIN product ON order_items.product_id = product.product_id where product.isDeleted=0
   GROUP BY order_items.product_id, product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
   ORDER BY total_Orders desc , rating desc , product_id asc`,
     function (err, recordset) {

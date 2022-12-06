@@ -14,6 +14,8 @@ import SkeletonJs from '../components/Skeleton';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
+import No_Item from '../image/no.png';
 
 
 const Subcategory = ({navigation, route}) => {
@@ -23,6 +25,10 @@ const Subcategory = ({navigation, route}) => {
   const [isLoading, setIsloading] = useState(true);
   const [id, setId] = useState();
   const [heading, setHeading] = useState('All');
+
+  const [overlay,setOverlay]=useState(false);
+  const [disable,setDisable]=useState(false);
+
   const getdata = async () => {
     setIsloading(true)
     if (!id) {
@@ -51,12 +57,13 @@ const Subcategory = ({navigation, route}) => {
         .then(json => {
           if(json.length > 0){
             setProducts(json);
-            console.log('chekcing',json.length);
-            //setIsloading(false)
+            setIsloading(false)
           }
           else{
             setIsloading(false)
           }
+          console.log('chekcing',json.length);
+          console.log('check product',products);
         })
         .catch(error => console.error(error));
     }
@@ -107,10 +114,19 @@ const Subcategory = ({navigation, route}) => {
 
     return (
       <View style={Style.all_item_main2}>
-        <View style={Style.all_item_main3}>
-          <TouchableOpacity
+        <TouchableOpacity disabled={disable} style={Style.all_item_main3} activeOpacity={0.8} onPress={() => {
+          
+          setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigation.navigate('Product_detail', element.item)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+          }}>
+          <View
             style={Style.all_item_main4}
-            onPress={() => navigation.navigate('Product_detail', element.item)}>
+            >
             <Image
               style={Style.all_item_main4_img}
               resizeMode="cover"
@@ -118,7 +134,7 @@ const Subcategory = ({navigation, route}) => {
                 uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
               }}
             />
-          </TouchableOpacity>
+          </View>
           <View>
             <Text style={Style.cardTitle}>
               {element.item.name.split(/\s+/).slice(0, 4).join(' ') + '...'}
@@ -162,7 +178,7 @@ const Subcategory = ({navigation, route}) => {
           {/*<TouchableOpacity onPress={() => storeMergeData(product)} style={{ flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "white", borderWidth: 1, elevation: 2, height: 35, borderRadius: 22, marginBottom: 4 }}>
           <Feather name="flower" style={Style.middle2_2_icon} />
         </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -176,6 +192,9 @@ const Subcategory = ({navigation, route}) => {
   return (
     <View>
       <View style={Style.head_main}>
+      <Spinner
+      visible={overlay}
+    />
         <View>
           <AntDesign
             name="arrowleft"
@@ -198,6 +217,22 @@ const Subcategory = ({navigation, route}) => {
               </View>
             </View>
           }
+          ListEmptyComponent={()=>{
+            return(
+              <View>
+                {isLoading===false&&(
+                  <View style={{marginTop:"20%",height:230,justifyContent:"center",alignItems:"center",width:"100%",zIndex:999}}>
+                    <Image
+              style={{height:200,width:220}}
+              source={No_Item}
+            />
+            <Text style={{color:"gray"}}>No Items</Text>
+                  </View>
+                )
+                }
+              </View>
+            )
+          }}
           data={products}
           renderItem={renderItem}
           keyExtractor={item => item.product_id}

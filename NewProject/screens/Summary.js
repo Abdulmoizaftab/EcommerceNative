@@ -203,7 +203,7 @@ const Summary = ({route,navigation}) => {
             <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{
       
       bg: "#000000"
-    }}>
+    }} backdropVisible={false}>
         <Modal.Content maxWidth="400px" >
           <Modal.Header style={{backgroundColor:"#5A56E9"}} width="100%">
             <Text style={{color:"white",fontSize:18}}>Your order has been confirmed</Text>

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator,ToastAndroid } from 'react-native';
 import React, { useEffect, useState,useRef } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +18,7 @@ import SortBottomSheet from '../components/SortBottomSheet';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const SeeAllPopular = () => {
@@ -38,6 +39,9 @@ const SeeAllPopular = () => {
   const [filterRatingDesc, setFilterRatingDesc] = useState(false);
   const refRBSheet = useRef();
 
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
+
 
 
 
@@ -47,7 +51,25 @@ const SeeAllPopular = () => {
       .then((response) => response.json())
       .then((json) => { setProducts(json)
       setIsloading(false) })
-      .catch((error) => console.error(error))
+      .catch((error) => {console.error(error)
+        if(error=="AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+        else{
+          ToastAndroid.showWithGravityAndOffset(  
+            "Something went wrong",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }})
 
   }
 
@@ -193,7 +215,15 @@ const SeeAllPopular = () => {
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail', element.item)}>
+          <TouchableOpacity style={Style.all_item_main4} disabled={disable} onPress={() => {
+              setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigate.navigate('Product_detail', element.item)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+              }}>
           <View style={{ borderBottomWidth: 1,paddingVertical:"3%", width: '100%', borderBottomColor: "#ACACAC", alignItems: 'center', justifyContent: 'center' }}>
             <Image style={Style.all_item_main4_img}
               resizeMode="cover"
@@ -275,6 +305,9 @@ const SeeAllPopular = () => {
 
   return (
     <View style={Style.all_item_main}>
+      <Spinner
+          visible={overlay}
+        />
       <FlatList
         ListHeaderComponent={
           <View>
