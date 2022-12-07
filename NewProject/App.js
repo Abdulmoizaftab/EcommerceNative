@@ -20,14 +20,20 @@ import Subcategory from './screens/subcategory';
 import CheckOutScreenNew from './screens/CheckOutScreenNew';
 import Summary from './screens/Summary'
 import SeeAllProducts from './screens/SeeAllProducts';
-import { View,Text } from 'react-native';
+import { View,Text ,LogBox} from 'react-native';
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
 import ProfileScreen from './screens/profileScreen';
 import Search from './screens/Search';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import VerificationScreen from './screens/VerificationScreen';
+import NewPasswordScreen from './screens/NewPasswordScreen';
+
 
 
 const Stack=createNativeStackNavigator();
 const App = () => {
+  LogBox.ignoreAllLogs();
+
   useEffect(() => {
     SplashScreen.hide();
   }, [])
@@ -80,7 +86,7 @@ const App = () => {
           }} name="CheckoutScreen" component={CheckOutScreenNew} />
         <Stack.Screen name="SeeAllPopular" component={SeeAllPopular} />
         <Stack.Screen name="SeeAllProducts" component={SeeAllProducts} />
-        <Stack.Screen name="AllDiscountedProducts" options={{headerShown:true,
+        <Stack.Screen name="AllDiscountedProducts" options={{headerShown:false,
             title:"All discounts",
            headerStyle:{backgroundColor:"#5A56E9"},
            headerTintColor: '#fff',
@@ -90,6 +96,9 @@ const App = () => {
            headerTitleAlign:"center"}} component={AllDiscountedProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="Forgot" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Verification" component={VerificationScreen} />
+        <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
         <Stack.Screen
           options={{headerShown:true,
             title:"Address Book",

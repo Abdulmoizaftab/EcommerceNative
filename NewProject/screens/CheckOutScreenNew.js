@@ -123,7 +123,7 @@ const CheckOutScreenNew = ({ route }) => {
               >
                 <Radio style={{ width: "90%", alignSelf: 'center', justifyContent: 'center' }} value={"cod"} my="5">
                   <MaterialCommunityIcons name="cash" size={35} color="#7FB848" />
-                  <Text style={{ fontSize: 22, fontWeight: '600' }}> Cash On Delivery</Text>
+                  <Text style={{ fontSize: 22, fontWeight: '600' , color:'#000'}}> Cash On Delivery</Text>
                 </Radio>
 
               </Radio.Group>

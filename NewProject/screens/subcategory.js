@@ -12,7 +12,7 @@ import Tabs from '../components/tabs';
 import {NativeBaseProvider} from 'native-base';
 import SkeletonJs from '../components/Skeleton';
 import Icon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import No_Item from '../image/no.png';
@@ -204,6 +204,7 @@ const Subcategory = ({navigation, route}) => {
         </View>
         <View style={Style.head_text_view}>
           <Text style={Style.head_text}>{cat}</Text>
+          <FontAwesome5 name='search' style={Style.searchIcon} onPress={() => navigation.navigate('Search')}/>
         </View>
       </View>
 
@@ -267,9 +268,12 @@ const Style = StyleSheet.create({
     color: 'white',
   },
   head_text_view: {
-    width: '95%',
+    width: '88%',
     justifyContent: 'center',
     marginHorizontal: '5%',
+    flexDirection:'row',
+    alignItems:'baseline',
+    justifyContent:'space-between',
   },
   head_text: {
     fontSize: 25,
@@ -344,4 +348,10 @@ const Style = StyleSheet.create({
     alignItems: "center",
     width:'95%'
   },
+  searchIcon: {
+
+    color: "#EAE9FC",
+    fontSize: 20,
+
+}
 });

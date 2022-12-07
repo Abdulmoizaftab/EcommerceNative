@@ -105,7 +105,7 @@ const ProfileScreen = ({navigation}) => {
 
             <Text style={styles.userName}>{user[0].first_name} {user[0].last_name}</Text>
             <Text style={styles.userEmail}>{user[0].email}</Text>
-            <Text style={styles.userEmail}>{user[0].telephone}</Text>
+            <Text style={styles.userEmail}>{user[0].phone}</Text>
             <TouchableOpacity
               activeOpacity={0.9}
               style={{marginVertical: '2%', width: '30%',backgroundColor: '#5A56E9',borderRadius: 10,alignSelf: 'center',

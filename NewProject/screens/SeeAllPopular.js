@@ -37,6 +37,7 @@ const SeeAllPopular = () => {
   const [filterPriceDesc, setFilterPriceDesc] = useState(false);
   const [filterRatingAsc, setFilterRatingAsc] = useState(false);
   const [filterRatingDesc, setFilterRatingDesc] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
   const refRBSheet = useRef();
 
   const [overlay,setOverlay]=useState(false)
@@ -79,6 +80,7 @@ const SeeAllPopular = () => {
     await fetch(`http://192.168.1.24:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
+    .then(check=>  setIsloading(false))
     .catch((error) => console.error(error))
     
     if (asc_desc==='asc') {
@@ -92,7 +94,8 @@ const SeeAllPopular = () => {
       setFilterRatingAsc(false)
       setFilterRatingDesc(false)
     }    
-    setIsRefreshing(false)
+    //setIsRefreshing(false)
+
   }
   
   const handleFilterRating = async (asc_desc)=>{
@@ -101,6 +104,7 @@ const SeeAllPopular = () => {
     await fetch(`http://192.168.1.24:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
+    .then(check=>  setIsloading(false))
     .catch((error) => console.error(error))
     
     if (asc_desc==='asc') {
@@ -114,7 +118,8 @@ const SeeAllPopular = () => {
       setFilterPriceAsc(false)
       setFilterPriceDesc(false)
     }    
-    setIsRefreshing(false)
+    //setIsRefreshing(false)
+
   }
 
   useEffect(() => {
@@ -129,7 +134,7 @@ const SeeAllPopular = () => {
     }else {
       getdata()
     }
-  }, [limit]);
+  }, [limit,refreshTrigger]);
 
   const onEndReached = () => {
     setlimit(limit + 4);
@@ -139,7 +144,8 @@ const SeeAllPopular = () => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    setlimit(6);
+    // setlimit(6);
+    setRefreshTrigger(!refreshTrigger)
     setIsRefreshing(false)
   }
 
@@ -372,7 +378,8 @@ const SeeAllPopular = () => {
                     setFilterRatingAsc,
                     setFilterRatingDesc,
                     getdata,
-                    setIsloading
+                    setIsloading,
+                    setProducts
                   }
                 } />
             </RBSheet>
@@ -380,7 +387,7 @@ const SeeAllPopular = () => {
         }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
         ListFooterComponent={flatlistEnd}
-        onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
+        onEndReached={onEndReached} onEndReachedThreshold={2} refreshing={IsRefreshing} onRefresh={onRefresh} />
     </View>
   )
 }

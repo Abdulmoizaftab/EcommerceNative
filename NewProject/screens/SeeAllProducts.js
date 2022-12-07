@@ -26,6 +26,7 @@ const SeeAllProducts = () => {
   const [filterPriceDesc, setFilterPriceDesc] = useState(false);
   const [filterRatingAsc, setFilterRatingAsc] = useState(false);
   const [filterRatingDesc, setFilterRatingDesc] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
   const refRBSheet = useRef();
 
   const [overlay,setOverlay]=useState(false)
@@ -37,6 +38,7 @@ const SeeAllProducts = () => {
     await fetch(`http://192.168.1.24:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
+      .then(check=>  setIsloading(false))
       .catch((error) => console.error(error))
 
   }
@@ -47,6 +49,7 @@ const SeeAllProducts = () => {
     await fetch(`http://192.168.1.24:5000/sql/filterAllByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
+    .then(check=>  setIsloading(false))
     .catch((error) => console.error(error))
     
     if (asc_desc==='asc') {
@@ -60,7 +63,7 @@ const SeeAllProducts = () => {
       setFilterRatingAsc(false)
       setFilterRatingDesc(false)
     }    
-    setIsRefreshing(false)
+    //setIsRefreshing(false)
   }
   
   const handleFilterRating = async (asc_desc)=>{
@@ -69,6 +72,7 @@ const SeeAllProducts = () => {
     await fetch(`http://192.168.1.24:5000/sql/filterAllByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
+    .then(check=>  setIsloading(false))
     .catch((error) => console.error(error))
     
     if (asc_desc==='asc') {
@@ -82,7 +86,7 @@ const SeeAllProducts = () => {
       setFilterPriceAsc(false)
       setFilterPriceDesc(false)
     }    
-    setIsRefreshing(false)
+    //setIsRefreshing(false)
   }
 
   useEffect(() => {
@@ -97,7 +101,7 @@ const SeeAllProducts = () => {
     }else {
       getdata()
     }
-  }, [limit]);
+  }, [limit,refreshTrigger]);
 
   const onEndReached = () => {
     setlimit(limit + 4);
@@ -107,7 +111,8 @@ const SeeAllProducts = () => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    setlimit(6);
+    // setlimit(6);
+    setRefreshTrigger(!refreshTrigger);
     setIsRefreshing(false)
   }
 
@@ -288,7 +293,8 @@ const SeeAllProducts = () => {
                     setFilterRatingAsc,
                     setFilterRatingDesc,
                     getdata,
-                    setIsloading
+                    setIsloading,
+                    setProducts
                   }
                 } />
             </RBSheet>
@@ -296,7 +302,7 @@ const SeeAllProducts = () => {
         }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
         ListFooterComponent={flatlistEnd}
-        onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
+        onEndReached={onEndReached} onEndReachedThreshold={2} refreshing={IsRefreshing} onRefresh={onRefresh} />
     </View>
   )
 }

@@ -253,6 +253,7 @@ const Product_detail = ({route}) => {
           {/* {isFav ? <Icon style={Style.heartBtn} name='heart' onPress={() => setIsFav(!isFav)} /> : <Icon style={Style.heartBtn} name='heart-outline' onPress={() => setIsFav(!isFav)} />} */}
 
           <SliderBox
+            disableOnPress={true}
             images={imgArr}
             sliderBoxHeight={SCREEN_HEIGHT / 2}
             ImageComponentStyle={{
@@ -387,7 +388,7 @@ const Product_detail = ({route}) => {
                   );
                   }
                   }}>
-                <Text style={{fontSize: 12}}>WRITE A REVIEW</Text>
+                <Text style={{fontSize: 12,color:'#000'}}>WRITE A REVIEW</Text>
               </TouchableOpacity>
           </View>
 

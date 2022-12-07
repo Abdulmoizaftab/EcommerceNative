@@ -5,7 +5,7 @@ import { deleteProductTest } from './Test_Redux'
 import axios from 'axios';
 
 import { addFavourite, getFavourite, removeFavourite } from './FavouritesRedux';
-import { Alert } from 'react-native';
+import { Alert , ToastAndroid} from 'react-native';
 //import { useNavigation } from '@react-navigation/native'
 
 //import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +22,7 @@ export const login = async (dispatch, user) => {
         }
         dispatch(loginSuccess(obj));
         user.navigation.navigate('Home')
+        
     } catch (error) {
         dispatch(loginFailure(true));
         console.log("No data");
@@ -171,18 +172,21 @@ export const getFavouriteDB = async (dispatch,user,navigation) => {
             dispatch(Logout());
         }
         else if(error == "AxiosError: Network Error"){
-            console.log("Something 2");
-            Alert.alert(
-                "Network Error",
-                "Please check your network connection.",
-                [
-              {
-                text: "Ok",
-                onPress: () => console.log("Ok"),
-              }
-            ]
-            );
+            //console.log("Something 2");
+            // Alert.alert(
+            //     "Network Error",
+            //     "Please check your network connection.",
+            //     [
+            //   {
+            //     text: "Ok",
+            //     onPress: () => console.log("Ok"),
+            //   }
+            // ]
+            // );
             //dispatch(getFavourite(null))
+            return(
+                ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
+            )
         }
     }
 }

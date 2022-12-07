@@ -41,6 +41,7 @@ const Home_inside = ({ navigate }) => {
   const [products, setProducts] = useState([]);
   // console.log(products)
   const [limit, setlimit] = useState(6);
+  const [toastErr, setToastErr] = useState(false);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
   const [head_comp,setHead_Comp] = useState(false)
@@ -74,7 +75,6 @@ const Home_inside = ({ navigate }) => {
 
   useEffect(() => {
     getdata()
-    
     // PushNotification.createChannel(
     //   {
     //     channelId: "test1", // (required)
@@ -91,7 +91,7 @@ const Home_inside = ({ navigate }) => {
     // PushNotification.channelExists("test1", function (exists) {
     //   console.log(exists); // true/false
     // });
-  }, [limit]);
+  }, [limit,toastErr]);
 
 
   const flatlistEnd = () => {
@@ -310,6 +310,7 @@ const Home_inside = ({ navigate }) => {
     //setlimit(4);
     getdata()
     setIsRefreshing(false)
+    setToastErr(!toastErr)
   }
   
   return (

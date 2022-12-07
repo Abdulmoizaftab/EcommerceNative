@@ -18,8 +18,9 @@ import {NativeBaseProvider} from 'native-base';
 import SearchBar from '../components/SearchBar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {addFavourite, removeFavourite} from '../redux/FavouritesRedux';
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const AllDiscountedProducts = () => {
   const favouriteState = useSelector(state => state.favourite);
@@ -211,9 +212,20 @@ const AllDiscountedProducts = () => {
         />
       <FlatList
         ListHeaderComponent={
-          <View style={{paddingTop:5}}>
-            {/* <SearchBar navigate={navigate} /> */}
-            
+          <View >
+            <View style={Style.head_main}>
+              <View>
+                <AntDesign
+                  name="arrowleft"
+                  style={Style.head_icon}
+                  onPress={() => navigate.goBack()}
+                />
+              </View>
+              <View style={Style.head_text_view}>
+                <Text style={Style.head_text}>All Discounts</Text>
+                <FontAwesome5 name='search' style={Style.searchIcon} onPress={() => navigate.navigate('Search')} />
+              </View>
+            </View>
           </View>
         }
         data={products}
@@ -222,7 +234,7 @@ const AllDiscountedProducts = () => {
         numColumns={2}
         ListFooterComponent={flatlistEnd}
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={2}
         refreshing={IsRefreshing}
         onRefresh={onRefresh}
       />
@@ -360,4 +372,33 @@ const Style = StyleSheet.create({
     marginHorizontal: '2%',
     color: '#484848',
   },
+  head_main: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    padding: '3%',
+    backgroundColor: '#5A56E9',
+  },
+  head_text_view: {
+    width: '88%',
+    justifyContent: 'center',
+    marginHorizontal: '5%',
+    flexDirection:'row',
+    alignItems:'baseline',
+    justifyContent:'space-between',
+  },
+  head_text: {
+    fontSize: 25,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  head_icon: {
+    fontSize: 20,
+    color: 'white',
+  },
+  searchIcon: {
+    color: "#EAE9FC",
+    fontSize: 20,
+}
 });

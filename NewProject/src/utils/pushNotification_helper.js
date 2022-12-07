@@ -4,7 +4,6 @@ import axios from 'axios'
 
 
 export async function requestUserPermission(currentUser) {
-  console.log("USER ======>>>>",currentUser);
   const authStatus = await messaging().requestPermission();
   const enabled =
     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -12,50 +11,56 @@ export async function requestUserPermission(currentUser) {
 
   if (enabled) {
     console.log('Authorization status:', authStatus);
-      GetFCMToken(currentUser)
+    GetFCMToken(currentUser)
   }
 }
 
 const GetFCMToken = async (currentUser) => {
-
-    let fcmtoken = await AsyncStorage.getItem('fcmtoken')
-    console.log(fcmtoken, 'oldToken')
-
-
-    if (!fcmtoken) {
-
-        try {
-            const fcmtoken = await messaging().getToken()
-            if (fcmtoken) {
-                const payload = {
-                  user_id:currentUser.user[0].user_id,
-                  token:fcmtoken
-                }
-                console.log(fcmtoken, 'newtoken')
-                await axios.post('http://192.168.1.24:5000/sql/updateNotifyToken', payload)
-                await AsyncStorage.setItem('fcmtoken', fcmtoken);
-
-
-            }
-        } catch (error) {
-            console.log(error, 'error in fcm token')
-        }
+  let fcmtoken = await AsyncStorage.getItem('fcmtoken')
+  console.log(fcmtoken, 'oldToken')
+  if(fcmtoken){
+    const payload = {
+      user_id: currentUser.user[0].user_id,
+      token: fcmtoken
     }
+    await axios.post('http://192.168.1.26:5000/sql/updateNotifyToken', payload)
+  }
+
+
+  if (!fcmtoken) {
+
+    try {
+      const fcmtoken = await messaging().getToken()
+      if (fcmtoken) {
+        const payload = {
+          user_id: currentUser.user[0].user_id,
+          token: fcmtoken
+        }
+        console.log(fcmtoken, 'newtoken')
+        await axios.post('http://192.168.1.26:5000/sql/updateNotifyToken', payload)
+        await AsyncStorage.setItem('fcmtoken', fcmtoken);
+
+
+      }
+    } catch (error) {
+      console.log(error, 'error in fcm token')
+    }
+  }
 
 
 }
 
-export const NotificationListener = ()=>{
-     
-    messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log(
-          'Notification caused app to open from background state:',
-          remoteMessage.notification,
-        );
-      });
+export const NotificationListener = () => {
 
-          // Check whether an initial notification is available
-    messaging()
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    console.log(
+      'Notification caused app to open from background state:',
+      remoteMessage.notification,
+    );
+  });
+
+  // Check whether an initial notification is available
+  messaging()
     .getInitialNotification()
     .then(remoteMessage => {
       if (remoteMessage) {
@@ -63,9 +68,10 @@ export const NotificationListener = ()=>{
           'Notification caused app to open from quit state:',
           remoteMessage.notification,
         );
-      }})
+      }
+    })
 
-      messaging().onMessage(async remoteMessage =>{
-        console.log("Notification on foreground state...",remoteMessage);
-      })
+  messaging().onMessage(async remoteMessage => {
+    console.log("Notification on foreground state...", remoteMessage);
+  })
 }

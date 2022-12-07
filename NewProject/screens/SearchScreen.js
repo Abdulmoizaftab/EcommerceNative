@@ -24,6 +24,7 @@ const SearchScreen = ({route}) => {
     await fetch(`http://192.168.1.24:5000/sql/suggest/${searchText}/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
+      .then(check=>  setIsloading(false))
       .catch((error) => console.error(error))
 
   }
@@ -165,7 +166,7 @@ const SearchScreen = ({route}) => {
       }
         data={products} renderItem={renderItem} keyExtractor={item => item.product_id} numColumns={2}
         ListFooterComponent={flatlistEnd}
-        onEndReached={onEndReached} onEndReachedThreshold={0.5} refreshing={IsRefreshing} onRefresh={onRefresh} />
+        onEndReached={onEndReached} onEndReachedThreshold={2} refreshing={IsRefreshing} onRefresh={onRefresh} />
   </View>
   )
 }

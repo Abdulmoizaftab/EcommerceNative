@@ -1,6 +1,6 @@
 const sql = require("mssql");
 const router = require("express").Router();
-const axios = require('axios')
+const axios = require("axios");
 const bcrypt = require("bcryptjs");
 // const validator = require('validator');
 const jwt = require("jsonwebtoken");
@@ -51,7 +51,7 @@ const sendMail = (email, name, user_id) => {
       from: 'digevoldevs@gmail.com',
       to: email,
       subject: 'For verify your email',
-      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.24:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
+      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.26:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
 
     }
     transporter.sendMail(mailOptions, function (error, info) {
@@ -233,7 +233,8 @@ router.get("/popular/:limit", (req, res) => {
   req.app.locals.db.query(
     `SELECT top(${req.params.limit}) SUM(order_items.quantity) as total_Orders, order_items.product_id,product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
   FROM order_items
-  INNER JOIN product ON order_items.product_id = product.product_id where product.isDeleted=0
+  INNER JOIN product ON order_items.product_id = product.product_id
+  WHERE product.isDeleted=0
   GROUP BY order_items.product_id, product.name,product.price,product.imgs,product.discount_id,product.inventory_id,product.category_id,product.vendor_id,product.rating,product.isDeleted,product.inStock
   ORDER BY total_Orders desc , rating desc , product_id asc`,
     function (err, recordset) {
@@ -976,7 +977,7 @@ router.post("/UpdateOrder", (req, res) => {
 router.post('/createSection', (req, res) => {
   let sectionHier = 0;
   // let subSectionHier = 0;
-  let sectionArr ;
+  let sectionArr;
 
   // const { sectionName, sectionDesc, vendorId } = req.body
   const bodyArr = req.body
@@ -993,10 +994,10 @@ router.post('/createSection', (req, res) => {
         sectionArr = recordset.recordset[0].SectionId.split("/");
         sectionHier = parseInt(sectionArr[1])
       }
-      
+
       bodyArr.forEach(element => {
         if (sectionHier === 0) {
-          let subSectionHier=0;
+          let subSectionHier = 0;
           sectionHier = 1;
           req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${element.section_name}' , '${element.description}' , ${element.vendorId})`, function (err, recordset) {
             if (err) {
@@ -1005,7 +1006,7 @@ router.post('/createSection', (req, res) => {
               return;
             }
           })
-          
+
           element.corners.forEach(subElement => {
             subSectionHier++
             req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/${subSectionHier.toString()}/' as Hierarchyid) , '${subElement.corner_name}' , '${subElement.description}' , ${element.vendorId})`, function (err, recordset) {
@@ -1018,7 +1019,7 @@ router.post('/createSection', (req, res) => {
           });
 
         } else {
-          let subSectionHier=0;
+          let subSectionHier = 0;
           sectionHier++
           req.app.locals.db.query(`insert into SectionTest(SectionId , sectionName , sectionDesc ,vendor_id) values(CAST('/${sectionHier.toString()}/' as Hierarchyid) , '${element.section_name}' , '${element.description}' , ${element.vendorId})`, function (err, recordset) {
             if (err) {
@@ -1198,4 +1199,156 @@ router.post("/getFavourites", auth.isLogin, (req, res) => {
     }
   );
 });
+
+
+const sendOtpMail = (email, otp) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: 'digevoldevs@gmail.com',
+        pass: 'vrrrakdeevotsepa'
+      }
+    })
+    const mailOptions = {
+      from: 'digevoldevs@gmail.com',
+      to: email,
+      subject: 'OTP For Password Reset',
+      html: "<p>Your OTP code for Password Reset is : <strong>" + otp + "</strong></p>"
+
+    }
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email has been sent==> ", info.response);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+router.post("/sendOTP", (req, res) => {
+  const { email } = req.body
+  let userId;
+  req.app.locals.db.query(`EXEC RegisterGetUsernameAndId @email = '${email}'`, function (err, recordset) {
+    if (err) {
+      console.error(err);
+      res.status(500).send("SERVER ERROR");
+      return;
+    } else {
+      if (Object.keys(recordset.recordset).length !== 0) {
+
+        const digits = '0123456789';
+        let otp = '';
+        for (let i = 0; i < 6; i++) {
+          otp += digits[Math.floor(Math.random() * 10)];
+        }
+        userId = recordset.recordset[0].user_id
+        req.app.locals.db.query(`EXEC OTPCheckIfAlreadyExists @userId = ${userId}`, function (err, recordset) {
+          if (err) {
+            console.error(err);
+            res.status(500).send("SERVER ERROR");
+            return;
+          } else {
+            if (Object.keys(recordset.recordset).length !== 0) {
+              req.app.locals.db.query(`
+              EXEC OTPUpdate @userId =${userId} , @otp = '${otp}'
+              `, function (err, recordset) {
+                if (err) {
+                  console.error(err);
+                  res.status(500).send("SERVER ERROR");
+                  return;
+                } else {
+                  sendOtpMail(email, otp)
+                  res.status(201).send(true);
+                }
+
+              }
+              );
+            } else {
+              req.app.locals.db.query(`
+              EXEC OTPInsert @userId =${userId} , @otp = '${otp}' , @email='${email}'
+              `, function (err, recordset) {
+                if (err) {
+                  console.error(err);
+                  res.status(500).send("SERVER ERROR");
+                  return;
+                } else {
+                  sendOtpMail(email, otp)
+                  res.status(201).send(true);
+                }
+
+              }
+              );
+            }
+          }
+        }
+        );
+
+      } else {
+        res.status(201).send(false);
+      }
+    }
+
+  }
+  );
+});
+
+router.post("/matchOTP", (req, res) => {
+  const { otp, email } = req.body
+  req.app.locals.db.query(`EXEC OTPMatch @otp='${otp}' ,@email = '${email}'`, function (err, recordset) {
+    if (err) {
+      console.error(err);
+      res.status(500).send("SERVER ERROR");
+      return;
+    } else {
+      if (Object.keys(recordset.recordset).length !== 0) {
+        res.status(201).send(true);
+      } else {
+        res.status(201).send(false);
+      }
+    }
+
+  }
+  );
+});
+
+router.post("/OTPExpire", (req, res) => {
+  const { email } = req.body
+
+  setTimeout(() => {
+    req.app.locals.db.query(`EXEC OTPExpire @email = '${email}'`, function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      }
+      res.status(201).send(recordset.recordset)
+
+    }
+    );
+  }, 60000);
+
+});
+
+router.post("/setNewPswd", async (req, res) => {
+  const { email,password } = req.body
+
+    const encrypt_pswd = await bcrypt.hash(password, 10);
+    req.app.locals.db.query(`EXEC UpdatePswd @email = '${email}' , @pswd='${encrypt_pswd}'`, function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+        return;
+      }
+      res.status(201).send(true)
+    }
+    );
+});
+
 module.exports = router;

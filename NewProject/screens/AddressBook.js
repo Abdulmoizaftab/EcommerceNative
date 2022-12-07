@@ -84,9 +84,9 @@ const AddressBook = ({route}) => {
                         <View style={styles.addressCard}>
                           <View style={styles.addressDetails}>
                             <Text style={{ color: '#5A56E9', fontSize: 22, fontWeight: 'bold', marginVertical: '1%' }}>{element.address_title}</Text>
-                            <Text style={{ marginVertical: '0.5%', fontWeight: '500' }}>{element.address_line}</Text>
-                            <Text style={{ marginVertical: '0.5%', fontWeight: '500' }}>Recipent: {element.recipent}</Text>
-                            <Text style={{ marginVertical: '0.5%', fontWeight: '500' }}>{element.mobile}</Text>
+                            <Text style={{ marginVertical: '0.5%', fontWeight: '500' , color:'#000' }}>{element.address_line}</Text>
+                            <Text style={{ marginVertical: '0.5%', fontWeight: '500' , color:'#000'}}>Recipent: {element.recipent}</Text>
+                            <Text style={{ marginVertical: '0.5%', fontWeight: '500' , color:'#000'}}>{element.mobile}</Text>
                             {/* <TouchableOpacity>
                         <Text style={{marginVertical:'1%', fontWeight:'500',color:'#5A56E9' , fontSize}}>Edit</Text>
                       </TouchableOpacity> */}
