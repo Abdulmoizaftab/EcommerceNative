@@ -27,8 +27,8 @@ const VendorSlider = ({ popular, setPopular }) => {
         setApiData(json)
         setSkeleton(false)
       })
-      .catch((error) => {console.error(error)
-        if(error=="AxiosError: Network Error"){
+      .catch((error) => {
+        if(error=="TypeError: Network request failed"){
           ToastAndroid.showWithGravityAndOffset(  
             "No network connectivity",  
             ToastAndroid.LONG,  

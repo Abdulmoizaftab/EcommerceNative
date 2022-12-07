@@ -41,8 +41,7 @@ const Popuplar_slider = ({ navigate,popular,setPopular }) => {
       .then((json) => { setProducts(json) 
         setIsloading(false)})
       .catch((error) => {
-        console.error(error)
-        if(error=="AxiosError: Network Error"){
+        if(error=="TypeError: Network request failed"){
           ToastAndroid.showWithGravityAndOffset(  
             "No network connectivity",  
             ToastAndroid.LONG,  

@@ -52,8 +52,7 @@ const Home_inside = ({ navigate }) => {
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .catch((error) => {
-        console.error(error)
-        if(error=="AxiosError: Network Error"){
+        if(error=="TypeError: Network request failed"){
           ToastAndroid.showWithGravityAndOffset(  
             "No network connectivity",  
             ToastAndroid.LONG,  
@@ -308,7 +307,8 @@ const Home_inside = ({ navigate }) => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setHead_Comp(true);
-    setlimit(4);
+    //setlimit(4);
+    getdata()
     setIsRefreshing(false)
   }
   
