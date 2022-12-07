@@ -141,25 +141,6 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
                     uri: element.imgs,
                   }}></Image>
               </View>
-
-
-            (
-              <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => {
-                navigate.navigate('Product_detail',element)
-                // setCardLoader(true)
-                // setTimeout(() => {
-                //   setCardLoader(false)
-                // }, 2000);
-              }}>
-                <View style={Styles.ProdCard}>
-                  <View style={Styles.imgContainer}>
-                    <Image
-                      style={Styles.cardImg}
-                      source={{
-                        uri: element.imgs,
-                      }}></Image>
-                  </View>
-
                   <View style={Styles.cardDesc}>
                     {
                       cardLoader ? (
@@ -182,14 +163,17 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
 
                   </View>
               </View>
-           {/* / </View> */}
           </TouchableOpacity>
       )))
     }
         </View>
       </ScrollView >
     </View >
+    
   );
+
+
+
 };
 
 const Styles = StyleSheet.create({
