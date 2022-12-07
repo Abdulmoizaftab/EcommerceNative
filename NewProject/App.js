@@ -24,6 +24,10 @@ import { View,Text ,LogBox} from 'react-native';
 import AllDiscountedProducts from './screens/AllDiscountedProducts';
 import ProfileScreen from './screens/profileScreen';
 import Search from './screens/Search';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import VerificationScreen from './screens/VerificationScreen';
+import NewPasswordScreen from './screens/NewPasswordScreen';
+
 
 
 const Stack=createNativeStackNavigator();
@@ -92,6 +96,9 @@ const App = () => {
            headerTitleAlign:"center"}} component={AllDiscountedProducts} />
         <Stack.Screen name="SearchScreen" component={SearchScreen} />
         <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="Forgot" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Verification" component={VerificationScreen} />
+        <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
         <Stack.Screen
           options={{headerShown:true,
             title:"Address Book",

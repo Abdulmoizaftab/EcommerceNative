@@ -1243,12 +1243,11 @@ router.post("/sendOTP", (req, res) => {
     } else {
       if (Object.keys(recordset.recordset).length !== 0) {
 
-        const digits = '123456789';
+        const digits = '0123456789';
         let otp = '';
         for (let i = 0; i < 6; i++) {
           otp += digits[Math.floor(Math.random() * 10)];
         }
-        otp = parseInt(otp);
         userId = recordset.recordset[0].user_id
         req.app.locals.db.query(`EXEC OTPCheckIfAlreadyExists @userId = ${userId}`, function (err, recordset) {
           if (err) {
@@ -1258,7 +1257,7 @@ router.post("/sendOTP", (req, res) => {
           } else {
             if (Object.keys(recordset.recordset).length !== 0) {
               req.app.locals.db.query(`
-              EXEC OTPUpdate @userId =${userId} , @otp = ${otp}
+              EXEC OTPUpdate @userId =${userId} , @otp = '${otp}'
               `, function (err, recordset) {
                 if (err) {
                   console.error(err);
@@ -1273,7 +1272,7 @@ router.post("/sendOTP", (req, res) => {
               );
             } else {
               req.app.locals.db.query(`
-              EXEC OTPInsert @userId =${userId} , @otp = ${otp}, @email='${email}'
+              EXEC OTPInsert @userId =${userId} , @otp = '${otp}' , @email='${email}'
               `, function (err, recordset) {
                 if (err) {
                   console.error(err);
@@ -1302,7 +1301,7 @@ router.post("/sendOTP", (req, res) => {
 
 router.post("/matchOTP", (req, res) => {
   const { otp, email } = req.body
-  req.app.locals.db.query(`EXEC OTPMatch @otp=${otp} ,@email = '${email}'`, function (err, recordset) {
+  req.app.locals.db.query(`EXEC OTPMatch @otp='${otp}' ,@email = '${email}'`, function (err, recordset) {
     if (err) {
       console.error(err);
       res.status(500).send("SERVER ERROR");
@@ -1333,7 +1332,7 @@ router.post("/OTPExpire", (req, res) => {
 
     }
     );
-  }, 5000);
+  }, 60000);
 
 });
 

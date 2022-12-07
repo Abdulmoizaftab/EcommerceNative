@@ -76,7 +76,7 @@ const Login = ({ navigation }) => {
             <Text style={Style.email_view_text}><MaterialCommunityIcons name='lock-outline' />  Password</Text>
             <TextInput value={password} selectionColor="black" style={Style.email_view_textinput} secureTextEntry={true} onChangeText={setPassword}/>
           </View>
-          <TouchableOpacity style={Style.forgot_btn}>
+          <TouchableOpacity style={Style.forgot_btn} onPress={()=>navigation.navigate('Forgot')}>
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
           </TouchableOpacity>
           <TouchableOpacity style={Style.login_btn} onPress={handlePress}>
