@@ -18,7 +18,7 @@ const AllVendorProducts = ({ route }) => {
 
     const getdata = async () => {
         setIsloading(true)
-        await fetch(`http://192.168.1.18:5000/sql/venderProduct/${vendorObj.vendorId}/${limit}`)
+        await fetch(`http://192.168.1.5:5000/sql/venderProduct/${vendorObj.vendorId}/${limit}`)
           .then((response) => response.json())
           .then((json) => { setProducts(json) })
           .then(check=>  setIsloading(false))
@@ -28,7 +28,7 @@ const AllVendorProducts = ({ route }) => {
 
     useEffect(() => {
         // setIsloading(true);
-        // fetch(`http://192.168.1.18:5000/sql/venderProduct/${vendorObj.vendorId}/${limit}`)
+        // fetch(`http://192.168.1.5:5000/sql/venderProduct/${vendorObj.vendorId}/${limit}`)
         //     .then((response) => response.json())
         //     .then((json) => setProducts(json))
         //     .then(e=>setIsloading(false))

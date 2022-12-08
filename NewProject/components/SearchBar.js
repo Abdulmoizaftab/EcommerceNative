@@ -27,7 +27,7 @@ const SearchBar = () => {
   // const check =async ()=>{
   //     try{
   //       if(searchText.length >= 1){
-  //         const result= await axios.get(`http://192.168.1.18:5000/sql/suggest/${searchText}/5`);
+  //         const result= await axios.get(`http://192.168.1.5:5000/sql/suggest/${searchText}/5`);
   //       if (result.data) {
   //         result.data.map(item => {
   //           return arr.push(item);
@@ -63,7 +63,7 @@ const SearchBar = () => {
     console.log(currentUser)
     try {
       if (currentUser) {
-        const res = await axios.post('http://192.168.1.18:5000/sql/session', { user_id: currentUser.user[0].user_id }, {
+        const res = await axios.post('http://192.168.1.5:5000/sql/session', { user_id: currentUser.user[0].user_id }, {
           headers: {
             'Authorization': `Bearer ${currentUser.token}`
           }

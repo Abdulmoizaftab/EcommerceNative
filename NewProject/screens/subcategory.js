@@ -29,7 +29,7 @@ const Subcategory = ({navigation, route}) => {
     if (!id) {
       setProducts([]);
       await fetch(
-        `http://192.168.1.18:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+        `http://192.168.1.5:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -46,7 +46,7 @@ const Subcategory = ({navigation, route}) => {
     } else {
       setProducts([]);
       await fetch(
-        `http://192.168.1.18:5000/sql/subCategoryProducts/${limit}/${id}`,
+        `http://192.168.1.5:5000/sql/subCategoryProducts/${limit}/${id}`,
       )
         .then(response => response.json())
         .then(json => {

@@ -54,7 +54,7 @@ const sendMail = (email, name, user_id) => {
       html:
         "<p>Hey " +
         name +
-        " Please verify you mail.</p> <a href='http://192.168.1.18:5000/sql/verify?id=" +
+        " Please verify you mail.</p> <a href='http://192.168.1.5:5000/sql/verify?id=" +
         user_id +
         "'>Click here verify your mail</a>",
     };
