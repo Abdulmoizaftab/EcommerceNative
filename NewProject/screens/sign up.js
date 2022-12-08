@@ -249,11 +249,11 @@ const Sign_up = ({navigation}) => {
                 onChangeText={setConfirmPswd}
               />
             </View>
-            <TouchableOpacity style={Style.signup_btn} onPress={handlePress}>
+            <TouchableOpacity style={Style.signup_btn} onPress={handlePress}>            
               {loadings ? (
                 <ActivityIndicator size="large" color="white" />
-              ) : (
-                <Text style={Style.signup_btn_text}>Sign up</Text>
+                ) : (
+                  <Text style={Style.signup_btn_text}>Sign up</Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
@@ -262,7 +262,7 @@ const Sign_up = ({navigation}) => {
               <Text style={Style.log_in_btn_text}>Log in instead</Text>
             </TouchableOpacity>
             <View style={Style.auth_view}>
-              <AntDesign
+              {/* <AntDesign
                 style={Style.auth_icon}
                 name="google"
                 onPress={Gmail_auth}
@@ -271,8 +271,8 @@ const Sign_up = ({navigation}) => {
                 style={Style.auth_icon}
                 name="facebook"
                 onPress={Facebook_auth}
-              />
-            </View>
+              /> */}
+            </View> 
           </View>
         </ScrollView>
       </View>
@@ -406,6 +406,7 @@ const Style = StyleSheet.create({
   signup_btn_text: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize:20
   },
   log_in_btn: {
     width: '55%',

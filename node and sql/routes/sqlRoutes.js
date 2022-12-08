@@ -84,7 +84,7 @@ router.post("/register", (req, res) => {
           const verify = 0;
           const encrypt_pswd = await bcrypt.hash(password, 10);
           req.app.locals.db.query(
-            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify} `,
+            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${encrypt_pswd}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${verify}, @phone=null `,
             function (err, recordset) {
               if (err) {
                 console.error(err);

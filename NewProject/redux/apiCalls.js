@@ -39,10 +39,26 @@ export const register = async (dispatch, user) => {
             load:false,
             data:res.data
         }
-       
-            dispatch(registerSuccess(obj));
+       const statusAPI = res.status
+       if (res.status===200) {
+        let obj={
+            load:false
+        }
+        Alert.alert(
+            "Register Failed",
+            "Email already in use.",
+            [
+                {
+                    text: "Ok",
+                    onPress: () => console.log("ok pressed")
+                },
+                
+            ]
+            );
+            dispatch(registerFailure(obj));
         
-        console.log(res.data);
+       }else if (res.status===201) {
+        dispatch(registerSuccess(obj));
         Alert.alert(
             "Register successfully",
             "Please verify your mail",
@@ -54,6 +70,27 @@ export const register = async (dispatch, user) => {
           
         ]
         );
+        
+       } else {
+        
+       }
+
+
+
+
+        //dispatch(registerSuccess(obj));        
+        //console.log(res.status);
+        // Alert.alert(
+        //     "Register successfully",
+        //     "Please verify your mail",
+        //     [
+        //   {
+        //     text: "Ok",
+        //     onPress: () => user.navigation.navigate('Login')
+        //   },
+          
+        // ]
+        // );
     
     } catch (error) {
         dispatch(registerFailure(true));
