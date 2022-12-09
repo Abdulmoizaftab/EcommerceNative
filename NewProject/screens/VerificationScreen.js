@@ -1,26 +1,33 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import React, { useState,useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios'
 
-const VerificationScreen = ({ route,navigation }) => {
+const VerificationScreen = ({ route, navigation }) => {
     const navigate = useNavigation();
     const [otp, setOtp] = useState('');
+    const [otp1, setOtp1] = useState('');
+    const [otp2, setOtp2] = useState('');
+    const [otp3, setOtp3] = useState('');
+    const [otp4, setOtp4] = useState('');
+    const [otp5, setOtp5] = useState('');
+    const [otp6, setOtp6] = useState('');
     const [error, setError] = useState(false);
     const [time, setTime] = useState(20);
     const [trigger, setTrigger] = useState(false);
-    const lastNameRef = useRef();
+    const input1 = useRef();
+    const input2 = useRef();
+    const input3 = useRef();
+    const input4 = useRef();
+    const input5 = useRef();
+    const input6 = useRef();
     const {email} = route.params;
 
-    const countdownTimer = () =>{
+    const countdownTimer = () => {
         setTime(20)
-       let interval = setInterval(() => {
-            if (time===0) {
-                clearInterval(id)
-            }else{
-                setTime(prevState=>prevState-1)
-            }
+        const interval = setInterval(() => {
+                setTime(prevState => prevState - 1)
         }, 1000);
 
         setTimeout(() => {
@@ -28,34 +35,34 @@ const VerificationScreen = ({ route,navigation }) => {
         }, 20500);
     }
 
-    const expireOtp = (emailParam) =>{
-        axios.post('http://192.168.1.26:5000/sql/OTPExpire',{email:emailParam})
-        countdownTimer()
+
+    const expireOtp = (emailParam) => {
+        axios.post('http://192.168.1.26:5000/sql/OTPExpire', { email: emailParam })
     }
 
     useEffect(() => {
-    expireOtp(email)
-    // countdownTimer()
+        expireOtp(email)
+        countdownTimer()
     }, [trigger])
 
-    const resendOTP = async() =>{
+    const resendOTP = async () => {
         await axios.post('http://192.168.1.26:5000/sql/sendOTP', { email: email })
         setError(false)
         setTrigger(!trigger)
     }
-    
-    const verifyOTP = async() =>{
-        const res = await axios.post('http://192.168.1.26:5000/sql/matchOTP', { otp:otp , email: email })
+
+    const verifyOTP = async () => {
+        const res = await axios.post('http://192.168.1.26:5000/sql/matchOTP', { otp: otp1+otp2+otp3+otp4+otp5+otp6, email: email })
         if (res.data) {
             setError(false)
-            navigation.navigate('NewPassword',{email})
+            navigation.navigate('NewPassword', { email })
         } else {
             setError(true)
         }
     }
 
     return (
-        <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
             <View>
 
                 <View style={styles.mainHeader}>
@@ -79,41 +86,171 @@ const VerificationScreen = ({ route,navigation }) => {
                     </View>
 
                     <View style={styles.codeInputParent}>
-                        <TextInput style={styles.verificationCode} maxLength={1} fo caretHidden={true} keyboardType='numeric'  onChangeText={(text)=>setOtp(prevState=>prevState.concat(text))} />
-                        <TextInput style={styles.verificationCode} maxLength={1} caretHidden={true} keyboardType='numeric'  onChangeText={(text)=>setOtp(prevState=>prevState.concat(text))}/>
-                        <TextInput style={styles.verificationCode} maxLength={1} caretHidden={true} keyboardType='numeric'  onChangeText={(text)=>setOtp(prevState=>prevState.concat(text))}/>
-                        <TextInput style={styles.verificationCode} maxLength={1} caretHidden={true} keyboardType='numeric'  onChangeText={(text)=>setOtp(prevState=>prevState.concat(text))}/>
-                        <TextInput style={styles.verificationCode} maxLength={1} caretHidden={true} keyboardType='numeric'  onChangeText={(text)=>setOtp(prevState=>prevState.concat(text))}/>
-                        <TextInput style={styles.verificationCode} maxLength={1} caretHidden={true} keyboardType='numeric'  onChangeText={(text)=>setOtp(prevState=>prevState.concat(text))}/>
+                        
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input1}
+                            value={otp1}
+                            autoFocus={true}
+                            editable={otp1.length === 1 ? false : true}
+                            //onChange={() => input2.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } }}
+                            // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } else{setOtp(otp.slice(0,-1))} }}
+                            keyboardType='numeric'
+                            onChangeText={setOtp1} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input2}
+                            value={otp2}
+                            editable={otp2.length !== 0 ? false : true}                            //onChange={() => input3.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp1(""); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
+                            // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={setOtp2} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input3}
+                            value={otp3}
+                            editable={otp3.length !== 0 ? false : true}
+                            //onChange={() => input4.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp2(""); setTimeout(() => {input2.current.focus();}, 100);  } else{ input4.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={setOtp3} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input4}
+                            value={otp4}
+                            editable={otp4.length !== 0 ? false : true}                            //onChange={() => input5.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp3(""); setTimeout(() => {input3.current.focus();}, 100);  } else{ input5.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={setOtp4} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input5} 
+                            value={otp5}
+                            editable={otp5.length !== 0 ? false : true}                            
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp4(""); setTimeout(() => {input4.current.focus();}, 100);  } else{ input6.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={setOtp5} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input6}
+                            value={otp6}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp5(""); setTimeout(() => {input5.current.focus();}, 100); } }}
+                            keyboardType='numeric'
+                            onChangeText={setOtp6} />
+                        {/* <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input1}
+                            autoFocus={true}
+                            editable={otp.length > 1 ? false : true}
+                            //onChange={() => input2.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } else{setOtp(otp.slice(0,-1))} }}
+                            keyboardType='numeric'
+                            onChangeText={(text) => 
+                                setOtp(prevState => prevState.concat(text))
+                            } />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input2}
+                            editable={otp.length > 2 ? false : true}
+                            //onChange={() => input3.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={(text) => setOtp(prevState => prevState.concat(text))} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input3}
+                            editable={otp.length > 3 ? false : true}
+                            //onChange={() => input4.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input2.current.focus();}, 100);  } else{ input4.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={(text) => setOtp(prevState => prevState.concat(text))} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input4}
+                            editable={otp.length > 4 ? false : true}
+                            //onChange={() => input5.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input3.current.focus();}, 100);  } else{ input5.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={(text) => setOtp(prevState => prevState.concat(text))} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input5} 
+                            editable={otp.length > 5 ? false : true}
+                            //onChange={() => input6.current.focus()}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input4.current.focus();}, 100);  } else{ input6.current.focus() } }}
+                            keyboardType='numeric'
+                            onChangeText={(text) => setOtp(prevState => prevState.concat(text))} />
+
+                        <TextInput
+                            style={styles.verificationCode}
+                            maxLength={1}
+                            caretHidden={false}
+                            ref={input6}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input5.current.focus();}, 100); } }}
+                            keyboardType='numeric'
+                            onChangeText={(text) => setOtp(prevState => prevState.concat(text))} /> */}
 
                     </View>
 
 
-                    <View style={{ alignItems: 'center', width: '47%',alignSelf:'center'}}>
+                    <View style={{ alignItems: 'center', width: '47%', alignSelf: 'center' }}>
                         <Text style={{ fontSize: 16, width: '100%' }} >If you didn't receive a code! </Text>
                         {
-                            time === 0?(
-                                <View style={{flexDirection:'row', alignItems:'center',marginVertical:'2%' }}>
-                                    <Text style={{color:'grey',marginHorizontal:'3%'}}>00:00</Text>
+                            time === 0 ? (
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: '2%' }}>
+                                    <Text style={{ color: 'grey', marginHorizontal: '3%' }}>00:00</Text>
                                     <TouchableOpacity onPress={resendOTP}><Text style={{ color: '#5A56E9', fontSize: 16 }}>Resend</Text></TouchableOpacity>
                                 </View>
-                            ):(
-                                time < 10?(
-                                        <View style={{flexDirection:'row', alignItems:'center',marginVertical:'2%' }}>
-                                            <Text style={{color:'grey',marginHorizontal:'3%'}}>00:0{time}</Text>
-                                            <Text style={{ color: 'darkgrey', fontSize: 16 }}>Resend</Text>
-                                        </View>
-                                ):(
-                                            <View style={{flexDirection:'row', alignItems:'center',marginVertical:'2%' }}>
-                                                <Text style={{color:'grey',marginHorizontal:'3%'}}>00:{time}</Text>
-                                                <Text style={{ color: 'darkgrey', fontSize: 16 }}>Resend</Text>
-                                            </View>
-                                    )
+                            ) : (
+                                time < 10 ? (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: '2%' }}>
+                                        <Text style={{ color: 'grey', marginHorizontal: '3%' }}>00:0{time}</Text>
+                                        <Text style={{ color: 'darkgrey', fontSize: 16 }}>Resend</Text>
+                                    </View>
+                                ) : (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: '2%' }}>
+                                        <Text style={{ color: 'grey', marginHorizontal: '3%' }}>00:{time}</Text>
+                                        <Text style={{ color: 'darkgrey', fontSize: 16 }}>Resend</Text>
+                                    </View>
+                                )
                             )
                         }
                     </View>
 
-                    <TouchableOpacity style={styles.sendEmail_btn} onPress={verifyOTP}>
+                    <TouchableOpacity style={styles.sendEmail_btn} onPress={()=>{console.log(otp1+otp2+otp3+otp4+otp5+otp6)}}>
                         <Text style={styles.sendEmail_btn_text}>Verify</Text>
                     </TouchableOpacity>
                 </View>
@@ -223,9 +360,6 @@ const styles = StyleSheet.create({
         height: 40,
         marginVertical: '8%',
         textAlign: 'center',
-        padding:0,
-       
-
-
-    }
+        padding: 0,
+    },
 })
