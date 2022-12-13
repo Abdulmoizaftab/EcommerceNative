@@ -50,7 +50,7 @@ const AddressBook = ({route}) => {
   useEffect(() => {
     setLoading(true)
     setDbAddress([])
-     axios.get(`http://192.168.1.24:5000/sql/getAddress/${currentUser.user[0].user_id}`)
+     axios.get(`http://192.168.1.9:5000/sql/getAddress/${currentUser.user[0].user_id}`)
       .then(function (response) {
         setDbAddress(response.data)
         // setSelectedValue[dbAddress[0]]
@@ -59,6 +59,7 @@ const AddressBook = ({route}) => {
       .catch(function (err) {
         console.log(err);
       })
+      //setTrigger(false)
   }, [trigger])
 
 
@@ -71,7 +72,6 @@ const AddressBook = ({route}) => {
           dbAddress?.length !== 0 ? (
             <NativeBaseProvider>
               <Radio.Group
-                
                 name="addressRadioGroup"
                 value={selectedValue}
                 onChange={(nextValue) => {
@@ -94,9 +94,8 @@ const AddressBook = ({route}) => {
 
                           <View style={styles.addressDelete}>
                             <TouchableOpacity onPress={() => {
-                              addressDelete(dispatch, element.address_id)
-                              setTrigger(!trigger)
-                              //setSelectedValue(dbAddress[dbAddress.length-1])
+                              addressDelete(dispatch, element.address_id, setTrigger)
+                              // setTrigger(true)
                             }}>
                               <AntDesign name="delete" size={30} color='#5A56E9' />
                             </TouchableOpacity>

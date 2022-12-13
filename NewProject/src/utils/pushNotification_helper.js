@@ -23,7 +23,7 @@ const GetFCMToken = async (currentUser) => {
       user_id: currentUser.user[0].user_id,
       token: fcmtoken
     }
-    await axios.post('http://192.168.1.26:5000/sql/updateNotifyToken', payload)
+    await axios.post('http://192.168.1.9:5000/sql/updateNotifyToken', payload)
   }
 
 
@@ -37,7 +37,7 @@ const GetFCMToken = async (currentUser) => {
           token: fcmtoken
         }
         console.log(fcmtoken, 'newtoken')
-        await axios.post('http://192.168.1.26:5000/sql/updateNotifyToken', payload)
+        await axios.post('http://192.168.1.9:5000/sql/updateNotifyToken', payload)
         await AsyncStorage.setItem('fcmtoken', fcmtoken);
 
 

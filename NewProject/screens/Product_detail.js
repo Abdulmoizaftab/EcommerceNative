@@ -100,7 +100,7 @@ const Product_detail = ({route}) => {
         userReview,
       };
   
-      await axios.post(`http://192.168.1.24:5000/sql/giveRating`, bodyData);
+      await axios.post(`http://192.168.1.9:5000/sql/giveRating`, bodyData);
       setRating(0);
       setUserReview('');
       setModalVisible(!modalVisible);
@@ -449,7 +449,7 @@ const Product_detail = ({route}) => {
               borderTopRightRadius: 25,
             },
           }}>
-          <BottomSheet reference={refRBSheet} prodData={paramData} />
+          <BottomSheet reference={refRBSheet} prodData={paramData} setOverlay={setOverlay} />
         </RBSheet>
       </View>
     </ScrollView>

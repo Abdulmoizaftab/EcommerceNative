@@ -78,7 +78,7 @@ const ComponentSearchBox = ({pic}) => {
         const check = async () => {
             try {
                 if (searchText.length !== null) {
-                    const result = await axios.get(`http://192.168.1.24:5000/sql/suggest/${searchText}/5`);
+                    const result = await axios.get(`http://192.168.1.9:5000/sql/suggest/${searchText}/5`);
                      if (result.data) {
                     //     result.data.map(item => {
                     //         return arr.push(item.name);

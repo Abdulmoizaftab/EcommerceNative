@@ -51,7 +51,7 @@ const sendMail = (email, name, user_id) => {
       from: 'digevoldevs@gmail.com',
       to: email,
       subject: 'For verify your email',
-      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.26:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
+      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.9:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
 
     }
     transporter.sendMail(mailOptions, function (error, info) {
@@ -66,9 +66,9 @@ const sendMail = (email, name, user_id) => {
   }
 };
 router.post("/register", (req, res) => {
-  const { username, email, password, first_name, last_name, mobile } = req.body;
+  const { username, email, password, first_name, last_name, phone } = req.body;
   req.app.locals.db.query(
-    `EXEC LoginSpUsersSelect @email='${email}'`,
+    `EXEC LoginSpUsersSelect @email='${email}', @phone='${phone}'`,
     async function (err, recordset) {
       if (err) {
         console.error(err);
@@ -136,9 +136,9 @@ router.get("/verify", (req, res) => {
 
 const auth = require("../middlewares/auth");
 router.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, phone } = req.body;
   req.app.locals.db.query(
-    `EXEC LoginSpUsersSelect @email='${email}'`,
+    `EXEC LoginSpUsersSelect @email='${email}', @phone='${phone}'`,
     async function (err, recordset) {
       if (err) {
         console.error(err);
@@ -1350,5 +1350,149 @@ router.post("/setNewPswd", async (req, res) => {
     }
     );
 });
+
+
+router.post("/loginWithAuth", (req, res) => {
+  const {username, password,first_name,last_name,email,isVerified,phone,vendor_id } = req.body;
+  req.app.locals.db.query(
+    `EXEC LoginSpUsersSelect @email='${email}', @phone='${phone}'`,
+    async function (err, recordset) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("SERVER ERROR");
+      } else {
+        if (Object.keys(recordset.recordset).length !== 0) {
+          
+          if (recordset.recordset[0].isVerified === true) {
+            const token = jwt.sign(
+              {
+                user_id: recordset.recordset[0].user_id,
+                user_name: recordset.recordset[0].username,
+              },
+              process.env.SECRET_KEY
+            );
+            req.session.user_id = recordset.recordset[0].user_id;
+            req.app.locals.db.query(
+              `EXEC LoginSpSessionSelect @id=${req.session.user_id}`,
+              function (err, recordset) {
+                if (err) {
+                  console.error(err);
+                  res.status(500).send("SERVER ERROR");
+                  return;
+                } else {
+                  if (Object.keys(recordset.recordset).length !== 0) {
+                    req.app.locals.db.query(
+                      `EXEC LoginSpSessionUpdate @id =${req.session.user_id}`,
+                      function (err, recordset) {
+                        if (err) {
+                          console.error(err);
+                          res.status(500).send("SERVER ERROR");
+                          return;
+                        }
+                      }
+                    );
+                  } else {
+                    req.app.locals.db.query(
+                      `EXEC LoginSpSessionInsert @id =${req.session.user_id}`,
+                      function (err, recordset) {
+                        if (err) {
+                          console.error(err);
+                          res.status(500).send("SERVER ERROR");
+                          return;
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+            );
+            res.status(201).json({ user: recordset.recordset, token: token });
+          } else {
+            res.status(400).json("Wrong credential");
+          }
+        } else {
+          req.app.locals.db.query(
+            `EXEC RegisterCreateUser @uname ='${username}' , @pswd ='${password}' , @fname ='${first_name}' ,@lname ='${last_name}' , @email ='${email}' , @isVerified =${isVerified} , @phone='${phone}'`,
+            function (err, recordset) {
+              if (err) {
+                console.error(err);
+                res.status(500).send("SERVER ERROR");
+                return;
+              } else {
+                    req.app.locals.db.query(
+                      `EXEC LoginSpUsersSelect @email='${email}', @phone='${phone}'`,
+                      async function (err, recordset) {
+                        if (err) {
+                          console.error(err);
+                          res.status(500).send("SERVER ERROR");
+                        }
+                        else{
+                          if (Object.keys(recordset.recordset).length !== 0) {
+          
+                            if (recordset.recordset[0].isVerified === true) {
+                              const token = jwt.sign(
+                                {
+                                  user_id: recordset.recordset[0].user_id,
+                                  user_name: recordset.recordset[0].username,
+                                },
+                                process.env.SECRET_KEY
+                              );
+                              req.session.user_id = recordset.recordset[0].user_id;
+                              req.app.locals.db.query(
+                                `EXEC LoginSpSessionSelect @id=${req.session.user_id}`,
+                                function (err, recordset) {
+                                  if (err) {
+                                    console.error(err);
+                                    res.status(500).send("SERVER ERROR");
+                                    return;
+                                  } else {
+                                    if (Object.keys(recordset.recordset).length !== 0) {
+                                      req.app.locals.db.query(
+                                        `EXEC LoginSpSessionUpdate @id =${req.session.user_id}`,
+                                        function (err, recordset) {
+                                          if (err) {
+                                            console.error(err);
+                                            res.status(500).send("SERVER ERROR");
+                                            return;
+                                          }
+                                        }
+                                      );
+                                    } else {
+                                      req.app.locals.db.query(
+                                        `EXEC LoginSpSessionInsert @id =${req.session.user_id}`,
+                                        function (err, recordset) {
+                                          if (err) {
+                                            console.error(err);
+                                            res.status(500).send("SERVER ERROR");
+                                            return;
+                                          }
+                                        }
+                                      );
+                                    }
+                                  }
+                                }
+                              );
+                              res.status(201).json({ user: recordset.recordset, token: token });
+                            } else {
+                              res.status(400).json("Wrong credential");
+                            }
+                          }
+                        }
+                      }
+                    )
+                  
+              }
+            }
+          );
+        }
+      }
+    }
+  );
+});
+
+
+
+
+
 
 module.exports = router;

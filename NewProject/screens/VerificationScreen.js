@@ -29,7 +29,7 @@ const VerificationScreen = ({ route,navigation }) => {
     }
 
     const expireOtp = (emailParam) =>{
-        axios.post('http://192.168.1.26:5000/sql/OTPExpire',{email:emailParam})
+        axios.post('http://192.168.1.9:5000/sql/OTPExpire',{email:emailParam})
         countdownTimer()
     }
 
@@ -39,13 +39,13 @@ const VerificationScreen = ({ route,navigation }) => {
     }, [trigger])
 
     const resendOTP = async() =>{
-        await axios.post('http://192.168.1.26:5000/sql/sendOTP', { email: email })
+        await axios.post('http://192.168.1.9:5000/sql/sendOTP', { email: email })
         setError(false)
         setTrigger(!trigger)
     }
     
     const verifyOTP = async() =>{
-        const res = await axios.post('http://192.168.1.26:5000/sql/matchOTP', { otp:otp , email: email })
+        const res = await axios.post('http://192.168.1.9:5000/sql/matchOTP', { otp:otp , email: email })
         if (res.data) {
             setError(false)
             navigation.navigate('NewPassword',{email})

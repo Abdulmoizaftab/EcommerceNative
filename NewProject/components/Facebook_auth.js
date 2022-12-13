@@ -1,7 +1,8 @@
 import auth from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { Alert } from 'react-native';
 
-const Facebook_auth = async() => {
+const Facebook_auth = async(authdata,setAuthdata,setDisable) => {
     try {
         // Attempt login with permissions
         const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
@@ -22,12 +23,51 @@ const Facebook_auth = async() => {
     
     // Sign-in the user with the credential
     const user= auth().signInWithCredential(facebookCredential);
-    user.then((user)=>{console.log("Facebook user data is====>",user);})
+    user.then((user)=>{
+        console.log("Facebook user data is====>",user);
+        if(user){
+            let obj={
+              username:user.additionalUserInfo.profile.name,
+              password:null,
+              first_name:user.additionalUserInfo.profile.first_name,
+              last_name:user.additionalUserInfo.profile.last_name,
+              email:user.additionalUserInfo.profile.email,
+              isVerified:true,
+              phone:user.user.phoneNumber,
+              vendor_id:null
+            }
+            setAuthdata([...authdata,obj])
+            setDisable(false)
+        }
+    })
   .catch((error)=>{console.log("Something went wrong",error);});
 } catch (error) {
     console.log("error is==>",error);
+    if(error=="User cancelled the login process"){
+        Alert.alert(
+            "Network Error",
+            "Please check your network connection.",
+            [
+          {
+            text: "Ok",
+            onPress: () => {setDisable(false)},
+          }
+        ]
+      );
     }
-    //console.log("hello==>",user);
+    else{
+        Alert.alert(
+            "Error",
+            "Something went wrong",
+            [
+          {
+            text: "Ok",
+            onPress: () => {setDisable(false)},
+          }
+        ]
+      );
+    }
+    }
 }
 
 export default Facebook_auth;

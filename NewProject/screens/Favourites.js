@@ -22,7 +22,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useDispatch, useSelector} from 'react-redux';
 import {removeFavourite} from '../redux/FavouritesRedux';
 import {getFavouriteDB, remFavouriteDB} from '../redux/apiCalls';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 const Favorites = ({navigation}) => {
   const dispatch = useDispatch();
 
@@ -37,6 +37,8 @@ const Favorites = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
   const [loader, setLoader] = useState(true);
   const [login, setLogin] = useState(false);
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
 
   const getData = async () => {
     try {
@@ -115,7 +117,9 @@ const Favorites = ({navigation}) => {
       price: item.price,
       image: item.imgs,
       user_id:currentUser?.user[0].user_id,
-      token:currentUser?.token
+      token:currentUser?.token,
+      setDisable,
+      setOverlay
     };
 
     return (
@@ -124,8 +128,17 @@ const Favorites = ({navigation}) => {
           <View style={Style.all_item_main2}>
             <View style={Style.all_item_main3}>
               <TouchableOpacity
+              disabled={disable}
                 style={Style.all_item_main4}
-                onPress={() => navigation.navigate('Product_detail', item)}>
+                onPress={() => {
+                  setDisable(true)
+                  setOverlay(true)
+                  setTimeout(() => {
+                    navigation.navigate('Product_detail', item)
+                    setOverlay(false)
+                    setDisable(false)
+                  }, 1000);
+                  }}>
                 {item.discount > 0 ? (
                   <View>
                     <Text style={Style.discount}>{item.discount}%</Text>
@@ -155,9 +168,12 @@ const Favorites = ({navigation}) => {
                 <MaterialCommunityIcons
                   name="delete-alert-outline"
                   style={Style.middle2_2_icon}
+                  disabled={disable}
                   onPress={() => {
                     if(currentUser){
-                      remFavouriteDB(dispatch, productDetail);
+                      setOverlay(true)
+                      setDisable(true)
+                      remFavouriteDB(dispatch, productDetail,setOverlay,setDisable);
                     }
                     else{
                       Alert.alert(
@@ -204,6 +220,9 @@ const Favorites = ({navigation}) => {
           <Text style={Style.head_text}>Favorites items</Text>
         </View>
       </View>
+      <Spinner
+          visible={overlay}
+        />
       {login ? (
         loader ? (
           <View style={Style.imgView}>

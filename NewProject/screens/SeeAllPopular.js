@@ -48,7 +48,7 @@ const SeeAllPopular = () => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.24:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/popular/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json)
       setIsloading(false) })
@@ -77,7 +77,7 @@ const SeeAllPopular = () => {
   const handleFilterPrice = async (asc_desc)=>{
     setIsloading(true)
     setIsRefreshing(true)
-    await fetch(`http://192.168.1.24:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -94,14 +94,14 @@ const SeeAllPopular = () => {
       setFilterRatingAsc(false)
       setFilterRatingDesc(false)
     }    
-    //setIsRefreshing(false)
+    setIsRefreshing(false)
 
   }
   
   const handleFilterRating = async (asc_desc)=>{
     setIsloading(true)
     setIsRefreshing(true)
-    await fetch(`http://192.168.1.24:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -118,7 +118,7 @@ const SeeAllPopular = () => {
       setFilterPriceAsc(false)
       setFilterPriceDesc(false)
     }    
-    //setIsRefreshing(false)
+    setIsRefreshing(false)
 
   }
 
@@ -314,6 +314,9 @@ const SeeAllPopular = () => {
       <Spinner
           visible={overlay}
         />
+        {/* {
+          console.log("hello")
+        } */}
       <FlatList
         ListHeaderComponent={
           <View>

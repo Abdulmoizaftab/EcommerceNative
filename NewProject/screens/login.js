@@ -1,25 +1,26 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert, TouchableWithoutFeedback,Keyboard,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity,Alert, TouchableWithoutFeedback,Keyboard,ActivityIndicator,ToastAndroid } from 'react-native';
 import React , {useState,useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro'
 import {useDispatch,useSelector} from 'react-redux'
-import { login } from '../redux/apiCalls'
-import Gmail_auth from '../components/Gmail_auth';
+import { login, loginAuth } from '../redux/apiCalls'
+import {Gmail_auth} from '../components/Gmail_auth';
 import Facebook_auth from '../components/Facebook_auth';
-import { loginFailure } from '../redux/LoginRedux';
+import { loginFailure, loginSuccess } from '../redux/LoginRedux';
 
 const Login = ({ navigation }) => {
 
   const [email , setEmail] = useState("")
   const [password , setPassword] = useState("")
+  const [authData,setAuthdata]=useState([{navigate:navigation}])
   const dispatch=useDispatch()
+  const [disable,setDisable]=useState(false)
   const {isFetching,error,currentUser,loadings}=useSelector((state)=>state.user)
-  //console.log();
   const handlePress=()=>{
     
     if(email && password){
-      login(dispatch,{email,password,navigation})
+      login(dispatch,{email,password,navigation,setDisable})
     }
     else{
       Alert.alert(
@@ -28,27 +29,35 @@ const Login = ({ navigation }) => {
         [
       {
         text: "Ok",
-        onPress: () => console.log("Ok"),
+        onPress: () => {setDisable(false)},
       }
     ]
     );
     }
   }
-  // useEffect(() => {
-  //   setLoader(loading)
-  // }, [loader])
-  
-  if(error===true){
-    Alert.alert(
-      "Login failed",
-      "Something went wrong",
-      [
-    {
-      text: "Ok",
-      onPress: () => dispatch(loginFailure(false)),
+  useEffect(() => {
+    if(authData.length>1){
+      loginAuth(dispatch,authData)
+      //setDisable(false)
     }
-  ]
-  );
+    else{
+      console.log("no data auth data");
+      //setDisable(false)
+    }
+  }, [authData])
+
+  if(error===true){
+    ToastAndroid.showWithGravityAndOffset(  
+      "Login failed! Something went wrong",  
+      ToastAndroid.SHORT,  
+      ToastAndroid.BOTTOM,
+      25,
+      50 
+      ); 
+      dispatch(loginFailure(false))
+      setTimeout(() => {
+        setDisable(false)
+      }, 1000);
   }
   return (
 
@@ -79,7 +88,10 @@ const Login = ({ navigation }) => {
           <TouchableOpacity style={Style.forgot_btn} onPress={()=>navigation.navigate('Forgot')}>
             <Text style={Style.forgot_btn_text}>Forgot password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Style.login_btn} onPress={handlePress}>
+          <TouchableOpacity disabled={disable} style={Style.login_btn} onPress={()=>{
+            setDisable(true)
+            handlePress();
+            }}>
             {loadings===true?
             <ActivityIndicator size='large' color="white"/>:
             <Text style={Style.login_btn_text}>Login</Text>
@@ -89,8 +101,14 @@ const Login = ({ navigation }) => {
             <Text style={Style.create_account_btn_text}>Create account instead</Text>
           </TouchableOpacity>
           <View style={Style.auth_view}>
-            <AntDesign style={Style.auth_icon} name='google' onPress={Gmail_auth}/>
-            <FontAwesome5Pro style={Style.auth_icon} name='facebook' onPress={Facebook_auth}/>
+            <AntDesign disabled={disable} style={Style.auth_icon} name='google' onPress={()=>{
+              setDisable(true)
+              Gmail_auth(authData,setAuthdata,setDisable)
+              }}/>
+            <FontAwesome5Pro disabled={disable} style={Style.auth_icon} name='facebook' onPress={()=>{
+              setDisable(true)
+              Facebook_auth(authData,setAuthdata,setDisable)
+            }}/>
           </View>
         </View>
       </View>

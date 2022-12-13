@@ -9,6 +9,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import axios from 'axios';
 import loadingGif from '../assets/fonts/images/loader.gif';
 import { Logout } from '../redux/LoginRedux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const AddToCart = ({ route, navigation }) => {
   const products = useSelector(state => state.test.products)
@@ -21,6 +22,7 @@ const AddToCart = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true)
   const [login, setLogin] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [overlay,setOverlay]=useState(false)
   const {isFetching, currentUser, loadings} = useSelector(
     state => state.user,
   );
@@ -33,7 +35,7 @@ const AddToCart = ({ route, navigation }) => {
     
     if(currentUser){
       setLogin(true)
-      axios.post(`http://192.168.1.24:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+      axios.post(`http://192.168.1.9:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
         headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
@@ -56,7 +58,7 @@ const AddToCart = ({ route, navigation }) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.24:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:currentUser.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${currentUser.token}` 
                             }
@@ -104,6 +106,9 @@ const AddToCart = ({ route, navigation }) => {
 
   return (
     <View style={{flex:1}}>
+      <Spinner
+          visible={overlay}
+        />
     {login ?
       (loader ? (
         <View style={Style.imgView}>
@@ -128,7 +133,7 @@ const AddToCart = ({ route, navigation }) => {
           </View>
         </View>
 
-        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} user_id={currentUser.user[0].user_id} token={currentUser.token}/>
+        <AddToCart_Comp products={dbProds} trigger={trigger} setTrigger={setTrigger} loading={loading} user_id={currentUser.user[0].user_id} token={currentUser.token} setOverlay={setOverlay}/>
         {
           quantity !== 0 && total !== 0 ? (
             <>

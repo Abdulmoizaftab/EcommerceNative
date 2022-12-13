@@ -9,12 +9,13 @@ import {addToCart} from '../redux/apiCalls'
 import { useNavigation } from '@react-navigation/native';
 
 
-const BottomSheet = ({ reference, prodData }) => {
+const BottomSheet = ({ reference, prodData, setOverlay}) => {
   
   const navigation=useNavigation();
   const dispatch = useDispatch()
   const [qty, setQty] = useState(1);
   const [product, setProduct] = useState(prodData);
+  const [disable,setDisable]=useState(false)
   const reduxDataProd = useSelector(state => state.cart.products);
   const reduxDataQty = useSelector(state => state.cart.quantity);
   const {isFetching, error, currentUser, loadings} = useSelector(
@@ -25,7 +26,7 @@ const BottomSheet = ({ reference, prodData }) => {
   
   // useEffect(()=>{
 
-  //   axios.post('http://192.168.1.24:5000/addCartItem', data={})
+  //   axios.post('http://192.168.1.9:5000/addCartItem', data={})
   //   .then()
   //   .catch()
   //   console.log('getting fro redux',reduxDataProd,reduxDataQty)
@@ -33,19 +34,21 @@ const BottomSheet = ({ reference, prodData }) => {
 
 
   const onAddCart = () => {
+    setOverlay(true)
     reference.current.close();
     const payload = {
       token:currentUser.token,
       user_id:currentUser.user[0].user_id,
       product_id: product.product_id,
-      quantity:qty
+      quantity:qty,
+      
     }
 
 
     console.log(payload)
 
       //  dispatch(addProduct(payload))
-      addToCart(dispatch,payload)
+      addToCart(dispatch,payload,setOverlay,navigation,setDisable)
   }
 
   return (
@@ -67,6 +70,7 @@ const BottomSheet = ({ reference, prodData }) => {
             leftButtonBackgroundColor='#E9565A' />
         </View>
         <FlatButton text='Add To Cart' onPress={()=>{
+          setDisable(true)
           if(currentUser){
             onAddCart();
           }
