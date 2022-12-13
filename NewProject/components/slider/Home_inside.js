@@ -15,7 +15,8 @@ import { NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
-import {requestUserPermission , NotificationListener} from '../../src/utils/pushNotification_helper'
+import {requestUserPermission , NotificationListener} from '../../src/utils/pushNotification_helper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 // import PushNotification , {Importance} from "react-native-push-notification";
 
@@ -27,6 +28,8 @@ const Home_inside = ({ navigate }) => {
     requestUserPermission(currentUser);
     NotificationListener();
   }
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
 
 
 
@@ -49,11 +52,25 @@ const Home_inside = ({ navigate }) => {
     await fetch(`http://192.168.1.10:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
-      .catch((error) => {console.error(error)
-        if(error == "TypeError: Network request failed"){
-          ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
-        }}
-      )
+      .catch((error) => {
+        if(error=="TypeError: Network request failed"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+        else{
+          ToastAndroid.showWithGravityAndOffset(  
+            "Something went wrong",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }})
   }
 
   useEffect(() => {
@@ -88,24 +105,24 @@ const Home_inside = ({ navigate }) => {
     );
   }
 
-  const addToCart = async (productData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-      else {
-        let cartItem = [];
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const addToCart = async (productData) => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //     else {
+  //       let cartItem = [];
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
   // const removeSpecificProduct = async (productData) => {
   //   try {
@@ -137,33 +154,33 @@ const Home_inside = ({ navigate }) => {
 
 
 
-  const removeValue = async () => {
-    try {
-      await AsyncStorage.removeItem('@cartItems')
-    } catch (e) {
-      // remove error
-    }
-    console.log('Done.')
-  }
-///==============================================
-  const addToFav = (productDetail) => {
-    try {
+//   const removeValue = async () => {
+//     try {
+//       await AsyncStorage.removeItem('@cartItems')
+//     } catch (e) {
+//       // remove error
+//     }
+//     console.log('Done.')
+//   }
+// ///==============================================
+//   const addToFav = (productDetail) => {
+//     try {
       
-      // alert("added")
-      dispatch(addFavourite(productDetail));
-    } catch (error) {
-      alert(error);
-    }
-  };
+//       // alert("added")
+//       dispatch(addFavourite(productDetail));
+//     } catch (error) {
+//       alert(error);
+//     }
+//   };
 
-  const removeFav = (productDetail) => {
-    try {
-      // alert("remove")
-      dispatch(removeFavourite(productDetail));
-    } catch (error) {
-      alert(error);
-    }
-  };
+//   const removeFav = (productDetail) => {
+//     try {
+//       // alert("remove")
+//       dispatch(removeFavourite(productDetail));
+//     } catch (error) {
+//       alert(error);
+//     }
+//   };
 
 
 
@@ -201,7 +218,15 @@ const Home_inside = ({ navigate }) => {
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)} activeOpacity={0.7}>
+          <TouchableOpacity style={Style.all_item_main4} disabled={disable} onPress={() => {
+          setDisable(true)
+          setOverlay(true)
+          setTimeout(() => {
+            navigate.navigate('Product_detail', element.item)
+            setOverlay(false)
+            setDisable(false)
+          }, 1000);
+          }} activeOpacity={0.7}>
             <View style={{borderBottomWidth: 1, paddingVertical:"3%",width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
 
             <Image style={Style.all_item_main4_img}
@@ -282,13 +307,17 @@ const Home_inside = ({ navigate }) => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setHead_Comp(true);
-    setlimit(4);
+    //setlimit(4);
+    getdata()
     setIsRefreshing(false)
     setToastErr(!toastErr)
   }
   
   return (
     <View style={Style.all_item_main}>
+      <Spinner
+          visible={overlay}
+        />
       <FlatList
       ListHeaderComponent={
         <View style={{flex:1,width:"100%"}}>
@@ -306,15 +335,13 @@ const Home_inside = ({ navigate }) => {
         <VendorSlider popular={head_comp} setPopular={setHead_Comp}/>
         <Popuplar_slider navigate={navigate} popular={head_comp} setPopular={setHead_Comp}/>
         <View style={Style.middle2}>
-
-
         <View style={Style.middle2_1}>
           <Text style={Style.middle2_1_text1}>All Items</Text>
         </View>
         <TouchableOpacity style={Style.middle2_2} activeOpacity={0.6} onPress={()=>navigate.navigate("SeeAllProducts")}>
           <Text style={Style.middle2_text1}>See All</Text>
           <Feather name="arrow-right" style={Style.middle2_2_icon} />
-        </TouchableOpacity> 
+        </TouchableOpacity>
         </View>
         </View>
       }

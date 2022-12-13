@@ -23,7 +23,8 @@ import axios from 'axios';
 
 const ProfileScreen = ({navigation}) => {
   const [login, setLogin] = useState(false);
-  const [user,setUser]=useState([])
+  const [user,setUser]=useState([]);
+  const [disable,setDisable]=useState(false)
   const {isFetching, error, currentUser, loadings} = useSelector(
     state => state.user,
   );
@@ -107,6 +108,7 @@ const ProfileScreen = ({navigation}) => {
             <Text style={styles.userEmail}>{user[0].email}</Text>
             <Text style={styles.userEmail}>{user[0].phone}</Text>
             <TouchableOpacity
+            disabled={disable}
               activeOpacity={0.9}
               style={{marginVertical: '2%', width: '30%',backgroundColor: '#5A56E9',borderRadius: 10,alignSelf: 'center',
               padding:"2%",alignItems:"center"}}
@@ -114,7 +116,8 @@ const ProfileScreen = ({navigation}) => {
                 console.log('logout');
                 dispatch(loginStart())
                 try {
-                  const res= await axios.post('http://192.168.1.10:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
+                  setDisable(true)
+                  const res= await axios.post('http://192.168.1.9:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
                     headers: {
                       'Authorization': `Bearer ${currentUser.token}` 
                     }
@@ -122,6 +125,7 @@ const ProfileScreen = ({navigation}) => {
                   console.log("log res==>",res.data)
                   dispatch(Logout())
                   navigation.navigate('TabNav')
+                  setDisable(false)
                 } catch (error) {
                   Alert.alert(
                     "Logout failed",

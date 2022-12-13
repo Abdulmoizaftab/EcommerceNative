@@ -6,8 +6,9 @@ import pic3 from '../../assets/fonts/images/pic3.png'
 import { requestUserPermission, NotificationListener } from '../../src/utils/pushNotification_helper'
 import { useSelector } from 'react-redux';
 import { Dimensions, Text, View, Image } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
+//import Carousel from 'react-native-reanimated-carousel';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Carousel from 'react-native-snap-carousel';
 
 
 //const { width, heigth } = Dimensions.get('window')
@@ -120,47 +121,47 @@ const CarouselSlider = () => {
     pic3,
   ]);
 
-
+//snap carousel dekhna hai
   return (
 
-    <View style={{ flex: 1, alignItems: 'center', marginTop: '2%' }}>
-      <GestureHandlerRootView>
-        <Carousel
-          style={{ borderRadius: 10 , elevation:5,shadowColor:"#333" , borderWidth:1,borderColor:'grey' }}
-          loop
-          width={width - 18}
-          height={width / 2}
-          autoPlay={true}
-          data={images}
-          scrollAnimationDuration={300}
-          autoPlayInterval={2000}
-          renderItem={({ index }) => (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column'
-              }}
-            >
-              <Image source={images[index]} style={{ width: '100%', resizeMode: 'contain' }}></Image>
-              <View style={{ flexDirection: 'row', position: 'absolute', bottom: 8, width: '100%', justifyContent: 'center' , alignItems:'center' ,elevation:20}}>
-                {
-                  images.map((elem,ind)=>(
-                    ind===index ?(
-                      <View style={{ color: 'black', backgroundColor: "#5a56e9", width: 14, height: 14, borderRadius: 50, borderWidth: 1, marginHorizontal: '1%' }} key={elem}></View>
+    // <View style={{ flex: 1, alignItems: 'center', marginTop: '2%' }}>
+    //     <Carousel
+    //       style={{ borderRadius: 10 , elevation:5,shadowColor:"#333" , borderWidth:1,borderColor:'grey' }}
+    //       loop
+    //       width={width - 18}
+    //       height={width / 2}
+    //       autoPlay={true}
+    //       data={images}
+    //       scrollAnimationDuration={300}
+    //       autoPlayInterval={2000}
+    //       renderItem={({ index }) => (
+    //         <View
+    //           style={{
+    //             flex: 1,
+    //             justifyContent: 'center',
+    //             alignItems: 'center',
+    //             flexDirection: 'column'
+    //           }}
+    //         >
+    //           <Image source={images[index]} style={{ width: '100%', resizeMode: 'contain' }}></Image>
+    //           <View style={{ flexDirection: 'row', position: 'absolute', bottom: 8, width: '100%', justifyContent: 'center' , alignItems:'center' ,elevation:20}}>
+    //             {
+    //               images.map((elem,ind)=>(
+    //                 ind===index ?(
+    //                   <View style={{ color: 'black', backgroundColor: "#5a56e9", width: 14, height: 14, borderRadius: 50, borderWidth: 1, marginHorizontal: '1%' }} key={elem}></View>
 
-                    ):(
-                      <View style={{ color: 'black', backgroundColor: "white", width: 10, height: 10, borderRadius: 50, borderWidth: 1, marginHorizontal: '1%' }} key={elem}></View>
-                    )
-                  ))
-                }
-              </View>
-            </View>
-          )}
-        />
-      </GestureHandlerRootView>
-    </View>
+    //                 ):(
+    //                   <View style={{ color: 'black', backgroundColor: "white", width: 10, height: 10, borderRadius: 50, borderWidth: 1, marginHorizontal: '1%' }} key={elem}></View>
+    //                 )
+    //               ))
+    //             }
+    //           </View>
+    //         </View>
+    //       )}
+    //     />
+    // </View>
+    <>
+    </>
   )
 }
 

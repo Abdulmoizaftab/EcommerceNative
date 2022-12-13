@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ActivityIndicator,ToastAndroid } from 'react-native';
 import React, { useEffect, useState,useRef } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,6 +18,7 @@ import SortBottomSheet from '../components/SortBottomSheet';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch,useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../redux/FavouritesRedux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const SeeAllPopular = () => {
@@ -30,7 +31,7 @@ const SeeAllPopular = () => {
 
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(20);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsloading] = useState(false);
   const [IsRefreshing, setIsRefreshing] = useState(false);
   const [filterPriceAsc, setFilterPriceAsc] = useState(false);
   const [filterPriceDesc, setFilterPriceDesc] = useState(false);
@@ -39,23 +40,44 @@ const SeeAllPopular = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const refRBSheet = useRef();
 
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
+
 
 
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.10:5000/sql/popular/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/popular/${limit}`)
       .then((response) => response.json())
-      .then((json) => { setProducts(json) })
-      .then(check=>  setIsloading(false))
-      .catch((error) => console.error(error))
+      .then((json) => { setProducts(json)
+      setIsloading(false) })
+      .catch((error) => {console.error(error)
+        if(error=="AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+        else{
+          ToastAndroid.showWithGravityAndOffset(  
+            "Something went wrong",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }})
 
   }
 
   const handleFilterPrice = async (asc_desc)=>{
     setIsloading(true)
-    //setIsRefreshing(true)
-    await fetch(`http://192.168.1.10:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
+    setIsRefreshing(true)
+    await fetch(`http://192.168.1.9:5000/sql/filterPopularByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -72,14 +94,14 @@ const SeeAllPopular = () => {
       setFilterRatingAsc(false)
       setFilterRatingDesc(false)
     }    
-    //setIsRefreshing(false)
+    setIsRefreshing(false)
 
   }
   
   const handleFilterRating = async (asc_desc)=>{
     setIsloading(true)
-    //setIsRefreshing(true)
-    await fetch(`http://192.168.1.10:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
+    setIsRefreshing(true)
+    await fetch(`http://192.168.1.9:5000/sql/filterPopularByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -96,7 +118,7 @@ const SeeAllPopular = () => {
       setFilterPriceAsc(false)
       setFilterPriceDesc(false)
     }    
-    //setIsRefreshing(false)
+    setIsRefreshing(false)
 
   }
 
@@ -199,7 +221,15 @@ const SeeAllPopular = () => {
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail', element.item)}>
+          <TouchableOpacity style={Style.all_item_main4} disabled={disable} onPress={() => {
+              setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigate.navigate('Product_detail', element.item)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+              }}>
           <View style={{ borderBottomWidth: 1,paddingVertical:"3%", width: '100%', borderBottomColor: "#ACACAC", alignItems: 'center', justifyContent: 'center' }}>
             <Image style={Style.all_item_main4_img}
               resizeMode="cover"
@@ -281,7 +311,12 @@ const SeeAllPopular = () => {
 
   return (
     <View style={Style.all_item_main}>
-      {console.log("jkh")}
+      <Spinner
+          visible={overlay}
+        />
+        {/* {
+          console.log("hello")
+        } */}
       <FlatList
         ListHeaderComponent={
           <View>

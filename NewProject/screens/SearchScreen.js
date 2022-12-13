@@ -7,6 +7,7 @@ import SkeletonJs from '../components/Skeleton'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider } from 'native-base';
 import SearchBar from '../components/SearchBar';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const SearchScreen = ({route}) => {
 
@@ -16,12 +17,14 @@ const SearchScreen = ({route}) => {
   const [limit, setlimit] = useState(20);
   const [isLoading, setIsloading] = useState(true);
   const [IsRefreshing, setIsRefreshing] = useState(false);
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
 
 
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.10:5000/sql/suggest/${searchText}/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/suggest/${searchText}/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .then(check=>  setIsloading(false))
@@ -41,8 +44,8 @@ const SearchScreen = ({route}) => {
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    // setlimit(6);
-    getdata();
+    //setlimit(6);
+    getdata()
     setIsRefreshing(false)
   }
 
@@ -81,7 +84,15 @@ const SearchScreen = ({route}) => {
     return (
       <View style={Style.all_item_main2}>
       <View style={Style.all_item_main3}>
-        <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail',element.item)} activeOpacity={0.7}>
+        <TouchableOpacity style={Style.all_item_main4} disabled={disable} onPress={() => {
+              setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigate.navigate('Product_detail', element.item)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+              }} activeOpacity={0.7}>
           <View style={{borderBottomWidth: 1, paddingVertical:"3%",width:'100%',borderBottomColor: "#ACACAC" ,alignItems:'center',justifyContent:'center'}}>
 
           <Image style={Style.all_item_main4_img}
@@ -157,6 +168,9 @@ const SearchScreen = ({route}) => {
 
   return (
     <View style={Style.all_item_main}>
+      <Spinner
+          visible={overlay}
+        />
       <FlatList
       ListHeaderComponent={
         <View>

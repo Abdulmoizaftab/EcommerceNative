@@ -17,53 +17,54 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Logout } from '../redux/LoginRedux';
 
 const SearchBar = () => {
-  //const [searchText , setSearchText] = useState("");
-  //const [filterData,setFilterData]=useState([]);
+    //const [searchText , setSearchText] = useState("");
+    //const [filterData,setFilterData]=useState([]);
+    
+    const navigate = useNavigation()
+    
+    // useEffect(() => {
+    // var arr=[]
+    // const check =async ()=>{
+    //     try{
+    //       if(searchText.length >= 1){
+    //         const result= await axios.get(`http://192.168.1.9:5000/sql/suggest/${searchText}/5`);
+    //       if (result.data) {
+    //         result.data.map(item => {
+    //           return arr.push(item);
+    //         })
+    //         setFilterData(arr)
+    //       }
+    //       else{
+    //         console.log("No data");
+    //       }
+    //       }
+    //     }
+    //     catch(error){
+    //       console.log("error");
+    //     }
+  
+    //   }
+    //   check()
+      
+    // }, [searchText])
+    // const removeValue = async () => {
+    //   try {
+    //     await AsyncStorage.removeItem('@searchItems')
+    //   } catch (e) {
+    //     // remove error
+    //   }
+    //   console.log('Done.')
+    // }
 
-  const navigate = useNavigation()
-
-  // useEffect(() => {
-  // var arr=[]
-  // const check =async ()=>{
-  //     try{
-  //       if(searchText.length >= 1){
-  //         const result= await axios.get(`http://192.168.1.10:5000/sql/suggest/${searchText}/5`);
-  //       if (result.data) {
-  //         result.data.map(item => {
-  //           return arr.push(item);
-  //         })
-  //         setFilterData(arr)
-  //       }
-  //       else{
-  //         console.log("No data");
-  //       }
-  //       }
-  //     }
-  //     catch(error){
-  //       console.log("error");
-  //     }
-
-  //   }
-  //   check()
-
-  // }, [searchText])
-  // const removeValue = async () => {
-  //   try {
-  //     await AsyncStorage.removeItem('@searchItems')
-  //   } catch (e) {
-  //     // remove error
-  //   }
-  //   console.log('Done.')
-  // }
-
+  //const navigate = useNavigation()
   const { isFetching, error, currentUser } = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
-  const check_session = async () => {
-    console.log(currentUser)
-    try {
-      if (currentUser) {
-        const res = await axios.post('http://192.168.1.10:5000/sql/session', { user_id: currentUser.user[0].user_id }, {
+    const check_session=async()=>{
+      console.log(currentUser)
+      try {
+      if(currentUser){
+        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:currentUser.user[0].user_id},{
           headers: {
             'Authorization': `Bearer ${currentUser.token}`
           }

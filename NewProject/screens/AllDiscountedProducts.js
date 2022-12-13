@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
+  ToastAndroid
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,6 +16,7 @@ import SkeletonJs from '../components/Skeleton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeBaseProvider} from 'native-base';
 import SearchBar from '../components/SearchBar';
+import Spinner from 'react-native-loading-spinner-overlay';
 import {addFavourite, removeFavourite} from '../redux/FavouritesRedux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
@@ -26,18 +28,41 @@ const AllDiscountedProducts = () => {
   const navigate = useNavigation();
   const [products, setProducts] = useState([]);
   const [limit, setlimit] = useState(20);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoading, setIsloading] = useState(false);
   const [IsRefreshing, setIsRefreshing] = useState(false);
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
   const dispatch = useDispatch();
 
   const getDisdata = async () => {
-    setIsloading(true);
-    await fetch(`http://192.168.1.10:5000/sql/allDiscountProducts/${limit}`)
+     setIsloading(true);
+    await fetch(`http://192.168.1.9:5000/sql/allDiscountProducts/${limit}`)
       .then(response => response.json())
       .then(json => {
         setProducts(json);
+        setIsloading(false)
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error(error)
+        if(error=="AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+        else{
+          ToastAndroid.showWithGravityAndOffset(  
+            "Something went wrong",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+      });
   };
 
   useEffect(() => {
@@ -45,14 +70,14 @@ const AllDiscountedProducts = () => {
   }, [limit]);
 
   const onEndReached = () => {
-    setlimit(limit + 4);
+    setlimit(limit + 8);
     setIsloading(false);
   };
 
   const onRefresh = () => {
     setIsRefreshing(true);
     setProducts([]);
-    // setlimit(6);
+    //setlimit(6);
     getDisdata()
     setIsRefreshing(false);
   };
@@ -115,8 +140,18 @@ const AllDiscountedProducts = () => {
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
           <TouchableOpacity
+          disabled={disable}
+          activeOpacity={0.7}
             style={Style.all_item_main4}
-            onPress={() => navigate.navigate('Product_detail', element.item)}>
+            onPress={() => {
+              setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigate.navigate('Product_detail', element.item)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+              }}>
             <View>
               <Text style={Style.discount}>
                 {element.item.discount_percent * 100}%
@@ -172,6 +207,9 @@ const AllDiscountedProducts = () => {
 
   return (
     <View style={Style.all_item_main}>
+      <Spinner
+          visible={overlay}
+        />
       <FlatList
         ListHeaderComponent={
           <View >

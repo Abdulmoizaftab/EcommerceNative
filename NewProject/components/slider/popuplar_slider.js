@@ -6,7 +6,7 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
-  ActivityIndicator,
+  ToastAndroid
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Feather from 'react-native-vector-icons/Feather';
@@ -16,6 +16,7 @@ import { NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavourite, removeFavourite } from '../../redux/FavouritesRedux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Popuplar_slider = ({ navigate, popular, setPopular }) => {
 
@@ -25,6 +26,10 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
   const [cardLoader, setCardLoader] = useState(false)
 
 
+  const [overlay,setOverlay]=useState(false);
+  const [disable,setDisable]=useState(false);
+
+  
   const favouriteState = useSelector(state => state.favourite)
   const favArray = favouriteState.favourites;
 
@@ -35,17 +40,33 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
     setIsloading(true)
     await fetch(`http://192.168.1.10:5000/sql/popular/${limit}`)
       .then((response) => response.json())
-      .then((json) => {
-        setProducts(json)
-        setIsloading(false)
-      })
-      .catch((error) => console.error(error))
-      
-    }
-    
-    useEffect(() => {
-      getdata()
-      setPopular(false)
+      .then((json) => { setProducts(json) 
+        setIsloading(false)})
+      .catch((error) => {
+        if(error=="TypeError: Network request failed"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+        else{
+          ToastAndroid.showWithGravityAndOffset(  
+            "Something went wrong",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }})
+
+  }
+
+  useEffect(() => {
+    getdata()
+    setPopular(false)
   }, [popular]);
 
 
@@ -76,6 +97,9 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
 
   return (
     <View style={Styles.main}>
+      <Spinner
+          visible={overlay}
+        />
       <View style={Styles.middle2}>
         <View style={Styles.middle2_1}>
           <Text style={Styles.middle2_1_text1}>Popular Items</Text>
@@ -97,25 +121,26 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
             ) : (products?.map((element, key) =>
 
 
-
-
-            (
-              <TouchableOpacity key={key} activeOpacity={0.7} onPress={() => {
-                navigate.navigate('Product_detail',element)
-                // setCardLoader(true)
-                // setTimeout(() => {
-                //   setCardLoader(false)
-                // }, 2000);
-              }}>
-                <View style={Styles.ProdCard}>
-                  <View style={Styles.imgContainer}>
-                    <Image
-                      style={Styles.cardImg}
-                      source={{
-                        uri: element.imgs,
-                      }}></Image>
-                  </View>
-
+      
+      
+      (
+        <TouchableOpacity key={key} disabled={disable} activeOpacity={0.7} onPress={() => {
+          setDisable(true)
+          setOverlay(true)
+          setTimeout(() => {
+            navigate.navigate('Product_detail', element)
+            setOverlay(false)
+            setDisable(false)
+          }, 1000);
+          }}>
+            <View style={Styles.ProdCard}>
+              <View style={Styles.imgContainer}>
+                <Image
+                  style={Styles.cardImg}
+                  source={{
+                    uri: element.imgs,
+                  }}></Image>
+              </View>
                   <View style={Styles.cardDesc}>
                     {
                       cardLoader ? (
@@ -137,20 +162,18 @@ const Popuplar_slider = ({ navigate, popular, setPopular }) => {
                     }
 
                   </View>
-
-
-
-
-
-                </View>
-                {/* / </View> */}
-              </TouchableOpacity>
-            )))
-          }
+              </View>
+          </TouchableOpacity>
+      )))
+    }
         </View>
       </ScrollView >
     </View >
+    
   );
+
+
+
 };
 
 const Styles = StyleSheet.create({

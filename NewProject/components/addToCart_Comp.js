@@ -10,11 +10,13 @@ import { deleteProductTest, addProductTest, resetCartTest, modifyCartTest } from
 import { cartModificationDecrease, cartModificationIncrease,deleteFromCart } from '../redux/apiCalls';
 import loadingGif from '../assets/fonts/images/loader.gif'
 
-const AddToCart_Comp = ({products,trigger,setTrigger,loading , user_id , token}) => {
+//cart ki addition realtime masla kari hai. baki loading set hai
+const AddToCart_Comp = ({products,trigger,setTrigger,loading , user_id , token, setOverlay}) => {
   const dispatch = useDispatch()
   const [error, setError] = useState(false)
   const [dbProduct, setDbProduct] = useState([])
   const [swipeClose, setSwipeClose] = useState(true)
+  const [disable,setDisable]=useState(false)
   
   const reduxData = useSelector(state => state.cart.products);
   const reduxDataTest = useSelector(state => state.test.products);
@@ -41,17 +43,19 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading , user_id , token})
   }
 
   const decreaseQuantity = (element) => {
+    setOverlay(true)
     const payload = {
       user_id,
       product_id : element.product_id
     }
     // dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product_id }))
     dispatch(modifyCartTest({ quantity: element.quantity - 1, product_id: element.product_id }))
-    cartModificationDecrease(dispatch, payload);
+    cartModificationDecrease(dispatch, payload,setOverlay,setDisable);
     setTrigger(!trigger)
   }
   
   const increaseQuantity = (element) => {
+    setOverlay(true)
     const payload = {
       user_id,
       token,
@@ -60,7 +64,7 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading , user_id , token})
     }
     // dispatch(modifyCart({ qty: element.qty - 1, product_id: element.product_id }))
     dispatch(modifyCartTest({ quantity: element.quantity + 1, product_id: element.product_id }))
-    cartModificationIncrease(dispatch, payload);
+    cartModificationIncrease(dispatch, payload,setOverlay,setDisable);
     setTrigger(!trigger)
   }
   
@@ -190,7 +194,11 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading , user_id , token})
                         ) : (
                           <View style={Style.counter_btn}>
                             <TouchableOpacity
-                              onPress={()=>decreaseQuantity(element)}
+                            disabled={disable}
+                              onPress={()=>{
+                                setDisable(true)
+                                decreaseQuantity(element);
+                              }}
                             >
                               <Text style={Style.counter_btn_text}>-</Text>
                             </TouchableOpacity>
@@ -199,7 +207,11 @@ const AddToCart_Comp = ({products,trigger,setTrigger,loading , user_id , token})
                         <Text style={Style.counter_variable}>{element.quantity}</Text>
                         <View style={Style.counter_btn}>
                           <TouchableOpacity
-                            onPress={() => increaseQuantity(element)}
+                            disabled={disable}
+                            onPress={() => {
+                              setDisable(true)
+                              increaseQuantity(element);
+                            }}
                           >
                             <Text style={Style.counter_btn_text}>+</Text>
                           </TouchableOpacity>

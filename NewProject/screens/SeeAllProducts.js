@@ -10,6 +10,7 @@ import { NativeBaseProvider } from 'native-base';
 import SearchBar from '../components/SearchBar';
 import RBSheet from "react-native-raw-bottom-sheet";
 import SortBottomSheet from '../components/SortBottomSheet';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
@@ -28,12 +29,13 @@ const SeeAllProducts = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(false);
   const refRBSheet = useRef();
 
-
+  const [overlay,setOverlay]=useState(false)
+  const [disable,setDisable]=useState(false)
 
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.10:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .then(check=>  setIsloading(false))
@@ -43,8 +45,8 @@ const SeeAllProducts = () => {
 
   const handleFilterPrice = async (asc_desc)=>{
     setIsloading(true)
-    //setIsRefreshing(true)
-    await fetch(`http://192.168.1.10:5000/sql/filterAllByPrice/${asc_desc}/${limit}`)
+    setIsRefreshing(true)
+    await fetch(`http://192.168.1.9:5000/sql/filterAllByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -61,13 +63,13 @@ const SeeAllProducts = () => {
       setFilterRatingAsc(false)
       setFilterRatingDesc(false)
     }    
-    //setIsRefreshing(false)
+    setIsRefreshing(false)
   }
   
   const handleFilterRating = async (asc_desc)=>{
     setIsloading(true)
-    //setIsRefreshing(true)
-    await fetch(`http://192.168.1.10:5000/sql/filterAllByRating/${asc_desc}/${limit}`)
+    setIsRefreshing(true)
+    await fetch(`http://192.168.1.9:5000/sql/filterAllByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -84,7 +86,7 @@ const SeeAllProducts = () => {
       setFilterPriceAsc(false)
       setFilterPriceDesc(false)
     }    
-    //setIsRefreshing(false)
+    setIsRefreshing(false)
   }
 
   useEffect(() => {
@@ -125,31 +127,39 @@ const SeeAllProducts = () => {
     );
   }
 
-  const addToCart = async (productData) => {
-    try {
-      let asyncData = await AsyncStorage.getItem('@cartItems');
-      asyncData = JSON.parse(asyncData);
-      if (asyncData) {
-        let cartItem = asyncData;
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-      else {
-        let cartItem = [];
-        cartItem.push(productData);
-        await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
-      }
-    } catch (error) {
-      alert('Something went wrong');
-    }
-  }
+  // const addToCart = async (productData) => {
+  //   try {
+  //     let asyncData = await AsyncStorage.getItem('@cartItems');
+  //     asyncData = JSON.parse(asyncData);
+  //     if (asyncData) {
+  //       let cartItem = asyncData;
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //     else {
+  //       let cartItem = [];
+  //       cartItem.push(productData);
+  //       await AsyncStorage.setItem('@cartItems', JSON.stringify(cartItem));
+  //     }
+  //   } catch (error) {
+  //     alert('Something went wrong');
+  //   }
+  // }
 
   const renderItem = (element) => {
 
     return (
       <View style={Style.all_item_main2}>
         <View style={Style.all_item_main3}>
-          <TouchableOpacity style={Style.all_item_main4} onPress={() => navigate.navigate('Product_detail', element.item)}>
+          <TouchableOpacity style={Style.all_item_main4} disabled={disable} onPress={() => {
+              setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigate.navigate('Product_detail', element.item)
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+              }}>
             <View style={{ borderBottomWidth: 1,paddingVertical:"3%", width: '100%', borderBottomColor: "#ACACAC", alignItems: 'center', justifyContent: 'center' }}>
               <Image style={Style.all_item_main4_img}
                 resizeMode="cover"
@@ -217,6 +227,9 @@ const SeeAllProducts = () => {
 
   return (
     <View style={Style.all_item_main}>
+      <Spinner
+          visible={overlay}
+        />
       <FlatList
         ListHeaderComponent={
           <View>
@@ -246,7 +259,6 @@ const SeeAllProducts = () => {
                 draggableIcon: {
                   backgroundColor: "#000",
                   width: 75
-
                 },
                 container: {
                   borderTopLeftRadius: 25,

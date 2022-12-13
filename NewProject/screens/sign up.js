@@ -82,7 +82,7 @@ const Sign_up = ({navigation}) => {
   }
   if(error===true){
     Alert.alert(
-      "Login failed",
+      "Registration failed",
       "Something went wrong",
       [
     {

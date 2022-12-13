@@ -11,6 +11,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  ToastAndroid
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -22,6 +23,7 @@ import FlatButton from '../components/Button';
 import StarRating from 'react-native-star-rating-widget';
 import {StarRatingDisplay} from 'react-native-star-rating-widget';
 import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -83,20 +85,60 @@ const Product_detail = ({route}) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
+  const [reviewbtn,setReviewBtn]=useState(false)
+  const [overlay,setOverlay]=useState(false)
 
-  const postReview = () => {
-    const bodyData = {
-      user_id:currentUser.user[0].user_id,
-      product_id: paramData.product_id,
-      userRating: rating,
-      userReview,
-    };
-
-    axios.post(`http://192.168.1.10:5000/sql/giveRating`, bodyData);
-    setRating(0);
-    setUserReview('');
-    setModalVisible(!modalVisible);
-    console.log(bodyData);
+  const postReview =async () => {
+    try {
+      if(userReview && rating){
+        setReviewBtn(true)
+        setOverlay(true)
+        const bodyData = {
+        user_id:currentUser.user[0].user_id,
+        product_id: paramData.product_id,
+        userRating: rating,
+        userReview,
+      };
+  
+      await axios.post(`http://192.168.1.9:5000/sql/giveRating`, bodyData);
+      setRating(0);
+      setUserReview('');
+      setModalVisible(!modalVisible);
+      setOverlay(false)
+      setReviewBtn(false)
+    }
+    else{
+      ToastAndroid.showWithGravityAndOffset(  
+        "Both fields required",  
+        ToastAndroid.LONG,  
+        ToastAndroid.BOTTOM,
+        25,
+        50 
+      );
+    }
+      // //console.log(bodyData);
+      //alert("hh")
+    } catch (error) {
+      console.log("erororoor",error)
+      if(error=="AxiosError: Network Error"){
+        ToastAndroid.showWithGravityAndOffset(  
+          "No network connectivity",  
+          ToastAndroid.LONG,  
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        ); 
+      }
+      else{
+        ToastAndroid.showWithGravityAndOffset(  
+          "Something went wrong",  
+          ToastAndroid.LONG,  
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        ); 
+      }
+    }
   };
 
   const addToFav = productDetail => {
@@ -116,6 +158,9 @@ const Product_detail = ({route}) => {
 
   return (
     <ScrollView scrollEnabled={true}>
+      <Spinner
+          visible={overlay}
+        />
       <View style={Style.container}>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Icon
@@ -276,11 +321,13 @@ const Product_detail = ({route}) => {
                     numberOfLines={4}
                     value={userReview}
                     onChangeText={setUserReview}
+                    maxLength={50}
                   />
 
                   <TouchableOpacity
                     style={{width: '60%', alignItems: 'center'}}
                     onPress={postReview}
+                    //disabled={setReviewBtn}
                     >
                     <View
                       style={{
@@ -402,7 +449,7 @@ const Product_detail = ({route}) => {
               borderTopRightRadius: 25,
             },
           }}>
-          <BottomSheet reference={refRBSheet} prodData={paramData} />
+          <BottomSheet reference={refRBSheet} prodData={paramData} setOverlay={setOverlay} />
         </RBSheet>
       </View>
     </ScrollView>

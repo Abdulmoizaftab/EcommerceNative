@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar'
 import LinearGradient from 'react-native-linear-gradient';
 import {Skeleton,NativeBaseProvider} from 'native-base'
 import img from '../image/img.png';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const CategoryScreen = ({navigation}) => {
@@ -11,9 +12,12 @@ const CategoryScreen = ({navigation}) => {
     const [categories,setCategories]=useState([])
     const [skeleton,setSkeleton]=useState(false)
 
+    const [overlay,setOverlay]=useState(false);
+    const [disable,setDisable]=useState(false);
+
     const getCategories=async()=>{
       setSkeleton(true)
-      const data=await fetch('http://192.168.1.10:5000/sql//allCategories')
+      const data=await fetch('http://192.168.1.9:5000/sql//allCategories')
       const res=await data.json()
       setCategories(res)
       setSkeleton(false)
@@ -27,13 +31,24 @@ const CategoryScreen = ({navigation}) => {
     <NativeBaseProvider>
 
     <View style={{width:"100%",height:"100%",backgroundColor:"white"}}>
+    <Spinner
+      visible={overlay}
+    />
       
       {skeleton===false?
 
         <ScrollView>
         <View style={{alignItems:'center', justifyContent:'center',width:"100%",backgroundColor:"white",height:"100%"}}>
        {categories.map((v,i)=>(
-         <TouchableOpacity key={i} activeOpacity={0.9} style={{marginVertical:"2%",width: "90%"}} onPress={()=>navigation.navigate('Subcategory',{cat_id:v.HierLevel,cat:v.name})}>
+         <TouchableOpacity disabled={disable} key={i} activeOpacity={0.9} style={{marginVertical:"2%",width: "90%"}} onPress={()=>{
+           setDisable(true)
+              setOverlay(true)
+              setTimeout(() => {
+                navigation.navigate('Subcategory',{cat_id:v.HierLevel,cat:v.name})
+                setOverlay(false)
+                setDisable(false)
+              }, 1000);
+           }}>
              <LinearGradient style={styles.categoryCard} start={{x: 0, y: 0}} end={{x: 1.2, y: 0}} colors={['#fff', '#D1D1ED']}>
              <Text style={styles.cardText}>{v.name}</Text>
              <Image

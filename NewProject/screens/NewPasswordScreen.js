@@ -7,7 +7,7 @@ const NewPasswordScreen = ({route,navigation}) => {
     const [confirmPswd, setConfirmPswd] = useState('');
     const {email} = route.params;
     const handleSubmit =async()=>{
-        const res = await axios.post('http://192.168.1.10:5000/sql/setNewPswd',{email:email , password:pswd})
+        const res = await axios.post('http://192.168.1.9:5000/sql/setNewPswd',{email:email , password:pswd})
         navigation.navigate('Login')
     }
 
