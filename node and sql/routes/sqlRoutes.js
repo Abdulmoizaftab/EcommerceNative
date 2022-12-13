@@ -51,7 +51,7 @@ const sendMail = (email, name, user_id) => {
       from: 'digevoldevs@gmail.com',
       to: email,
       subject: 'For verify your email',
-      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.26:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
+      html: "<p>Hey " + name + " Please verify you mail.</p> <a href='http://192.168.1.10:5000/sql/verify?id=" + user_id + "'>Click here verify your mail</a>"
 
     }
     transporter.sendMail(mailOptions, function (error, info) {
@@ -136,9 +136,9 @@ router.get("/verify", (req, res) => {
 
 const auth = require("../middlewares/auth");
 router.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, phone } = req.body;
   req.app.locals.db.query(
-    `EXEC LoginSpUsersSelect @email='${email}'`,
+    `EXEC LoginSpUsersSelect @email='${email}', @phone='${phone}'`,
     async function (err, recordset) {
       if (err) {
         console.error(err);
@@ -203,7 +203,6 @@ router.post("/login", (req, res) => {
     }
   );
 });
-
 router.get("/allVenders", (req, res) => {
   req.app.locals.db.query(`select * from vendors`, function (err, recordset) {
     if (err) {

@@ -16,7 +16,7 @@ const AddressBottomSheet = ({reference,trigger,setTrigger}) => {
     const handlePress = () => {
 
         let regex1 = "[0-9*#+]+"
-        let regex2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+        let regex2 = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
         if(recipent.match(regex1) !== null){
             setInvalidChar(true)
             console.log('regexwork IF');
@@ -44,21 +44,6 @@ const AddressBottomSheet = ({reference,trigger,setTrigger}) => {
 
     }
 
-    const alphaNumericNameCheck = () =>{
-        let regex1 = "[0-9*#+]+"
-        let regex2 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
-        if(recipent.match(regex1) !== null){
-            setInvalidChar(true)
-            console.log('regexwork IF');
-        }else if(recipent.match(regex2) !== null){
-            setInvalidChar(true)
-            console.log('regexwork ELSE IF');
-        }
-        else{
-            setInvalidChar(false)
-            console.log('regexwork else');
-        }
-    }
 
     return (
         <View style={styles.main}>

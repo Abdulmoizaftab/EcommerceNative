@@ -37,7 +37,7 @@ const VerificationScreen = ({ route, navigation }) => {
 
 
     const expireOtp = (emailParam) => {
-        axios.post('http://192.168.1.26:5000/sql/OTPExpire', { email: emailParam })
+        axios.post('http://192.168.1.10:5000/sql/OTPExpire', { email: emailParam })
     }
 
     useEffect(() => {
@@ -46,13 +46,13 @@ const VerificationScreen = ({ route, navigation }) => {
     }, [trigger])
 
     const resendOTP = async () => {
-        await axios.post('http://192.168.1.26:5000/sql/sendOTP', { email: email })
+        await axios.post('http://192.168.1.10:5000/sql/sendOTP', { email: email })
         setError(false)
         setTrigger(!trigger)
     }
 
     const verifyOTP = async () => {
-        const res = await axios.post('http://192.168.1.26:5000/sql/matchOTP', { otp: otp1+otp2+otp3+otp4+otp5+otp6, email: email })
+        const res = await axios.post('http://192.168.1.10:5000/sql/matchOTP', { otp: otp1+otp2+otp3+otp4+otp5+otp6, email: email })
         if (res.data) {
             setError(false)
             navigation.navigate('NewPassword', { email })
@@ -250,7 +250,7 @@ const VerificationScreen = ({ route, navigation }) => {
                         }
                     </View>
 
-                    <TouchableOpacity style={styles.sendEmail_btn} onPress={()=>{console.log(otp1+otp2+otp3+otp4+otp5+otp6)}}>
+                    <TouchableOpacity style={styles.sendEmail_btn} onPress={verifyOTP}>
                         <Text style={styles.sendEmail_btn_text}>Verify</Text>
                     </TouchableOpacity>
                 </View>

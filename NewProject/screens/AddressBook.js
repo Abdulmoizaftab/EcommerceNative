@@ -50,7 +50,7 @@ const AddressBook = ({route}) => {
   useEffect(() => {
     setLoading(true)
     setDbAddress([])
-     axios.get(`http://192.168.1.26:5000/sql/getAddress/${currentUser.user[0].user_id}`)
+     axios.get(`http://192.168.1.10:5000/sql/getAddress/${currentUser.user[0].user_id}`)
       .then(function (response) {
         setDbAddress(response.data)
         // setSelectedValue[dbAddress[0]]

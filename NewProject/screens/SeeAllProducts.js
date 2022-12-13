@@ -33,7 +33,7 @@ const SeeAllProducts = () => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.26:5000/sql/all/${limit}`)
+    await fetch(`http://192.168.1.10:5000/sql/all/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .then(check=>  setIsloading(false))
@@ -44,7 +44,7 @@ const SeeAllProducts = () => {
   const handleFilterPrice = async (asc_desc)=>{
     setIsloading(true)
     //setIsRefreshing(true)
-    await fetch(`http://192.168.1.26:5000/sql/filterAllByPrice/${asc_desc}/${limit}`)
+    await fetch(`http://192.168.1.10:5000/sql/filterAllByPrice/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
@@ -67,7 +67,7 @@ const SeeAllProducts = () => {
   const handleFilterRating = async (asc_desc)=>{
     setIsloading(true)
     //setIsRefreshing(true)
-    await fetch(`http://192.168.1.26:5000/sql/filterAllByRating/${asc_desc}/${limit}`)
+    await fetch(`http://192.168.1.10:5000/sql/filterAllByRating/${asc_desc}/${limit}`)
     .then((response) => response.json())
     .then((json) => { setProducts(json) })
     .then(check=>  setIsloading(false))
