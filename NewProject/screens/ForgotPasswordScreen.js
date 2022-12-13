@@ -13,7 +13,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [isError, setError] = useState(false);
 
   const onSend = async () => {
-    const res = await axios.post('http://192.168.1.9:5000/sql/sendOTP',{email:text})
+    const res = await axios.post('http://192.168.1.10:5000/sql/sendOTP',{email:text})
     if (res.data) {
       setError(false)
       navigation.navigate('Verification',{email:text});

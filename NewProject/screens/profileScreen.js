@@ -117,7 +117,7 @@ const ProfileScreen = ({navigation}) => {
                 dispatch(loginStart())
                 try {
                   setDisable(true)
-                  const res= await axios.post('http://192.168.1.9:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
+                  const res= await axios.post('http://192.168.1.10:5000/sql/logout',{user_id:currentUser.user[0].user_id},{
                     headers: {
                       'Authorization': `Bearer ${currentUser.token}` 
                     }
@@ -439,9 +439,9 @@ const styles = StyleSheet.create({
   profileButton: {
     width: '100%',
     height: 70,
-    elevation: 5,
+    elevation: 3,
     // borderColor: '#8580AF',
-    borderRadius: 15,
+    borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

@@ -35,13 +35,13 @@ const AddToCart = ({ route, navigation }) => {
     
     if(currentUser){
       setLogin(true)
-      axios.post(`http://192.168.1.9:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+      //setDbProds([])
+      axios.post(`http://192.168.1.10:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
         headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
       })
       .then(function (res) {
-        setDbProds([])
         setDbProds(res.data)
         setLoading(false)
         setLoader(false)
@@ -58,7 +58,7 @@ const AddToCart = ({ route, navigation }) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.10:5000/sql/session',{user_id:currentUser.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${currentUser.token}` 
                             }
