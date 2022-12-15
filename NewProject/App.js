@@ -27,6 +27,7 @@ import Search from './screens/Search';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import NewPasswordScreen from './screens/NewPasswordScreen';
+import About from './screens/About';
 
 
 
@@ -109,6 +110,16 @@ const App = () => {
           },
            headerTitleAlign:"center"}}
         name="AddressBook" component={AddressBook} />
+        <Stack.Screen
+          options={{headerShown:true,
+            title:"About us",
+           headerStyle:{backgroundColor:"#5A56E9"},
+           headerTintColor: '#fff',
+           headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+           headerTitleAlign:"center"}}
+        name="Aboutus" component={About} />
         <Stack.Screen
         name="Subcategory" component={Subcategory} />
         <Stack.Screen name="Summary" component={Summary} 

@@ -47,7 +47,7 @@ const Tabs = ({cat_id,setHeading,setId}) => {
           {data.map((v, i) => {
             return (
               <TouchableOpacity key={i} disabled={disable} activeOpacity={0.9} style={num == i ? Style.tabs : Style.tabs2} onPress={()=>{
-                
+                setDisable(true)
                 setOverlay(true)
               setTimeout(() => {
                 getTab(v.name,i,v.HierId)

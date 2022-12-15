@@ -45,23 +45,40 @@ export const loginAuth = async (dispatch, user) => {
         
     } catch (error) {
         //dispatch(loginFailure(true));
-        console.log("No data");
+        console.log("No data",error);
     }
 }
 
 
 export const register = async (dispatch, user) => {
     try {
+        console.log(user)
         dispatch(registerStart());
-        const res = await axios.post("http://192.168.1.9:5000/sql/register", { username:user.username, email:user.email, password:user.password, first_name:user.first_name, last_name:user.last_name,phone:null });
+        const res = await axios.post("http://192.168.1.9:5000/sql/register", { username:user.username, email:user.email, password:user.password, first_name:user.first_name, last_name:user.last_name,phone:null});
         let obj={
             load:false,
             data:res.data
         }
-       
-            dispatch(registerSuccess(obj));
+       const statusAPI = res.status
+       if (res.status===200) {
+        let obj={
+            load:false
+        }
+        Alert.alert(
+            "Register Failed",
+            "Email already in use.",
+            [
+                {
+                    text: "Ok",
+                    onPress: () => console.log("ok pressed")
+                },
+                
+            ]
+            );
+            dispatch(registerFailure(obj));
         
-        console.log(res.data);
+       }else if (res.status===201) {
+        dispatch(registerSuccess(obj));
         Alert.alert(
             "Register successfully",
             "Please verify your mail",
@@ -73,6 +90,10 @@ export const register = async (dispatch, user) => {
           
         ]
         );
+        
+       } else {
+        
+       }
     
     } catch (error) {
         dispatch(registerFailure(true));

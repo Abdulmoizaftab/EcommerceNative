@@ -131,7 +131,7 @@ const Subcategory = ({navigation, route}) => {
               style={Style.all_item_main4_img}
               resizeMode="cover"
               source={{
-                uri: 'https://www.pngmart.com/files/13/Apple-Airpods-Transparent-PNG.png',
+                uri: element.item.imgs,
               }}
             />
           </View>
