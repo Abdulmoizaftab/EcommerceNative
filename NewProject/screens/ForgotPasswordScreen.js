@@ -11,14 +11,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const navigate = useNavigation();
   const [text, onChangeText] = useState('');
   const [isError, setError] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   const onSend = async () => {
+    setDisable(true)
     const res = await axios.post('http://192.168.1.10:5000/sql/sendOTP',{email:text})
     if (res.data) {
       setError(false)
+      setDisable(false)
       navigation.navigate('Verification',{email:text});
     } else {
       setError(true);
+      setDisable(false)
     }
   }
 
@@ -66,11 +70,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
             ):(null)
           }
 
-          <TouchableOpacity style={{ alignItems: 'center', marginLeft: '25%', width: '50%' }}>
+          <TouchableOpacity style={{ alignItems: 'center', marginLeft: '25%', width: '50%' }} disabled={disable}>
             <Text style={{ fontSize: 16 }} onPress={() => navigate.goBack()}>Back to sign in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.sendEmail_btn} onPress={onSend}>
+          <TouchableOpacity style={styles.sendEmail_btn} onPress={onSend} disabled={disable}>
             <Text style={styles.sendEmail_btn_text}>Send</Text>
           </TouchableOpacity>
         </View>

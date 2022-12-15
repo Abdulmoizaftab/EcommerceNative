@@ -59,7 +59,7 @@ const NewPasswordScreen = ({route,navigation}) => {
                 </View>
 
                 {
-                    pswd===confirmPswd?(
+                     pswd.length>8 && confirmPswd.length>8 && pswd===confirmPswd?(
                         <TouchableOpacity style={styles.sendEmail_btn} onPress={handleSubmit}>
                             <Text style={styles.sendEmail_btn_text}>Submit</Text>
                         </TouchableOpacity>

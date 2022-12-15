@@ -22,12 +22,13 @@ const VerificationScreen = ({ route, navigation }) => {
     const input4 = useRef();
     const input5 = useRef();
     const input6 = useRef();
-    const {email} = route.params;
+    const { email } = route.params;
+    const [disable, setDisable] = useState(false);
 
     const countdownTimer = () => {
         setTime(20)
         const interval = setInterval(() => {
-                setTime(prevState => prevState - 1)
+            setTime(prevState => prevState - 1)
         }, 1000);
 
         setTimeout(() => {
@@ -52,12 +53,15 @@ const VerificationScreen = ({ route, navigation }) => {
     }
 
     const verifyOTP = async () => {
-        const res = await axios.post('http://192.168.1.10:5000/sql/matchOTP', { otp: otp1+otp2+otp3+otp4+otp5+otp6, email: email })
+        setDisable(true)
+        const res = await axios.post('http://192.168.1.10:5000/sql/matchOTP', { otp: otp1 + otp2 + otp3 + otp4 + otp5 + otp6, email: email })
         if (res.data) {
             setError(false)
+            setDisable(false)
             navigation.navigate('NewPassword', { email })
         } else {
             setError(true)
+            setDisable(false)
         }
     }
 
@@ -85,8 +89,16 @@ const VerificationScreen = ({ route, navigation }) => {
                         <Text style={styles.email}>Enter Verification Code</Text>
                     </View>
 
+                    {
+                        error ? (
+                            <Text style={{ color: 'red', fontSize: 16, alignSelf: 'center', marginTop: '4%' }}>There OTP is incorrect</Text>
+                        ) : (
+                            null
+                        )
+                    }
+
                     <View style={styles.codeInputParent}>
-                        
+
                         <TextInput
                             style={styles.verificationCode}
                             maxLength={1}
@@ -108,7 +120,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             ref={input2}
                             value={otp2}
                             editable={otp2.length !== 0 ? false : true}                            //onChange={() => input3.current.focus()}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp1(""); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp1(""); setTimeout(() => { input1.current.focus(); }, 100); } else { input3.current.focus() } }}
                             // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
                             keyboardType='numeric'
                             onChangeText={setOtp2} />
@@ -121,7 +133,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             value={otp3}
                             editable={otp3.length !== 0 ? false : true}
                             //onChange={() => input4.current.focus()}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp2(""); setTimeout(() => {input2.current.focus();}, 100);  } else{ input4.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp2(""); setTimeout(() => { input2.current.focus(); }, 100); } else { input4.current.focus() } }}
                             keyboardType='numeric'
                             onChangeText={setOtp3} />
 
@@ -132,7 +144,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             ref={input4}
                             value={otp4}
                             editable={otp4.length !== 0 ? false : true}                            //onChange={() => input5.current.focus()}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp3(""); setTimeout(() => {input3.current.focus();}, 100);  } else{ input5.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp3(""); setTimeout(() => { input3.current.focus(); }, 100); } else { input5.current.focus() } }}
                             keyboardType='numeric'
                             onChangeText={setOtp4} />
 
@@ -140,10 +152,10 @@ const VerificationScreen = ({ route, navigation }) => {
                             style={styles.verificationCode}
                             maxLength={1}
                             caretHidden={false}
-                            ref={input5} 
+                            ref={input5}
                             value={otp5}
-                            editable={otp5.length !== 0 ? false : true}                            
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp4(""); setTimeout(() => {input4.current.focus();}, 100);  } else{ input6.current.focus() } }}
+                            editable={otp5.length !== 0 ? false : true}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp4(""); setTimeout(() => { input4.current.focus(); }, 100); } else { input6.current.focus() } }}
                             keyboardType='numeric'
                             onChangeText={setOtp5} />
 
@@ -153,7 +165,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             caretHidden={false}
                             ref={input6}
                             value={otp6}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp5(""); setTimeout(() => {input5.current.focus();}, 100); } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp5(""); setTimeout(() => { input5.current.focus(); }, 100); } }}
                             keyboardType='numeric'
                             onChangeText={setOtp6} />
                         {/* <TextInput
