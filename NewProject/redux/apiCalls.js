@@ -14,7 +14,7 @@ export const login = async (dispatch, user) => {
     
     try {
         dispatch(loginStart());
-        const res = await axios.post("http://192.168.1.10:5000/sql/login", {email:user.email,password:user.password,phone:null});
+        const res = await axios.post("http://192.168.1.9:5000/sql/login", {email:user.email,password:user.password,phone:null});
         let obj={
             load:false,
             data:res.data
@@ -34,7 +34,7 @@ export const loginAuth = async (dispatch, user) => {
     
     try {
         //dispatch(loginStart());
-        const res=await axios.post('http://192.168.1.10:5000/sql/loginWithAuth',user[1])
+        const res=await axios.post('http://192.168.1.9:5000/sql/loginWithAuth',user[1])
         //console.log("redux data==>",res.data);
         let obj={
             load:false,
@@ -53,7 +53,7 @@ export const register = async (dispatch, user) => {
     try {
         console.log(user)
         dispatch(registerStart());
-        const res = await axios.post("http://192.168.1.10:5000/sql/register", { username:user.username, email:user.email, password:user.password, first_name:user.first_name, last_name:user.last_name,phone:null });
+        const res = await axios.post("http://192.168.1.9:5000/sql/register", { username:user.username, email:user.email, password:user.password, first_name:user.first_name, last_name:user.last_name,phone:null });
         let obj={
             load:false,
             data:res.data
@@ -103,7 +103,7 @@ export const register = async (dispatch, user) => {
 export const addressAdd = async (dispatch, addressPayload,setDisable,setTrigger) => {
     try {
         setTrigger(true)
-        const res = await axios.post("http://192.168.1.10:5000/sql/addAddress", addressPayload);
+        const res = await axios.post("http://192.168.1.9:5000/sql/addAddress", addressPayload);
         setDisable(false)
         setTrigger(false)
     } catch (error) {
@@ -114,7 +114,7 @@ export const addressAdd = async (dispatch, addressPayload,setDisable,setTrigger)
 export const addressDelete = async (dispatch, addressId, setTrigger) => {
     try {
         setTrigger(true)
-        const res = await axios.put(`http://192.168.1.10:5000/sql/deleteAddress/${addressId}`);
+        const res = await axios.put(`http://192.168.1.9:5000/sql/deleteAddress/${addressId}`);
         setTrigger(false)
     } catch (error) {
         dispatch(errorAddress());
@@ -124,7 +124,7 @@ export const addressDelete = async (dispatch, addressId, setTrigger) => {
 export const addressUpdate = async (dispatch, addressObj,setTrigger) => {
     try {
         setTrigger(true)
-        const res = await axios.put(`http://192.168.1.10:5000/sql/updateAddress/${addressObj.address_id}`, addressObj.payload);
+        const res = await axios.put(`http://192.168.1.9:5000/sql/updateAddress/${addressObj.address_id}`, addressObj.payload);
         setTrigger(false)
     } catch (error) {
         dispatch(errorAddress());
@@ -133,7 +133,7 @@ export const addressUpdate = async (dispatch, addressObj,setTrigger) => {
 export const addToCart = async (dispatch, prod,setOverlay,navigation,setDisable) => {
     try {
         const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${prod.token}` } }
-        await axios.post('http://192.168.1.10:5000/sql/addCartItem', prod,config)
+        await axios.post('http://192.168.1.9:5000/sql/addCartItem', prod,config)
         setOverlay(false)
         navigation.navigate('AddToCart')
         setDisable(false)
@@ -145,7 +145,7 @@ export const addToCart = async (dispatch, prod,setOverlay,navigation,setDisable)
 export const cartModificationDecrease = async (dispatch, prod,setOverlay,setDisable) => {
     try {
         const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${prod.token}` } }
-        await axios.post('http://192.168.1.10:5000/sql/delCartItem', prod,config);
+        await axios.post('http://192.168.1.9:5000/sql/delCartItem', prod,config);
         setOverlay(false);
         setDisable(false)
     } catch (error) {
@@ -156,7 +156,7 @@ export const cartModificationDecrease = async (dispatch, prod,setOverlay,setDisa
 export const cartModificationIncrease = async (dispatch, prod,setOverlay,setDisable) => {
     try {
         const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${prod.token}` } }
-        await axios.post('http://192.168.1.10:5000/sql/addCartItem', prod,config);
+        await axios.post('http://192.168.1.9:5000/sql/addCartItem', prod,config);
         setOverlay(false);
         setDisable(false)
     } catch (error) {
@@ -165,7 +165,7 @@ export const cartModificationIncrease = async (dispatch, prod,setOverlay,setDisa
 }
 export const deleteFromCart = async (dispatch, prod) => {
     try {
-        await axios.post('http://192.168.1.10:5000/sql/deleteFromCart', prod)
+        await axios.post('http://192.168.1.9:5000/sql/deleteFromCart', prod)
     } catch (error) {
         console.log(error);
     }
@@ -175,7 +175,7 @@ export const addFavouriteDB = async (dispatch, data) => {
 
     try {
         const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${data.token}` } }
-        const res = await axios.post("http://192.168.1.10:5000/sql/setFavourites", { favouritedProd: data.product_id , user_id:data.user_id } , config);
+        const res = await axios.post("http://192.168.1.9:5000/sql/setFavourites", { favouritedProd: data.product_id , user_id:data.user_id } , config);
         // const result=await res.json()
         dispatch(addFavourite(res.data));
         //console.log(res.data);
@@ -193,7 +193,7 @@ export const getFavouriteDB = async (dispatch,user,navigation) => {
 
     try {
         const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` } }
-        const res = await axios.post("http://192.168.1.10:5000/sql/getFavourites",{user_id:user.user[0].user_id},config);
+        const res = await axios.post("http://192.168.1.9:5000/sql/getFavourites",{user_id:user.user[0].user_id},config);
         dispatch(getFavourite(res.data));
         console.log("token",res.data);
 
@@ -208,7 +208,7 @@ export const getFavouriteDB = async (dispatch,user,navigation) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.10:5000/sql/session',{user_id:user.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:user.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${user.token}` 
                             }
@@ -248,7 +248,7 @@ export const getFavouriteDB = async (dispatch,user,navigation) => {
 export const remFavouriteDB = async (dispatch, data) => {
     try {
         const config = { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${data.token}` } }
-        const res = await axios.post("http://192.168.1.10:5000/sql/delFavourites", { favouritedProd: data.product_id , user_id:data.user_id} , config);
+        const res = await axios.post("http://192.168.1.9:5000/sql/delFavourites", { favouritedProd: data.product_id , user_id:data.user_id} , config);
         // const result=await res.json()
         dispatch(removeFavourite(res.data));
         //  console.log(res.data);

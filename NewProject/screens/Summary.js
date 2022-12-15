@@ -41,7 +41,7 @@ const Summary = ({route,navigation}) => {
         user_id:currentUser.user[0].user_id
         
       }
-      await axios.post('http://192.168.1.10:5000/sql/setOrderDetails', obj)
+      await axios.post('http://192.168.1.9:5000/sql/setOrderDetails', obj)
       setOverlay(false)
       setShowModal(true)
       console.log("Data inserted successfully");
