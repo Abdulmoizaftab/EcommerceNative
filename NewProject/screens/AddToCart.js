@@ -42,6 +42,7 @@ const AddToCart = ({ route, navigation }) => {
         }
       })
       .then(function (res) {
+        //setDbProds([])
         setDbProds(res.data)
         setLoading(false)
         setLoader(false)

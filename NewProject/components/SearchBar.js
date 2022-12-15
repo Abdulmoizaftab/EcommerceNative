@@ -12,15 +12,21 @@ import {
 import SearchDropdown from './SearchDropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused, useRoute } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Logout } from '../redux/LoginRedux';
+import IconBadge from 'react-native-icon-badge';
+
+var count=0;
 
 const SearchBar = () => {
     //const [searchText , setSearchText] = useState("");
     //const [filterData,setFilterData]=useState([]);
     
     const navigate = useNavigation()
+    const focused=useIsFocused()
+    const route=useRoute()
+    
     
     // useEffect(() => {
     // var arr=[]
@@ -59,6 +65,36 @@ const SearchBar = () => {
   //const navigate = useNavigation()
   const { isFetching, error, currentUser } = useSelector((state) => state.user)
   const dispatch = useDispatch()
+
+  const [countCart,setCountCart]=useState(0)
+  //console.log("navigation==>",route.name)
+  
+  if(focused){
+    if(currentUser){
+      axios.post(`http://192.168.1.10:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}` 
+        }
+      })
+      .then(function (res) {
+        setCountCart(res.data.length)
+        console.log("cart==>",countCart)
+      }) 
+      .catch(function (err) {
+        if(err=="AxiosError: Network Error"){
+          ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
+        }
+        else{
+          ToastAndroid.showWithGravity("Something went wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM)
+        }
+      })
+    }
+    else{
+      //count=0
+      //setCountCart(0)
+    }
+    console.log("hello focued")
+  }
 
     const check_session=async()=>{
       console.log(currentUser)
@@ -101,7 +137,7 @@ const SearchBar = () => {
   }
 
   useEffect(() => {
-    check_session()
+    check_session();
   }, [])
 
 
@@ -139,10 +175,28 @@ const SearchBar = () => {
                         placeholder="Search Here"
                         placeholderTextColor="#EAE9FC"
                       onChangeText={(e) => onChange(e)} /> */}
-            <Text style={{ marginLeft: 2, color: 'white' }}>Search Here</Text>
+            <Text style={{ marginLeft: 2, color: 'white' }}>Search here</Text>
           </View>
         </TouchableOpacity>
+        <View>
+          {currentUser?
+        <IconBadge 
+        BadgeElement={
+          <Text style={{color:'#FFFFFF',fontSize:10}}>{countCart}</Text>
+        }
+        IconBadgeStyle={
+          {width:10,
+          height:18,
+          backgroundColor: 'red'}
+        }
+        />:null}
         <Ionicons name="cart-outline" style={styles.cartIcon} onPress={() => navigate.navigate('AddToCart')} />
+        </View>
+
+        
+
+
+
       </View>
       {/* {searchText ?
               <SearchDropdown dataSource={filterData} navigate={navigate}/> :
@@ -187,11 +241,14 @@ const styles = StyleSheet.create({
   },
   accountIcon: {
     color: "#EAE9FC",
-    fontSize: 25
+    fontSize: 30
   },
   cartIcon: {
     color: "#EAE9FC",
-    fontSize: 25
+    fontSize: 30,
+    zIndex:-999,
+    marginRight:"1%",
+    marginTop:"1%"
   }
 });
 

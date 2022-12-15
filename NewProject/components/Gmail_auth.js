@@ -35,6 +35,7 @@ const Gmail_auth = async (authdata,setAuthdata,setDisable) => {
       setAuthdata([...authdata,obj])
       setDisable(false)
     }
+    setDisable(false)
   })
   .catch((error)=>{
     console.log("Something went wrong from google mail",error);
