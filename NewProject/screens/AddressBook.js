@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Button, TouchableOpacity, Image, ScrollView, ActivityIndicator, ToastAndroid } from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import React, { useRef, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -12,12 +13,14 @@ import { addressDelete } from '../redux/apiCalls'
 import { NativeBaseProvider, Radio } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AddressUpdateBottomSheet from '../components/AddressUpdateBottomSheet';
-import axios from 'axios'
+import axios from 'axios';
 
 
 
 
 const AddressBook = ({route}) => {
+  
+  const net=NetInfo.useNetInfo().isConnected;
 
   let bgcolor = '#fff'
   const {checkOutTrigger,setCheckOutTrigger} = route.params
@@ -50,7 +53,7 @@ const AddressBook = ({route}) => {
   useEffect(() => {
     setLoading(true)
     setDbAddress([])
-     axios.get(`http://192.168.1.9:5000/sql/getAddress/${currentUser.user[0].user_id}`)
+     axios.get(`http://192.168.1.14:5000/sql/getAddress/${currentUser.user[0].user_id}`)
       .then(function (response) {
         setDbAddress(response.data)
         // setSelectedValue[dbAddress[0]]
@@ -58,6 +61,15 @@ const AddressBook = ({route}) => {
       })
       .catch(function (err) {
         console.log(err);
+        if(err == "AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          )
+      }
       })
       //setTrigger(false)
   }, [trigger])
@@ -197,7 +209,20 @@ const AddressBook = ({route}) => {
       {
         dbAddress.length === 0 ? (
           <View style={styles.bottomFlexSingle}>
-            <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={() => refRBSheet.current.open()}>
+            <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={() => {
+              if(net==true){
+                refRBSheet.current.open();
+              }
+              else{
+                  ToastAndroid.showWithGravityAndOffset(  
+                    "No network connectivity",  
+                    ToastAndroid.LONG,
+                    ToastAndroid.BOTTOM,
+                    25,
+                    50 
+                  ); 
+              }
+            }}>
               <MaterialIcons name='add-location-alt' color='#E9ECFF' size={40} />
             </TouchableOpacity>
           </View>
@@ -210,7 +235,20 @@ const AddressBook = ({route}) => {
             </View>
 
             <View style={styles.addNewBtn}>
-              <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={() => refRBSheet.current.open()}>
+              <TouchableOpacity style={styles.iconView2} activeOpacity={0.7} onPress={() => {
+                if(net==true){
+                  refRBSheet.current.open();
+                }
+                else{
+                    ToastAndroid.showWithGravityAndOffset(  
+                      "No network connectivity",  
+                      ToastAndroid.LONG,
+                      ToastAndroid.BOTTOM,
+                      25,
+                      50 
+                    ); 
+                }
+                }}>
                 <MaterialIcons name='add-location-alt' color='#E9ECFF' size={40} />
               </TouchableOpacity>
             </View>

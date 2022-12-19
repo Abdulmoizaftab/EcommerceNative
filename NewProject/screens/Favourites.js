@@ -109,6 +109,7 @@ const Favorites = ({navigation}) => {
   //       ,
   //   }
   // );
+  console.log("fav data",favArray)
 
   const renderItem = ({item}) => {
     const productDetail = {
@@ -155,9 +156,9 @@ const Favorites = ({navigation}) => {
                   {item.name.split(/\s+/).slice(0, 4).join(' ') + '...'}
                 </Text>
                 <View style={Style.cardBotm}>
-                  <Text style={Style.cardPrice}>{item.price}</Text>
+                  <Text style={Style.cardPrice}>Rs.{item.price}</Text>
                   <Text style={Style.rating}>
-                    4.5{' '}
+                    {item.numberOfRatings}{' '}
                     <Icon style={Style.ratingIcon} name="md-star-half-sharp" />
                   </Text>
                 </View>

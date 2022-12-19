@@ -107,7 +107,7 @@ const ProfileScreen = ({navigation}) => {
                 try {
                   setDisable(true);
                   const res = await axios.post(
-                    'http://192.168.1.9:5000/sql/logout',
+                    'http://192.168.1.14:5000/sql/logout',
                     {user_id: currentUser.user[0].user_id},
                     {
                       headers: {

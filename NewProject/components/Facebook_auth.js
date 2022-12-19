@@ -55,18 +55,19 @@ const Facebook_auth = async(authdata,setAuthdata,setDisable) => {
         ]
       );
     }
-    else{
-        Alert.alert(
-            "Error",
-            "Something went wrong",
-            [
-          {
-            text: "Ok",
-            onPress: () => {setDisable(false)},
-          }
-        ]
-      );
-    }
+    setDisable(false)
+    // else{
+    //     Alert.alert(
+    //         "Error",
+    //         "Something went wrong",
+    //         [
+    //       {
+    //         text: "Ok",
+    //         onPress: () => {setDisable(false)},
+    //       }
+    //     ]
+    //   );
+    // }
     }
 }
 

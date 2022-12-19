@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, ToastAndroid } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -24,11 +24,22 @@ const SearchScreen = ({route}) => {
 
   const getdata = async () => {
     setIsloading(true)
-    await fetch(`http://192.168.1.9:5000/sql/suggest/${searchText}/${limit}`)
+    await fetch(`http://192.168.1.14:5000/sql/suggest/${searchText}/${limit}`)
       .then((response) => response.json())
       .then((json) => { setProducts(json) })
       .then(check=>  setIsloading(false))
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        console.log("error");
+        if(error=="TypeError: Network request failed"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+      })
 
   }
 

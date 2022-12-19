@@ -33,7 +33,7 @@ const SearchBar = () => {
     // const check =async ()=>{
     //     try{
     //       if(searchText.length >= 1){
-    //         const result= await axios.get(`http://192.168.1.9:5000/sql/suggest/${searchText}/5`);
+    //         const result= await axios.get(`http://192.168.1.14:5000/sql/suggest/${searchText}/5`);
     //       if (result.data) {
     //         result.data.map(item => {
     //           return arr.push(item);
@@ -71,7 +71,7 @@ const SearchBar = () => {
   
   if(focused){
     if(currentUser){
-      axios.post(`http://192.168.1.9:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+      axios.post(`http://192.168.1.14:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
         headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
@@ -81,11 +81,15 @@ const SearchBar = () => {
         console.log("cart==>",countCart)
       }) 
       .catch(function (err) {
-        if(err=="AxiosError: Network Error"){
-          ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
-        }
-        else{
-          ToastAndroid.showWithGravity("Something went wrong", ToastAndroid.LONG, ToastAndroid.BOTTOM)
+        console.log("error is==>",err)
+        if(error=="AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
         }
       })
     }
@@ -100,7 +104,7 @@ const SearchBar = () => {
       console.log(currentUser)
       try {
       if(currentUser){
-        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+        const res= await axios.post('http://192.168.1.14:5000/sql/session',{user_id:currentUser.user[0].user_id},{
           headers: {
             'Authorization': `Bearer ${currentUser.token}`
           }
@@ -118,20 +122,14 @@ const SearchBar = () => {
         console.log("Session expired")
       }
     } catch (error) {
-      if (error == "AxiosError: Network Error") {
-        // console.log("Something 2");
-        // Alert.alert(
-        //     "Network Error",
-        //     "Please check your network connection.",
-        //     [
-        //   {
-        //     text: "Ok",
-        //     onPress: () => console.log("Ok"),
-        //   }
-        // ]
-        // );
-        ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
-
+      if(error=="AxiosError: Network Error"){
+        ToastAndroid.showWithGravityAndOffset(  
+          "No network connectivity",  
+          ToastAndroid.LONG,  
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        ); 
       }
     }
   }

@@ -15,7 +15,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const onSend = async () => {
     setDisable(true)
-    const res = await axios.post('http://192.168.1.9:5000/sql/sendOTP',{email:text})
+    const res = await axios.post('http://192.168.1.14:5000/sql/sendOTP',{email:text})
     if (res.data) {
       setError(false)
       setDisable(false)

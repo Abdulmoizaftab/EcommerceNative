@@ -6,7 +6,7 @@ import { Alert } from 'react-native';
 
 
 const Gmail_auth = async (authdata,setAuthdata,setDisable) => {
-
+  try {
     GoogleSignin.configure({
         webClientId: '377406759720-7sipomkha2hii8urd0gnqq2mle4q92mr.apps.googleusercontent.com',
     });
@@ -38,6 +38,7 @@ const Gmail_auth = async (authdata,setAuthdata,setDisable) => {
     setDisable(false)
   })
   .catch((error)=>{
+    //setDisable(false);
     console.log("Something went wrong from google mail",error);
     if(error=="Error: [auth/network-request-failed] A network error (such as timeout, interrupted connection or unreachable host) has occurred."){
       Alert.alert(
@@ -51,10 +52,15 @@ const Gmail_auth = async (authdata,setAuthdata,setDisable) => {
             ]
           );
     }
-    else {
-      Alert.alert(
-          "Error",
-          "Something went wrong",
+    setDisable(false);
+  
+  })
+} catch (error) {
+    console.log("some google error",error)
+    if(error=="Error: NETWORK_ERROR"){
+           Alert.alert(
+          "Network Error",
+          "Please check your network connection.",
           [
         {
           text: "Ok",
@@ -62,8 +68,9 @@ const Gmail_auth = async (authdata,setAuthdata,setDisable) => {
         }
       ]
     );
-  }
-  })
+    }
+    setDisable(false);
+}
 }
 
 export {

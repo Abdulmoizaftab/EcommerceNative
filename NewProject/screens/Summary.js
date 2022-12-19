@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ToastAndroid
 } from 'react-native';
 import React, { useState,useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -24,9 +25,7 @@ const Summary = ({route,navigation}) => {
   const {currentUser} = useSelector(state => state.user);
   const [disable,setDisable]=useState(false)
   const [overlay,setOverlay]=useState(false)
-  // useEffect(() => {
-  //   setProducts()
-  // }, [])
+  
 
   
   console.log("data==>",testProducts,testquantity,testTotal);
@@ -41,7 +40,7 @@ const Summary = ({route,navigation}) => {
         user_id:currentUser.user[0].user_id
         
       }
-      await axios.post('http://192.168.1.9:5000/sql/setOrderDetails', obj)
+      await axios.post('http://192.168.1.14:5000/sql/setOrderDetails', obj)
       setOverlay(false)
       setShowModal(true)
       console.log("Data inserted successfully");
@@ -49,7 +48,7 @@ const Summary = ({route,navigation}) => {
         setShowModal(false)
         navigation.navigate('TabNav')
         setDisable(false)
-      }, 2500)
+      }, 2000)
     }catch(error){
       console.log("error",error)
       if(error=="AxiosError: Network Error"){
@@ -60,16 +59,13 @@ const Summary = ({route,navigation}) => {
           25,
           50 
         ); 
+        setOverlay(false)
+        setShowModal(false)
+        setDisable(true)
       }
-      else{
-        ToastAndroid.showWithGravityAndOffset(  
-          "Something went wrong",  
-          ToastAndroid.LONG,  
-          ToastAndroid.BOTTOM,
-          25,
-          50 
-        ); 
-      }
+      setOverlay(false)
+      setShowModal(false)
+      setDisable(true)
     }
   }
 

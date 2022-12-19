@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Image,ToastAndroid } from 'react-native'
 import React , {useEffect,useState} from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -22,13 +22,22 @@ const CheckOutScreenNew = ({ route }) => {
   const {currentUser} = useSelector(state=>state.user)
 
   useEffect(() => {
-    axios.get(`http://192.168.1.9:5000/sql/getAddress/${currentUser.user[0].user_id}`)
+    axios.get(`http://192.168.1.14:5000/sql/getAddress/${currentUser.user[0].user_id}`)
      .then(function (response) {
        setDbAddress(response.data)
        setLoading(false)
      })
      .catch(function (err) {
        console.log(err);
+       if(err == "AxiosError: Network Error"){
+        ToastAndroid.showWithGravityAndOffset(  
+          "No network connectivity",  
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        )
+    }
      })
  }, [checkOutTrigger])
 

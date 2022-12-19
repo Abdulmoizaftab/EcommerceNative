@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  ToastAndroid
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -34,7 +35,7 @@ const Subcategory = ({navigation, route}) => {
     if (!id) {
       setProducts([]);
       await fetch(
-        `http://192.168.1.9:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+        `http://192.168.1.14:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -47,11 +48,22 @@ const Subcategory = ({navigation, route}) => {
             setIsloading(false)
           }
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error)
+          if(error=="TypeError: Network request failed"){
+            ToastAndroid.showWithGravityAndOffset(  
+              "No network connectivity",  
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50 
+            ); 
+          }
+        });
     } else {
       setProducts([]);
       await fetch(
-        `http://192.168.1.9:5000/sql/subCategoryProducts/${limit}/${id}`,
+        `http://192.168.1.14:5000/sql/subCategoryProducts/${limit}/${id}`,
       )
         .then(response => response.json())
         .then(json => {
@@ -65,7 +77,18 @@ const Subcategory = ({navigation, route}) => {
           console.log('chekcing',json.length);
           console.log('check product',products);
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+          console.error(error);
+          if(error=="TypeError: Network request failed"){
+            ToastAndroid.showWithGravityAndOffset(  
+              "No network connectivity",  
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50 
+            ); 
+          }
+        });
     }
   };
 

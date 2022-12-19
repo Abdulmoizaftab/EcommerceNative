@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity,ToastAndroid } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import SearchBar from '../components/SearchBar'
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,11 +16,24 @@ const CategoryScreen = ({navigation}) => {
     const [disable,setDisable]=useState(false);
 
     const getCategories=async()=>{
-      setSkeleton(true)
-      const data=await fetch('http://192.168.1.9:5000/sql//allCategories')
-      const res=await data.json()
-      setCategories(res)
-      setSkeleton(false)
+      try {
+        setSkeleton(true)
+        const data=await fetch('http://192.168.1.14:5000/sql/allCategories')
+        const res=await data.json()
+        setCategories(res)
+        setSkeleton(false) 
+      } catch (error) {
+        console.log("error category",error)
+        if(error=="TypeError: Network request failed"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,  
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          ); 
+        }
+      }
     }
 
   useEffect(() => {

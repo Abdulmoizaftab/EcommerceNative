@@ -36,7 +36,7 @@ const AddToCart = ({ route, navigation }) => {
     if(currentUser){
       setLogin(true)
       //setDbProds([])
-      axios.post(`http://192.168.1.9:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+      axios.post(`http://192.168.1.14:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
         headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
@@ -59,7 +59,7 @@ const AddToCart = ({ route, navigation }) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.14:5000/sql/session',{user_id:currentUser.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${currentUser.token}` 
                             }
@@ -76,19 +76,13 @@ const AddToCart = ({ route, navigation }) => {
             dispatch(Logout());
         }
         else if(err == "AxiosError: Network Error"){
-            // console.log("Something 2");
-            // Alert.alert(
-            //     "Network Error",
-            //     "Please check your network connection.",
-            //     [
-            //   {
-            //     text: "Ok",
-            //     onPress: () => console.log("Ok"),
-            //   }
-            // ]
-            // );
-            //dispatch(getFavourite(null))
-            ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
+            ToastAndroid.showWithGravityAndOffset(  
+              "No network connectivity",  
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50 
+            )
         }
       })
     }
@@ -203,7 +197,7 @@ const AddToCart = ({ route, navigation }) => {
 const Style = StyleSheet.create({
   main: {
     width: "100%",
-    backgroundColor: "#e8e6e6",
+    backgroundColor: "#fff",
     height: "100%"
   },
   topHeader: {

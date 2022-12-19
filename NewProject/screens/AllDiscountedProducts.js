@@ -36,7 +36,7 @@ const AllDiscountedProducts = () => {
 
   const getDisdata = async () => {
      setIsloading(true);
-    await fetch(`http://192.168.1.9:5000/sql/allDiscountProducts/${limit}`)
+    await fetch(`http://192.168.1.14:5000/sql/allDiscountProducts/${limit}`)
       .then(response => response.json())
       .then(json => {
         setProducts(json);
@@ -44,19 +44,10 @@ const AllDiscountedProducts = () => {
       })
       .catch(error => {
         console.error(error)
-        if(error=="AxiosError: Network Error"){
+        if(error=="TypeError: Network request failed"){
           ToastAndroid.showWithGravityAndOffset(  
             "No network connectivity",  
-            ToastAndroid.LONG,  
-            ToastAndroid.BOTTOM,
-            25,
-            50 
-          ); 
-        }
-        else{
-          ToastAndroid.showWithGravityAndOffset(  
-            "Something went wrong",  
-            ToastAndroid.LONG,  
+            ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50 

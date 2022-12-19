@@ -78,7 +78,7 @@ const ComponentSearchBox = ({pic}) => {
         const check = async () => {
             try {
                 if (searchText.length !== null) {
-                    const result = await axios.get(`http://192.168.1.9:5000/sql/suggest/${searchText}/5`);
+                    const result = await axios.get(`http://192.168.1.14:5000/sql/suggest/${searchText}/5`);
                      if (result.data) {
                     //     result.data.map(item => {
                     //         return arr.push(item.name);
@@ -95,25 +95,20 @@ const ComponentSearchBox = ({pic}) => {
                 // }
             }
             catch (error) {
-                console.log("error",error);
+                console.log("error is",error);
                 
-                if(error == "AxiosError: Network Error"){
-                    // console.log("Something 2");
-                    // Alert.alert(
-                    //     "Network Error",
-                    //     "Please check your network connection.",
-                    //     [
-                    //   {
-                    //     text: "Ok",
-                    //     onPress: () => console.log("Ok"),
-                    //   }
-                    // ]
-                    // );
-                    ToastAndroid.showWithGravity("Please Check Your Network Connection!", ToastAndroid.LONG, ToastAndroid.BOTTOM)
-                }
-                else if(error == "TypeError: null is not an object (evaluating 'searchText.length')"){
-                    pic(true)
-                }
+                if(error=="AxiosError: Network Error"){
+                    ToastAndroid.showWithGravityAndOffset(  
+                      "No network connectivity",  
+                      ToastAndroid.LONG,  
+                      ToastAndroid.BOTTOM,
+                      25,
+                      50 
+                    ); 
+                  }
+                // else if(error == "TypeError: null is not an object (evaluating 'searchText.length')"){
+                //     pic(true)
+                // }
             }
 
         }

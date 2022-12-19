@@ -48,7 +48,7 @@ const Login = ({ navigation }) => {
 
   if(error===true){
     ToastAndroid.showWithGravityAndOffset(  
-      "Login failed! Something went wrong",  
+      "No network connectivity",  
       ToastAndroid.SHORT,  
       ToastAndroid.BOTTOM,
       25,
