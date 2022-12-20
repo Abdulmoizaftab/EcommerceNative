@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFe
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import axios from 'axios'
+import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const VerificationScreen = ({ route, navigation }) => {
     const navigate = useNavigation();
@@ -24,16 +25,18 @@ const VerificationScreen = ({ route, navigation }) => {
     const input6 = useRef();
     const { email } = route.params;
     const [disable, setDisable] = useState(false);
+    const [overlay,setOverlay]=useState(false)
 
     const countdownTimer = () => {
-        setTime(20)
-        const interval = setInterval(() => {
-            setTime(prevState => prevState - 1)
-        }, 1000);
-
-        setTimeout(() => {
-            clearInterval(interval)
-        }, 20500);
+        if(time==20){
+            const interval = setInterval(() => {
+                setTime(prevState => prevState - 1)
+                //setTime(time)
+            }, 1000);
+            setTimeout(() => {
+                clearInterval(interval)
+            }, 21000);
+        }
     }
 
 
@@ -47,28 +50,51 @@ const VerificationScreen = ({ route, navigation }) => {
     }, [trigger])
 
     const resendOTP = async () => {
+        setTime(20)
+        setTrigger(!trigger)
         await axios.post('http://192.168.1.14:5000/sql/sendOTP', { email: email })
         setError(false)
-        setTrigger(!trigger)
     }
 
     const verifyOTP = async () => {
+        try {
         setDisable(true)
+        setOverlay(true)
         const res = await axios.post('http://192.168.1.14:5000/sql/matchOTP', { otp: otp1 + otp2 + otp3 + otp4 + otp5 + otp6, email: email })
         if (res.data) {
             setError(false)
             setDisable(false)
             navigation.navigate('NewPassword', { email })
+            setOverlay(false)
         } else {
             setError(true)
             setDisable(false)
+            setOverlay(false)
         }
+    } catch (error) {
+        console.log("error",error);
+        if(error == "AxiosError: Network Error"){
+          ToastAndroid.showWithGravityAndOffset(  
+            "No network connectivity",  
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50 
+          )
+          setDisable(false)
+          setOverlay(false)
+      }
+      setDisable(false)
+      setOverlay(false)
     }
+}
 
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
             <View>
-
+            <Spinner
+          visible={overlay}
+        />
                 <View style={styles.mainHeader}>
                     <View style={styles.innerHeader}>
                         <View style={styles.innerHeader1}>
@@ -106,7 +132,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             ref={input1}
                             value={otp1}
                             autoFocus={true}
-                            editable={otp1.length === 1 ? false : true}
+                            editable={otp1.length === 0 && otp2.length===0 && otp3.length===0 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}
                             //onChange={() => input2.current.focus()}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } }}
                             // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } else{setOtp(otp.slice(0,-1))} }}
@@ -119,7 +145,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             caretHidden={false}
                             ref={input2}
                             value={otp2}
-                            editable={otp2.length !== 0 ? false : true}                            //onChange={() => input3.current.focus()}
+                            editable={otp1.length === 1 && otp2.length===0 && otp3.length===0 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}                            //onChange={() => input3.current.focus()}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp1(""); setTimeout(() => { input1.current.focus(); }, 100); } else { input3.current.focus() } }}
                             // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
                             keyboardType='numeric'
@@ -131,7 +157,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             caretHidden={false}
                             ref={input3}
                             value={otp3}
-                            editable={otp3.length !== 0 ? false : true}
+                            editable={otp1.length === 1 && otp2.length===1 && otp3.length===0 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}
                             //onChange={() => input4.current.focus()}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp2(""); setTimeout(() => { input2.current.focus(); }, 100); } else { input4.current.focus() } }}
                             keyboardType='numeric'
@@ -143,7 +169,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             caretHidden={false}
                             ref={input4}
                             value={otp4}
-                            editable={otp4.length !== 0 ? false : true}                            //onChange={() => input5.current.focus()}
+                            editable={otp1.length === 1 && otp2.length===1 && otp3.length===1 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}                            //onChange={() => input5.current.focus()}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp3(""); setTimeout(() => { input3.current.focus(); }, 100); } else { input5.current.focus() } }}
                             keyboardType='numeric'
                             onChangeText={setOtp4} />
@@ -154,7 +180,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             caretHidden={false}
                             ref={input5}
                             value={otp5}
-                            editable={otp5.length !== 0 ? false : true}
+                            editable={otp1.length === 1 && otp2.length===1 && otp3.length===1 && otp4.length===1 && otp5.length===0 && otp6.length===0 ? true : false}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp4(""); setTimeout(() => { input4.current.focus(); }, 100); } else { input6.current.focus() } }}
                             keyboardType='numeric'
                             onChangeText={setOtp5} />
@@ -165,6 +191,7 @@ const VerificationScreen = ({ route, navigation }) => {
                             caretHidden={false}
                             ref={input6}
                             value={otp6}
+                            editable={otp1.length === 1 && otp2.length===1 && otp3.length===1 && otp4.length===1 && otp5.length===1 || otp6.length===1 ? true : false}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp5(""); setTimeout(() => { input5.current.focus(); }, 100); } }}
                             keyboardType='numeric'
                             onChangeText={setOtp6} />
@@ -238,8 +265,8 @@ const VerificationScreen = ({ route, navigation }) => {
                     </View>
 
 
-                    <View style={{ alignItems: 'center', width: '47%', alignSelf: 'center' }}>
-                        <Text style={{ fontSize: 16, width: '100%' }} >If you didn't receive a code! </Text>
+                    <View style={{ alignItems: 'center', width: '60%', alignSelf: 'center'}}>
+                        <Text style={{ fontSize: 16, width: '100%',textAlign:"center" }} >If you didn't receive a code! </Text>
                         {
                             time === 0 ? (
                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: '2%' }}>
@@ -262,7 +289,7 @@ const VerificationScreen = ({ route, navigation }) => {
                         }
                     </View>
 
-                    <TouchableOpacity style={styles.sendEmail_btn} onPress={verifyOTP}>
+                    <TouchableOpacity style={styles.sendEmail_btn} disabled={disable} onPress={verifyOTP}>
                         <Text style={styles.sendEmail_btn_text}>Verify</Text>
                     </TouchableOpacity>
                 </View>
@@ -271,7 +298,7 @@ const VerificationScreen = ({ route, navigation }) => {
     )
 }
 
-export default VerificationScreen
+export default VerificationScreen;
 
 const styles = StyleSheet.create({
     mainHeader: {

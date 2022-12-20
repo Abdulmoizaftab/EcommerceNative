@@ -1,18 +1,45 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const NewPasswordScreen = ({route,navigation}) => {
     const [pswd, setPswd] = useState('');
     const [confirmPswd, setConfirmPswd] = useState('');
     const {email} = route.params;
+    const [disable, setDisable] = useState(false);
+    const [overlay,setOverlay]=useState(false)
     const handleSubmit =async()=>{
+        try {
+            setDisable(true)
+            setOverlay(true)
         const res = await axios.post('http://192.168.1.14:5000/sql/setNewPswd',{email:email , password:pswd})
-        navigation.navigate('Login')
+        setDisable(false)
+        setOverlay(false)
+        navigation.navigate('Login');
+        } catch (error) {
+            console.log("errror==>",error)
+            if(error == "AxiosError: Network Error"){
+                ToastAndroid.showWithGravityAndOffset(  
+                  "No network connectivity",  
+                  ToastAndroid.LONG,
+                  ToastAndroid.BOTTOM,
+                  25,
+                  50 
+                )
+                setDisable(false)
+                setOverlay(false)
+            }
+            setDisable(false)
+      setOverlay(false)
+        }
     }
 
     return (
         <>
+        <Spinner
+          visible={overlay}
+        />
             <View style={styles.mainHeader}>
                 <View style={styles.innerHeader}>
                     <View style={styles.innerHeader1}>
@@ -59,8 +86,8 @@ const NewPasswordScreen = ({route,navigation}) => {
                 </View>
 
                 {
-                     pswd.length>8 && confirmPswd.length>8 && pswd===confirmPswd?(
-                        <TouchableOpacity style={styles.sendEmail_btn} onPress={handleSubmit}>
+                     pswd.length>=8 && confirmPswd.length>=8 && pswd===confirmPswd?(
+                        <TouchableOpacity style={styles.sendEmail_btn} disabled={disable} onPress={handleSubmit}>
                             <Text style={styles.sendEmail_btn_text}>Submit</Text>
                         </TouchableOpacity>
                     ):(

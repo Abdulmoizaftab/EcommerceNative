@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard,ToastAndroid } from 'react-native'
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
@@ -12,26 +13,60 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [text, onChangeText] = useState('');
   const [isError, setError] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [overlay,setOverlay]=useState(false)
 
   const onSend = async () => {
-    setDisable(true)
+    try {
+      if(text){
+        setDisable(true)
+        setOverlay(true)
     const res = await axios.post('http://192.168.1.14:5000/sql/sendOTP',{email:text})
     if (res.data) {
       setError(false)
       setDisable(false)
+      setOverlay(false)
       navigation.navigate('Verification',{email:text});
     } else {
       setError(true);
       setDisable(false)
+      setOverlay(false)
     }
+      }
+      else{
+        ToastAndroid.showWithGravityAndOffset(  
+          "Field is required!",  
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50 
+        )
+      }
+  } catch (error) {
+    console.log("error",error);
+    if(error == "AxiosError: Network Error"){
+      ToastAndroid.showWithGravityAndOffset(  
+        "No network connectivity",  
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50 
+      )
+      setDisable(false)
+      setOverlay(false)
   }
+  setDisable(false)
+  setOverlay(false)
+  }
+}
 
   return (
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss()
     }}>
       <View>
-
+      <Spinner
+          visible={overlay}
+        />
         <View style={styles.mainHeader}>
           <View style={styles.innerHeader}>
             <View style={styles.innerHeader1}>
@@ -74,7 +109,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Text style={{ fontSize: 16 }} onPress={() => navigate.goBack()}>Back to sign in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.sendEmail_btn} onPress={onSend} disabled={disable}>
+          <TouchableOpacity activeOpacity={0.7} style={styles.sendEmail_btn} onPress={onSend} disabled={disable}>
             <Text style={styles.sendEmail_btn_text}>Send</Text>
           </TouchableOpacity>
         </View>
