@@ -93,6 +93,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Text style={styles.email}>Enter Email Address</Text>
           </View>
           <TextInput
+          autoFocus={true}
             style={styles.inputEmail}
             onChangeText={onChangeText}
             keyboardType={'email-address'}

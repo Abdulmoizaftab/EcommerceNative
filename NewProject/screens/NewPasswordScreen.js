@@ -64,6 +64,7 @@ const NewPasswordScreen = ({route,navigation}) => {
                     </View>
                     <TextInput
                         style={styles.inputEmail}
+                        autoFocus={true}
                         secureTextEntry={true}
                         onChangeText={setPswd}
                         value={pswd}

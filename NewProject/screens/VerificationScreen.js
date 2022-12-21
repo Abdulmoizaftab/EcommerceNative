@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -31,11 +31,10 @@ const VerificationScreen = ({ route, navigation }) => {
         if(time==20){
             const interval = setInterval(() => {
                 setTime(prevState => prevState - 1)
-                //setTime(time)
             }, 1000);
             setTimeout(() => {
                 clearInterval(interval)
-            }, 21000);
+            }, 20500); 
         }
     }
 
@@ -45,6 +44,7 @@ const VerificationScreen = ({ route, navigation }) => {
     }
 
     useEffect(() => {
+       input1.current.focus()
         expireOtp(email)
         countdownTimer()
     }, [trigger])
@@ -90,12 +90,13 @@ const VerificationScreen = ({ route, navigation }) => {
 }
 
     return (
-        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+        
+            <ScrollView keyboardShouldPersistTaps={'always'}>
             <View>
             <Spinner
           visible={overlay}
         />
-                <View style={styles.mainHeader}>
+                <View style={styles.mainHeader} keyboardShouldPersistTaps="always">
                     <View style={styles.innerHeader}>
                         <View style={styles.innerHeader1}>
                             <Icon
@@ -132,68 +133,84 @@ const VerificationScreen = ({ route, navigation }) => {
                             ref={input1}
                             value={otp1}
                             autoFocus={true}
+                            //onChange={}
                             editable={otp1.length === 0 && otp2.length===0 && otp3.length===0 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}
-                            //onChange={() => input2.current.focus()}
+                            onChange={() => input2.current.focus()}
                             onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } }}
                             // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key !== 'Backspace') { input2.current.focus() } else{setOtp(otp.slice(0,-1))} }}
                             keyboardType='numeric'
+                            selection={otp1.length>0?{ start: 1 }:{ start: 0 }}
                             onChangeText={setOtp1} />
 
                         <TextInput
                             style={styles.verificationCode}
+                            blurOnSubmit={false}
                             maxLength={1}
                             caretHidden={false}
                             ref={input2}
                             value={otp2}
+                            onChange={() => input3.current.focus()}
                             editable={otp1.length === 1 && otp2.length===0 && otp3.length===0 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}                            //onChange={() => input3.current.focus()}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp1(""); setTimeout(() => { input1.current.focus(); }, 100); } else { input3.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp1(""); input1.current.focus(); } else { input3.current.focus() } }}
                             // onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp(otp.slice(0,-1)); setTimeout(() => {input1.current.focus();}, 100); } else{ input3.current.focus() } }}
                             keyboardType='numeric'
+                            selection={otp2.length>0?{ start: 1 }:{ start: 0 }}
                             onChangeText={setOtp2} />
 
                         <TextInput
                             style={styles.verificationCode}
+                            blurOnSubmit={false}
                             maxLength={1}
                             caretHidden={false}
                             ref={input3}
                             value={otp3}
+                            onChange={() => input4.current.focus()}
                             editable={otp1.length === 1 && otp2.length===1 && otp3.length===0 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}
                             //onChange={() => input4.current.focus()}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp2(""); setTimeout(() => { input2.current.focus(); }, 100); } else { input4.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp2(""); input2.current.focus();  } else { input4.current.focus() } }}
                             keyboardType='numeric'
+                            selection={otp3.length>0?{ start: 1 }:{ start: 0 }}
                             onChangeText={setOtp3} />
 
                         <TextInput
                             style={styles.verificationCode}
+                            blurOnSubmit={false}
                             maxLength={1}
                             caretHidden={false}
                             ref={input4}
                             value={otp4}
+                            onChange={() => input5.current.focus()}
                             editable={otp1.length === 1 && otp2.length===1 && otp3.length===1 && otp4.length===0 && otp5.length===0 && otp6.length===0 ? true : false}                            //onChange={() => input5.current.focus()}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp3(""); setTimeout(() => { input3.current.focus(); }, 100); } else { input5.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp3(""); input3.current.focus(); } else { input5.current.focus() } }}
                             keyboardType='numeric'
+                            selection={otp4.length>0?{ start: 1 }:{ start: 0 }}
                             onChangeText={setOtp4} />
 
                         <TextInput
                             style={styles.verificationCode}
+                            blurOnSubmit={false}
                             maxLength={1}
                             caretHidden={false}
                             ref={input5}
                             value={otp5}
+                            onChange={() => input6.current.focus()}
                             editable={otp1.length === 1 && otp2.length===1 && otp3.length===1 && otp4.length===1 && otp5.length===0 && otp6.length===0 ? true : false}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp4(""); setTimeout(() => { input4.current.focus(); }, 100); } else { input6.current.focus() } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp4(""); input4.current.focus() } else { input6.current.focus() } }}
                             keyboardType='numeric'
+                            selection={otp5.length>0?{ start: 1 }:{ start: 0 }}
                             onChangeText={setOtp5} />
 
                         <TextInput
                             style={styles.verificationCode}
+                            blurOnSubmit={false}
                             maxLength={1}
                             caretHidden={false}
                             ref={input6}
                             value={otp6}
                             editable={otp1.length === 1 && otp2.length===1 && otp3.length===1 && otp4.length===1 && otp5.length===1 || otp6.length===1 ? true : false}
-                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp5(""); setTimeout(() => { input5.current.focus(); }, 100); } }}
+                            onKeyPress={({ nativeEvent }) => { if (nativeEvent.key === 'Backspace') { setOtp5("");  input5.current.focus(); } }}
                             keyboardType='numeric'
+                            selection={otp6.length>0?{ start: 1 }:{ start: 0 }}
                             onChangeText={setOtp6} />
                         {/* <TextInput
                             style={styles.verificationCode}
@@ -294,7 +311,8 @@ const VerificationScreen = ({ route, navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </TouchableWithoutFeedback>
+            </ScrollView>
+        
     )
 }
 
