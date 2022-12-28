@@ -17,37 +17,38 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import No_Item from '../image/no.png';
+import axios from 'axios';
+
 
 
 const Subcategory = ({navigation, route}) => {
   const [products, setProducts] = useState([]);
-  const {cat_id, cat} = route.params;
+  const {hierarchy_id, cat_name} = route.params;
   const [limit, setlimit] = useState(6);
   const [isLoading, setIsloading] = useState(true);
   const [id, setId] = useState();
-  const [heading, setHeading] = useState('All');
+  //const [heading, setHeading] = useState('All');
+  console.log("hier id",hierarchy_id)
 
   const [overlay,setOverlay]=useState(false);
   const [disable,setDisable]=useState(false);
 
   const getdata = async () => {
     setIsloading(true)
-    if (!id) {
+    
       setProducts([]);
-      await fetch(
-        `http://192.168.1.14:5000/sql/allCategoryProducts/${limit}/${cat_id}`,
+      await axios.post(
+        `http://192.168.1.14:5000/sql/getMainSpecificCategoryAllProducts`, {hierarchy_id}
       )
-        .then(response => response.json())
-        .then(json => {
-          if(json){
-            setProducts(json);
-            console.log('chekcing');
-            //setIsloading(false);
+        .then(response => {response.data
+          if(response.data){
+            setProducts(response.data);
+            console.log('chekcing',response.data);
+            setIsloading(false);
           }
           else{
             setIsloading(false)
-          }
-        })
+          }})
         .catch(error => {
           console.error(error)
           if(error=="TypeError: Network request failed"){
@@ -60,41 +61,42 @@ const Subcategory = ({navigation, route}) => {
             ); 
           }
         });
-    } else {
-      setProducts([]);
-      await fetch(
-        `http://192.168.1.14:5000/sql/subCategoryProducts/${limit}/${id}`,
-      )
-        .then(response => response.json())
-        .then(json => {
-          if(json.length > 0){
-            setProducts(json);
-            setIsloading(false)
-          }
-          else{
-            setIsloading(false)
-          }
-          console.log('chekcing',json.length);
-          console.log('check product',products);
-        })
-        .catch(error => {
-          console.error(error);
-          if(error=="TypeError: Network request failed"){
-            ToastAndroid.showWithGravityAndOffset(  
-              "No network connectivity",  
-              ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
-              25,
-              50 
-            ); 
-          }
-        });
-    }
+     
+    // } else {
+    //   setProducts([]);
+    //   await fetch(
+    //     `http://192.168.1.14:5000/sql/subCategoryProducts/${limit}/${id}`,
+    //   )
+    //     .then(response => response.json())
+    //     .then(json => {
+    //       if(json.length > 0){
+    //         setProducts(json);
+    //         setIsloading(false)
+    //       }
+    //       else{
+    //         setIsloading(false)
+    //       }
+    //       console.log('chekcing',json.length);
+    //       console.log('check product',products);
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //       if(error=="TypeError: Network request failed"){
+    //         ToastAndroid.showWithGravityAndOffset(  
+    //           "No network connectivity",  
+    //           ToastAndroid.LONG,
+    //           ToastAndroid.BOTTOM,
+    //           25,
+    //           50 
+    //         ); 
+    //       }
+    //     });
+    // }
   };
 
   useEffect(() => {
     getdata();
-  }, [limit, id]);
+  }, [limit]);
 
 
   const flatlistEnd = () => {
@@ -226,7 +228,7 @@ const Subcategory = ({navigation, route}) => {
           />
         </View>
         <View style={Style.head_text_view}>
-          <Text style={Style.head_text}>{cat}</Text>
+          <Text style={Style.head_text}>{cat_name}</Text>
           <FontAwesome5 name='search' style={Style.searchIcon} onPress={() => navigation.navigate('Search')}/>
         </View>
       </View>
@@ -235,10 +237,10 @@ const Subcategory = ({navigation, route}) => {
         <FlatList
           ListHeaderComponent={
             <View style={{backgroundColor:"white"}}>
-              <Tabs cat_id={cat_id} setHeading={setHeading} setId={setId} />
-              <View style={Style.middle2_1}>
+              <Tabs hierarchy_id={hierarchy_id} navigation={navigation} />
+              {/* <View style={Style.middle2_1}>
                 <Text style={Style.middle2_1_text1}>{heading}</Text>
-              </View>
+              </View> */}
             </View>
           }
           ListEmptyComponent={()=>{

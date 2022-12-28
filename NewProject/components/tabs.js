@@ -2,30 +2,46 @@ import {View, Text, ScrollView,TouchableOpacity,StyleSheet} from 'react-native';
 import React,{useState,useEffect} from 'react';
 import { Skeleton,NativeBaseProvider } from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
+import axios from 'axios';
 
 
-const Tabs = ({cat_id,setHeading,setId}) => {
-  const [data, setData] = useState([{name:"All"}]);
+
+const Tabs = ({hierarchy_id,setHier_id,setHeading,setId,navigation,dont_navigate}) => {
+  const [data, setData] = useState([{category_name:"All"}]);
   const [num,setNum]=useState(0);
   const [skeleton,setSkeleton]=useState(false)
 
   const [overlay,setOverlay]=useState(false);
   const [disable,setDisable]=useState(false);
 
-  const getTab=async(value,index,hierId)=>{
-    setNum(index)
-    setHeading(value)
-    setId(hierId)
+  const getTab=async(v,index)=>{
+    if(dont_navigate){
+      setNum(index);
+      setHier_id(v.hierarchy_id)
+      console.log("all=>",v)
+    }
+    else{
+      navigation.navigate('More_subcategory',{data:v})
+    }
+    // setHeading(value)
+    
   }
 
   const getsubCategories=async()=>{
-    setSkeleton(true)
-    const datas=await fetch(`http://192.168.1.14:5000/sql/getSubCategories/${cat_id}`)
-    const res=await datas.json()
+    setData([{category_name:"All"}])
+    try {
+      setSkeleton(true)
+    const datas=await axios.post(`http://192.168.1.14:5000/sql/getSubCategories`, {hierarchy_id})
+    const res=datas.data
+    //console.log("tabs data==>",res)
     for (let i = 0; i < res.length; i++) {
       setData((data)=>[...data,res[i]])
     }
     setSkeleton(false)
+    } catch (error) {
+      console.log("some tab==>",error)
+    }
+    
   }
   useEffect(() => {
     getsubCategories();
@@ -36,7 +52,7 @@ const Tabs = ({cat_id,setHeading,setId}) => {
     <NativeBaseProvider>
 
       {skeleton===false?
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{borderBottomWidth:0.5,borderBottomColor:"#f2f2f2",backgroundColor:"#f2f2f2"}}>
         <View
         style={{
           width: '100%',flexDirection: 'row', padding: 7
@@ -46,17 +62,19 @@ const Tabs = ({cat_id,setHeading,setId}) => {
           />
           {data.map((v, i) => {
             return (
-              <TouchableOpacity key={i} disabled={disable} activeOpacity={0.9} style={num == i ? Style.tabs : Style.tabs2} onPress={()=>{
+              <TouchableOpacity key={i} disabled={disable} activeOpacity={0.9} style={num == i ? Style.tabs : Style.tabs2} 
+              onPress={()=>{
                 setDisable(true)
                 setOverlay(true)
               setTimeout(() => {
-                getTab(v.name,i,v.HierId)
+                getTab(v,i)
                 setOverlay(false)
                 setDisable(false)
               }, 1000);
                 
-                }}>
-                <Text style={num == i ? Style.text : Style.text2}>{v.name}</Text>
+                }}
+              >
+                <Text style={num == i ? Style.text : Style.text2}>{v.category_name}</Text>
               </TouchableOpacity>
             );
           })}

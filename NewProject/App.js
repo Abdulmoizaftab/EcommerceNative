@@ -28,6 +28,7 @@ import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import VerificationScreen from './screens/VerificationScreen';
 import NewPasswordScreen from './screens/NewPasswordScreen';
 import About from './screens/About';
+import More_subcategory from './screens/more_subcategory';
 
 
 
@@ -122,6 +123,8 @@ const App = () => {
         name="Aboutus" component={About} />
         <Stack.Screen
         name="Subcategory" component={Subcategory} />
+        <Stack.Screen
+        name="More_subcategory" component={More_subcategory} />
         <Stack.Screen name="Summary" component={Summary} 
         options={{headerShown:true,
           title:"Cart Summary",

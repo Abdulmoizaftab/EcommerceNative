@@ -1489,6 +1489,64 @@ router.post("/loginWithAuth", (req, res) => {
   );
 });
 
+//*---------------------------new category api using sql hierarchy------------------*\\
+
+//all category
+router.get('/getMainCategories', (req, res) => {
+  req.app.locals.db.query(`select category_id, hierarchy_id.ToString() as hierarchy_id, hierarchy_id.GetLevel() as level, category_name, isDeleted from Hierarchy_Category where hierarchy_id.GetLevel()=1`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+//get subcategory of specific category and also sub categories ki bhi sub categories
+router.post('/getSubCategories', (req, res) => {
+  const {hierarchy_id}=req.body
+  req.app.locals.db.query(`select category_id, hierarchy_id.ToString() as hierarchy_id ,hierarchy_id.GetLevel() as level, category_name, isDeleted from Hierarchy_Category where hierarchy_id.GetLevel() = (CAST('${hierarchy_id}' as hierarchyid).GetLevel()+1) and hierarchy_id.IsDescendantOf('${hierarchy_id}')=1 order by hierarchy_id asc`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      console.log("🚀  file: sqlRoutes.js:336  res", res)
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+});
+
+//get all products of main category
+router.post('/getMainSpecificCategoryAllProducts', (req, res) => {
+  const {hierarchy_id}=req.body
+  req.app.locals.db.query(`select * from product inner join Hierarchy_Category on product.new_category_id=Hierarchy_Category.category_id where Hierarchy_Category.hierarchy_id.GetLevel() > 1 and Hierarchy_Category.hierarchy_id.IsDescendantOf('${hierarchy_id}')=1`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      console.log("🚀  file: sqlRoutes.js:336  res", res)
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
+//get specific category products
+router.post('/getSpecificCategoryProducts', (req, res) => {
+  const {hierarchy_id}=req.body
+  req.app.locals.db.query(`select *,Hierarchy_Category.hierarchy_id.ToString() as category_string from product 
+  inner join Hierarchy_Category on product.new_category_id=Hierarchy_Category.category_id 
+  where hierarchy_id.GetLevel() = (CAST('${hierarchy_id}' as hierarchyid).GetLevel()) and Hierarchy_Category.hierarchy_id.IsDescendantOf('${hierarchy_id}')=1`, function (err, recordset) {
+    if (err) {
+      console.error(err)
+      res.status(500).send('SERVER ERROR')
+      console.log("🚀  file: sqlRoutes.js:336  res", res)
+      return
+    }
+    res.status(200).json(recordset.recordset)
+  })
+})
+
 
 
 

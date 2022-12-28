@@ -18,7 +18,7 @@ const CategoryScreen = ({navigation}) => {
     const getCategories=async()=>{
       try {
         setSkeleton(true)
-        const data=await fetch('http://192.168.1.14:5000/sql/allCategories')
+        const data=await fetch('http://192.168.1.14:5000/sql/getMainCategories')
         const res=await data.json()
         setCategories(res)
         setSkeleton(false) 
@@ -57,13 +57,13 @@ const CategoryScreen = ({navigation}) => {
            setDisable(true)
               setOverlay(true)
               setTimeout(() => {
-                navigation.navigate('Subcategory',{cat_id:v.HierLevel,cat:v.name})
+                navigation.navigate('Subcategory',{hierarchy_id:v.hierarchy_id,cat_name:v.category_name.charAt(0).toUpperCase() + v.category_name.slice(1)})
                 setOverlay(false)
                 setDisable(false)
               }, 1000);
            }}>
              <LinearGradient style={styles.categoryCard} start={{x: 0, y: 0}} end={{x: 1.2, y: 0}} colors={['#fff', '#D1D1ED']}>
-             <Text style={styles.cardText}>{v.name}</Text>
+             <Text style={styles.cardText}>{v.category_name.charAt(0).toUpperCase() + v.category_name.slice(1)}</Text>
              <Image
              style={styles.logo}
              source={img}
@@ -151,9 +151,9 @@ const styles = StyleSheet.create({
   categoryCard: {
     width: "100%",
     height: 113,
-    elevation: 5,
+    elevation: 3,
     borderColor: "#8580AF",
-    borderRadius: 15,
+    borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     cardText:{
         fontSize:25,
         color: "#5D59EE",
-        marginLeft:"5%",
-        width:"35%"
+        marginLeft:"3%",
+        width:"40%"
     },
     logo:{
         width: 150,
