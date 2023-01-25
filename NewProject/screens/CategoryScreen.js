@@ -18,7 +18,7 @@ const CategoryScreen = ({navigation}) => {
     const getCategories=async()=>{
       try {
         setSkeleton(true)
-        const data=await fetch('http://192.168.1.14:5000/sql/getMainCategories')
+        const data=await fetch('http://192.168.1.9:5000/sql/getMainCategories')
         const res=await data.json()
         setCategories(res)
         setSkeleton(false) 

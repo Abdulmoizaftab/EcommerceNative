@@ -36,7 +36,7 @@ const AddToCart = ({ route, navigation }) => {
     if(currentUser){
       setLogin(true)
       //setDbProds([])
-      axios.post(`http://192.168.1.14:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
+      axios.post(`http://192.168.1.9:5000/sql/getCartItem`,{user_id:currentUser.user[0].user_id},{
         headers: {
           'Authorization': `Bearer ${currentUser.token}` 
         }
@@ -59,7 +59,7 @@ const AddToCart = ({ route, navigation }) => {
                 text: "Ok",
                 onPress: async () => {
                     try {
-                        const res= await axios.post('http://192.168.1.14:5000/sql/session',{user_id:currentUser.user[0].user_id},{
+                        const res= await axios.post('http://192.168.1.9:5000/sql/session',{user_id:currentUser.user[0].user_id},{
                             headers: {
                                 'Authorization': `Bearer ${currentUser.token}` 
                             }

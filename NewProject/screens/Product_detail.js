@@ -100,7 +100,7 @@ const Product_detail = ({route}) => {
         userReview,
       };
   
-      await axios.post(`http://192.168.1.14:5000/sql/giveRating`, bodyData);
+      await axios.post(`http://192.168.1.9:5000/sql/giveRating`, bodyData);
       setRating(0);
       setUserReview('');
       setModalVisible(!modalVisible);

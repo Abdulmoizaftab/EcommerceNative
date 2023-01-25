@@ -13,7 +13,7 @@ const NewPasswordScreen = ({route,navigation}) => {
         try {
             setDisable(true)
             setOverlay(true)
-        const res = await axios.post('http://192.168.1.14:5000/sql/setNewPswd',{email:email , password:pswd})
+        const res = await axios.post('http://192.168.1.9:5000/sql/setNewPswd',{email:email , password:pswd})
         setDisable(false)
         setOverlay(false)
         navigation.navigate('Login');

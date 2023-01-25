@@ -40,7 +40,7 @@ const Summary = ({route,navigation}) => {
         user_id:currentUser.user[0].user_id
         
       }
-      await axios.post('http://192.168.1.14:5000/sql/setOrderDetails', obj)
+      await axios.post('http://192.168.1.9:5000/sql/setOrderDetails', obj)
       setOverlay(false)
       setShowModal(true)
       console.log("Data inserted successfully");
@@ -126,10 +126,10 @@ const Summary = ({route,navigation}) => {
             </View>
             <View style={Style.address_list}>
               <Text style={Style.address_list_text_same}>
-                {data[0].address_line}, Pakistan.
+                {data.address_line}, Pakistan.
               </Text>
-              <Text style={Style.address_list_text_same}>{data[0].address_title}.</Text>
-              <Text style={Style.address_list_text_same}>Receiving by {data[0].recipent}.</Text>
+              <Text style={Style.address_list_text_same}>{data.address_title}.</Text>
+              <Text style={Style.address_list_text_same}>Receiving by {data.recipent}.</Text>
             </View>
           </View>
 
@@ -140,7 +140,7 @@ const Summary = ({route,navigation}) => {
               <Text style={Style.items_head_text}>Contacts</Text>
             </View>
             <View style={Style.address_list}>
-              <Text style={Style.address_list_text_same}>{data[0].mobile}</Text>
+              <Text style={Style.address_list_text_same}>{data.mobile}</Text>
             </View>
           </View>
 

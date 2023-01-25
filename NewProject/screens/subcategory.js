@@ -38,7 +38,7 @@ const Subcategory = ({navigation, route}) => {
     
       setProducts([]);
       await axios.post(
-        `http://192.168.1.14:5000/sql/getMainSpecificCategoryAllProducts`, {hierarchy_id}
+        `http://192.168.1.9:5000/sql/getMainSpecificCategoryAllProducts`, {hierarchy_id}
       )
         .then(response => {response.data
           if(response.data){
@@ -65,7 +65,7 @@ const Subcategory = ({navigation, route}) => {
     // } else {
     //   setProducts([]);
     //   await fetch(
-    //     `http://192.168.1.14:5000/sql/subCategoryProducts/${limit}/${id}`,
+    //     `http://192.168.1.9:5000/sql/subCategoryProducts/${limit}/${id}`,
     //   )
     //     .then(response => response.json())
     //     .then(json => {

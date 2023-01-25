@@ -36,7 +36,7 @@ const AllDiscountedProducts = () => {
 
   const getDisdata = async () => {
      setIsloading(true);
-    await fetch(`http://192.168.1.14:5000/sql/allDiscountProducts/${limit}`)
+    await fetch(`http://192.168.1.9:5000/sql/allDiscountProducts/${limit}`)
       .then(response => response.json())
       .then(json => {
         setProducts(json);

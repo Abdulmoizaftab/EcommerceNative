@@ -31,7 +31,7 @@ const Tabs = ({hierarchy_id,setHier_id,setHeading,setId,navigation,dont_navigate
     setData([{category_name:"All"}])
     try {
       setSkeleton(true)
-    const datas=await axios.post(`http://192.168.1.14:5000/sql/getSubCategories`, {hierarchy_id})
+    const datas=await axios.post(`http://192.168.1.9:5000/sql/getSubCategories`, {hierarchy_id})
     const res=datas.data
     //console.log("tabs data==>",res)
     for (let i = 0; i < res.length; i++) {

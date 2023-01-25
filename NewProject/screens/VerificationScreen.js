@@ -40,7 +40,7 @@ const VerificationScreen = ({ route, navigation }) => {
 
 
     const expireOtp = (emailParam) => {
-        axios.post('http://192.168.1.14:5000/sql/OTPExpire', { email: emailParam })
+        axios.post('http://192.168.1.9:5000/sql/OTPExpire', { email: emailParam })
     }
 
     useEffect(() => {
@@ -52,7 +52,7 @@ const VerificationScreen = ({ route, navigation }) => {
     const resendOTP = async () => {
         setTime(20)
         setTrigger(!trigger)
-        await axios.post('http://192.168.1.14:5000/sql/sendOTP', { email: email })
+        await axios.post('http://192.168.1.9:5000/sql/sendOTP', { email: email })
         setError(false)
     }
 
@@ -60,7 +60,7 @@ const VerificationScreen = ({ route, navigation }) => {
         try {
         setDisable(true)
         setOverlay(true)
-        const res = await axios.post('http://192.168.1.14:5000/sql/matchOTP', { otp: otp1 + otp2 + otp3 + otp4 + otp5 + otp6, email: email })
+        const res = await axios.post('http://192.168.1.9:5000/sql/matchOTP', { otp: otp1 + otp2 + otp3 + otp4 + otp5 + otp6, email: email })
         if (res.data) {
             setError(false)
             setDisable(false)

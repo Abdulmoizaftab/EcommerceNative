@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity,Image,ToastAndroid } from 'react-native'
-import React , {useEffect,useState} from 'react'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, ToastAndroid } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -15,31 +15,36 @@ const CheckOutScreenNew = ({ route }) => {
   const navigate = useNavigation()
   const address = useSelector(state => state.address)
   const selectedValue = route.params
-  console.log('selected=>',selectedValue);
-  const [dbAddress,setDbAddress] = useState([]);
-  const [loading,setLoading] = useState(true);
-  const [checkOutTrigger,setCheckOutTrigger] = useState(true);
-  const {currentUser} = useSelector(state=>state.user)
+  console.log('selected=>', selectedValue);
+  const [dbAddress, setDbAddress] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [checkOutTrigger, setCheckOutTrigger] = useState(true);
+  const { currentUser } = useSelector(state => state.user)
 
   useEffect(() => {
-    axios.get(`http://192.168.1.14:5000/sql/getAddress/${currentUser.user[0].user_id}`)
-     .then(function (response) {
-       setDbAddress(response.data)
-       setLoading(false)
-     })
-     .catch(function (err) {
-       console.log(err);
-       if(err == "AxiosError: Network Error"){
-        ToastAndroid.showWithGravityAndOffset(  
-          "No network connectivity",  
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-          25,
-          50 
-        )
+    if (selectedValue) {
+      setDbAddress(selectedValue)
+    } else {
+
+      axios.get(`http://192.168.1.9:5000/sql/getAddress/${currentUser.user[0].user_id}`)
+        .then(function (response) {
+          setDbAddress(response.data[0])
+          setLoading(false)
+        })
+        .catch(function (err) {
+          console.log(err);
+          if (err == "AxiosError: Network Error") {
+            ToastAndroid.showWithGravityAndOffset(
+              "No network connectivity",
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50
+            )
+          }
+        })
     }
-     })
- }, [checkOutTrigger])
+  }, [checkOutTrigger])
 
   return (
     <>
@@ -47,7 +52,7 @@ const CheckOutScreenNew = ({ route }) => {
         <View style={styles.main}>
           <View style={styles.informationView}>
             <Text style={{ color: "#444", fontSize: 20, fontWeight: '500' }}>Shipping Information</Text>
-            <TouchableOpacity onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
+            <TouchableOpacity onPress={() => navigate.navigate('AddressBook', { checkOutTrigger, setCheckOutTrigger })}>
               <Text style={styles.buttonAdd}>
                 Add
               </Text>
@@ -57,59 +62,59 @@ const CheckOutScreenNew = ({ route }) => {
             {
               dbAddress.length !== 0 ? (
                 selectedValue !== undefined ? (
-                  Object.keys(selectedValue).length !==0 ? (
-                  <View style={styles.addressDetailsView}>
-                    <View style={styles.addressDetailsInside}>
-                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.recipent}</Text>
-                    </View>
-                    <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address_line}</Text>
-                    </View>
-                    <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.mobile}</Text>
-                    </View>
-                  </View>
-
-                  ):(
+                  Object.keys(selectedValue).length !== 0 ? (
                     <View style={styles.addressDetailsView}>
-                    <View style={styles.addressDetailsInside}>
-                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].recipent}</Text>
+                      <View style={styles.addressDetailsInside}>
+                        <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.recipent}</Text>
+                      </View>
+                      <View style={styles.addressDetailsInside}>
+                        <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.address_line}</Text>
+                      </View>
+                      <View style={styles.addressDetailsInside}>
+                        <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{selectedValue.mobile}</Text>
+                      </View>
                     </View>
-                    <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].address_line}</Text>
+
+                  ) : (
+                    <View style={styles.addressDetailsView}>
+                      <View style={styles.addressDetailsInside}>
+                        <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress.recipent}</Text>
+                      </View>
+                      <View style={styles.addressDetailsInside}>
+                        <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress.address_line}</Text>
+                      </View>
+                      <View style={styles.addressDetailsInside}>
+                        <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress.mobile}</Text>
+                      </View>
                     </View>
-                    <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress[0].mobile}</Text>
-                    </View>
-                  </View>
                   )
                 ) : (
                   <View style={styles.addressDetailsView}>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].recipent}</Text>
+                      <Octicons name="person" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress.recipent}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress[0].address_line}</Text>
+                      <Octicons name="location" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>{dbAddress.address_line}</Text>
                     </View>
                     <View style={styles.addressDetailsInside}>
-                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress[0].mobile}</Text>
+                      <Feather name="phone" size={30} color="#444" style={{ flex: 1 }} /><Text style={styles.detailsText}>+92 {dbAddress.mobile}</Text>
                     </View>
                   </View>
                 )
               ) : (
 
-                  loading === true ? (
+                loading === true ? (
                   <View style={styles.loaderGifView}>
                     <Image style={styles.imgStyleGif} source={loadingGif}></Image>
                   </View>
 
-                  ):(
-                    <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook',{checkOutTrigger,setCheckOutTrigger})}>
-                      <Entypo name="plus" size={30} color="#444" />
-                      <Text style={{ fontSize: 21 }}> Add Address</Text>
-                    </TouchableOpacity>
-                  )
-                
+                ) : (
+                  <TouchableOpacity style={styles.addAddressBtn} onPress={() => navigate.navigate('AddressBook', { checkOutTrigger, setCheckOutTrigger })}>
+                    <Entypo name="plus" size={30} color="#444" />
+                    <Text style={{ fontSize: 21 }}> Add Address</Text>
+                  </TouchableOpacity>
+                )
+
               )
             }
 
@@ -132,7 +137,7 @@ const CheckOutScreenNew = ({ route }) => {
               >
                 <Radio style={{ width: "90%", alignSelf: 'center', justifyContent: 'center' }} value={"cod"} my="5">
                   <MaterialCommunityIcons name="cash" size={35} color="#7FB848" />
-                  <Text style={{ fontSize: 22, fontWeight: '600' , color:'#000'}}> Cash On Delivery</Text>
+                  <Text style={{ fontSize: 22, fontWeight: '600', color: '#000' }}> Cash On Delivery</Text>
                 </Radio>
 
               </Radio.Group>
@@ -141,13 +146,13 @@ const CheckOutScreenNew = ({ route }) => {
         </View>
       </ScrollView>
       {
-        dbAddress.length !==0 ? (
-        <View style={styles.finalCheckout}>
-          <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigate.navigate('Summary',{data:dbAddress})}>
-            <Text style={styles.checkoutBtnText}>Checkout</Text>
-          </TouchableOpacity>
-        </View>
-        ):(
+        dbAddress.length !== 0 ? (
+          <View style={styles.finalCheckout}>
+            <TouchableOpacity style={styles.checkoutBtn} onPress={() => navigate.navigate('Summary', { data: dbAddress })}>
+              <Text style={styles.checkoutBtnText}>Checkout</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
           <></>
         )
       }
@@ -169,11 +174,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     opacity: 1,
-    backgroundColor:"#5D59EE",
-    padding:5,
-    borderRadius:10,
-    width:60,
-    textAlign:'center'
+    backgroundColor: "#5D59EE",
+    padding: 5,
+    borderRadius: 10,
+    width: 60,
+    textAlign: 'center'
   },
   addAddressBtnView: {
     alignSelf: 'center',
@@ -209,7 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: '5%',
     marginVertical: '2.5%',
-    alignItems:'center'
+    alignItems: 'center'
   },
   detailsText: {
     fontSize: 21,
@@ -222,7 +227,7 @@ const styles = StyleSheet.create({
     bottom: '0%',
     justifyContent: 'center',
     zIndex: 999,
-    width:"100%"
+    width: "100%"
   },
   checkoutBtn: {
     backgroundColor: '#5D59EE',
@@ -241,13 +246,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
-  loaderGifView:{
+  loaderGifView: {
     alignSelf: 'center',
     width: '100%',
     borderRadius: 10,
     backgroundColor: 'white',
     padding: '5%',
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

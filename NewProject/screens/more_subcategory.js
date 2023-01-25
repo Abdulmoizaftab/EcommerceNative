@@ -39,7 +39,7 @@ import {
         setIsloading(true)
         setProducts([]);
         await axios.post(
-          `http://192.168.1.14:5000/sql/getMainSpecificCategoryAllProducts`, {hierarchy_id}
+          `http://192.168.1.9:5000/sql/getMainSpecificCategoryAllProducts`, {hierarchy_id}
         )
           .then(response => {response.data
             if(response.data){
@@ -69,7 +69,7 @@ import {
         setIsloading(true)
         setProducts([]);
         await axios.post(
-          `http://192.168.1.14:5000/sql/getSpecificCategoryProducts`, {hierarchy_id}
+          `http://192.168.1.9:5000/sql/getSpecificCategoryProducts`, {hierarchy_id}
         )
           .then(response => {response.data
             if(response.data){
